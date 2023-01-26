@@ -1,0 +1,19 @@
+/* Payment Update Confirmation Card Container */
+
+.updateConfContainer {
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.updateCard {
+  width: 350px;
+  text-align: center;
+}
+
+.formCardContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

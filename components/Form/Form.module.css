@@ -1,0 +1,10 @@
+.errorText {
+  font-size: .9em;
+  color: red;
+}
+
+.cardFooter {
+  display: flex;
+  flex-direction: column;
+  padding-top: 16px;
+}

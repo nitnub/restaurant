@@ -1,0 +1,20 @@
+.restaurants {
+  padding: 0 2rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.main {
+  min-height: 100vh;
+  padding: 4rem 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: 1.25rem;
+}
+
+.emptyText {
+  text-align: center;
+}

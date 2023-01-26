@@ -1,0 +1,11 @@
+.header {
+  background-color: #4e4740;
+  color: white;
+  text-align: center;
+}
+
+.subtotal {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 6px;
+}

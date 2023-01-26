@@ -1,0 +1,19 @@
+query GetAllRestaurants {
+  restaurantsResult {
+    __typename
+    ... on Restaurants {
+      restaurants {
+        id
+        name
+        description
+        style
+        rating
+        image
+        homePage
+      }
+    }
+    ... on RestaurantsError {
+      message
+    }
+  }
+}

@@ -1,0 +1,165 @@
+:root {
+  --clr-lt-bkgd: #f2f0f3;
+  --clr-lt-hdr: #db5f68;
+  --clr-lt-blk: #4e4740;
+  --val-hdr-gap: 450px;
+}
+
+* {
+  box-sizing: border-box;
+  font-size: 10pt;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  background-color: var(--clr-lt-bkgd);
+}
+
+.parentContainer {
+  max-width: 'sm';
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.plainLink {
+  text-decoration: underline;
+}
+
+.error-text {
+  color: red;
+  font-size: 0.85em;
+  text-align: center;
+}
+.formPageContainer {
+  display: flex;
+  height: 100%;
+  justify-content: center;
+}
+
+.header {
+  background-color: var(--clr-lt-hdr);
+  background-color: var(--clr-lt-blk);
+}
+
+.formCard {
+  padding: 0 28px;
+}
+
+.formCardContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sectionBreak {
+  display: flex;
+  flex-direction: row;
+}
+.sectionBreak:before,
+.sectionBreak:after {
+  content: '';
+  flex: 1 1;
+  border-bottom: 1px solid rgb(180, 180, 180);
+  margin: auto;
+}
+
+.footerLink {
+  color: #1769aa;
+}
+
+.headerImage {
+  height: 100%;
+  width: 100vw;
+  left: 0px;
+  top: -45px;
+  position: absolute;
+  z-index: 0.5;
+  opacity: 0.33;
+}
+
+.headerImageSpacer {
+  width: 100px;
+  height: calc(var(--val-hdr-gap) - 175px);
+  z-index: -10;
+}
+
+.headerBackgroundSpan {
+  position: absolute;
+  background-color: red;
+  background-color: var(--clr-lt-blk);
+  width: 100vw;
+  height: 250px;
+  left: 0;
+  top: 0;
+  opacity: 0.5;
+}
+.mainBackground {
+  height: 100vh;
+  width: 100vw;
+  left: 0px;
+  top: var(--val-hdr-gap);
+  position: absolute;
+  z-index: 0;
+  background-color: var(--clr-lt-bkgd);
+}
+
+.resInputContainer {
+  position: absolute;
+  display: flex;
+  flex-wrap: wrap;
+  z-index: 2;
+}
+
+.resTitleContainer {
+  margin-top: -40px;
+}
+
+.resTitleName {
+  color: white;
+  font-size: 4em;
+}
+.resTitleStyle {
+  color: white;
+  font-size: 2em;
+}
+.resTitleDescription {
+  color: white;
+  font-size: 1.5em;
+}
+
+/* Card Update Page */
+.updateContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Payment Update Confirmation Card Container */
+
+.updateConfContainer {
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.updateCard {
+  width: 350px;
+  text-align: center;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+  body {
+    background-color: var(--clr-lt-bkgd);
+  }
+}

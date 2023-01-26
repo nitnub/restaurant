@@ -1,0 +1,79 @@
+query GetCustomerTransactions {
+  customerTransactionsResult {
+    __typename
+    ... on CustomerTransactions {
+      object
+      dataFormatted {
+        id
+        object
+        amount
+        application
+        created
+        currency
+        customer
+        description
+        invoice
+        livemode
+        metadata {
+          null
+        }
+        processing
+        review
+        shipping
+        source
+        status
+        amountCapturable
+        amountDetails {
+          tip {
+            amount
+          }
+        }
+        amountReceived
+        applicationFeeAmount
+        automaticPaymentMethods
+        canceledAt
+        cancellationReason
+        captureMethod
+        clientSecret
+        confirmationMethod
+        lastPaymentError
+        latestCharge
+        nextAction
+        onBehalfOf
+        paymentMethod
+        paymentMethodOptions {
+          amountCapturable
+          installments
+          tip
+          mandateOptions
+          network
+          requestThreeDSecure
+        }
+        paymentMethodTypes
+        receiptEmail
+        setupFutureUsage
+        statementDescriptor
+        statementDescriptorSuffix
+        transferData
+        transferGroup
+        cardId
+        cardType
+        cardName
+        expMonth
+        expYear
+        custId
+      }
+      hasMore
+      url
+    }
+    ... on CustomerTransactionsError {
+      message
+    }
+    ... on StripeError {
+      message
+    }
+    ... on NotAuthorized {
+      message
+    }
+  }
+}

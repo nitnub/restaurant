@@ -1,0 +1,25 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cartCounterContainer {
+  width: 100%;
+  margin-top: -40px;
+}
+.cartCounter {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  color: black;
+  background-color: white;
+  opacity: .80;
+}
+
+.itemDetails {}
+
+.itemCount {
+  text-align: center;
+  font-size: 22px;
+}

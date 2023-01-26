@@ -1,0 +1,33 @@
+.verified {
+  color: white;
+  background-color: #2e7d32;
+}
+
+.pending {
+  background-color: rgb(255, 251, 213);
+  background-color: rgb(255, 253, 237);
+}
+
+.settingsLink {
+  text-decoration: underline;
+  font-size: .9em;
+}
+
+.submitOrderPane {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.confirmation {
+  text-align: center;
+}
+.paymentPane {
+  display: flex;
+  flex-direction: column;
+  gap: 24px
+}
+
+.submitButton {
+  width: 160px;
+  padding: 16px 0
+}

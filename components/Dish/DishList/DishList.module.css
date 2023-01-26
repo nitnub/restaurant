@@ -1,0 +1,10 @@
+.listContainer {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+
+.emptyText {
+  padding-top: 48px;
+  text-align: center;
+}

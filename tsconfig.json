@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "target": "ES2015",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "incremental": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "@/components/*": ["components/*"],
+      "@/configs/*": ["configs/*"],
+      "@/graphql/*": ["graphql/*"],
+      "@/libs/*": ["libs/*"],
+      "@/models/*": ["models/*"],
+      "@/mutations/*": ["mutations/*"],
+      "@/pages/*": ["pages/*"],
+      "@/queries/*": [".local-files/to-be-deleted/queries/*"],
+      "@/src/*": ["src/*"],
+      "@/styles/*": ["styles/*"],
+      "@/types/*": ["types/*"],
+      "@/utils/*": ["utils/*"]
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "../User.resolver.ts", ".local-files/to-be-deleted/Stripe.resolver copy.ts", ".local-files/to-be-deleted/index.tsx", ".local-files/to-be-deleted/update-amount.ts", ".local-files/LEGACY_schema.ts", ".local-files/pingHandler.ts"],
+  "exclude": ["node_modules"]
+}

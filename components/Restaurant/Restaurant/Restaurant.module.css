@@ -1,0 +1,45 @@
+.card {
+  display: flex;
+  width: 256px;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: baseline;
+  margin: 6px;
+  max-width: 240px;
+  max-height: 384px;
+  padding-bottom: 10px;
+}
+
+.header {
+  width: 100%;
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}
+
+.image {
+  height: 128px;
+  margin: 0;
+}
+
+.rating {
+  text-align: right;
+  height: 20px;
+  width: 100%;
+  margin: 0px;
+}
+
+.actionsContainer {
+  justify-self: flex-end;
+  justify-self: end;
+  align-content: end;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.actions {
+  display: flex;
+  height: auto;
+  width: 100%;
+  align-items: center;
+  justify-content: end;
+}

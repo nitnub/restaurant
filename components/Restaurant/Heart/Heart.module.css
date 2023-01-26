@@ -1,0 +1,8 @@
+.heart {
+  /* color: pink; */
+}
+
+.heart:checked {
+  /* color: pink; */
+  /* background-color: pink; */
+}

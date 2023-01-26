@@ -1,0 +1,31 @@
+.brand {
+  color: white;
+}
+
+.drawerHeader {
+  z-index: 1;
+  background-color: white;
+  position: sticky;
+  top: 0;
+  height: 120px;
+}
+
+.cartSummary {
+  display: flex;
+  justify-content: space-between;
+}
+
+.headerCheckout {
+  text-align: center;
+  background-color: white;
+  position: sticky;
+  top: 1;
+}
+
+.priceSummary {
+  display: flex;
+}
+
+.priceLabel {
+  font-weight: bold;
+}

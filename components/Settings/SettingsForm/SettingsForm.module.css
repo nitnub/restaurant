@@ -1,0 +1,10 @@
+.formContainer {
+  padding: 16px;
+}
+
+.submitContainer {
+  padding-top: 24px;
+  display:flex;
+  justify-content: flex-end;
+
+}
