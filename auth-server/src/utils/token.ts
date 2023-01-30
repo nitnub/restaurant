@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 // import { AccessTokenPayload, RefreshTokenPayload } from 'ts/tokenTypes';
-import fetch from 'node-fetch';
+// import fetch from 'node-fetch';
 import GlobalUser from 'ts/userTypes';
 import {
   AccessToken,

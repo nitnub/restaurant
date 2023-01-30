@@ -214,6 +214,8 @@ export default function CartDrawer() {
             <div className={styles.drawerHeader}>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <DrawerHeader className={styles.cartSummary}>
+                  <div style={{display: 'flex', justifyContent: 'space-between'}}>
+
                   <div>
                     <IconButton onClick={handleDrawerClose}>
                       <CartComp />
@@ -224,6 +226,7 @@ export default function CartDrawer() {
                     <div className={styles.priceAmount}>
                       {convertToCurrency(ctx.cart.totalCost)}
                     </div>
+                  </div>
                   </div>
                 </DrawerHeader>
               </div>
