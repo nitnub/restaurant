@@ -187,8 +187,7 @@ const resolvers = {
 
       if (!stripeCustomerId) {
         log.error('Unable to find customerID in the DB!');
-        log.error(`With globalid = ${globalUserID}`);
-        throw new Error('Unable to find customerID in the DB! With globalid:', globalUserID);
+        throw new Error('Unable to find customerID in the DB!');
       }
 
       return await Stripe.clientSecret(stripeCustomerId);
