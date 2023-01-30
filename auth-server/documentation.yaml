@@ -1,0 +1,266 @@
+openapi: 3.0.3
+info:
+  title: Auth Server - OpenAPI 3.0
+  description: |-
+    This is a demo authorization server for use with the Restaurant App project found [here](https://github.com/nitnub/restaurant) on GitHub.
+
+  license:
+    name: MIT License
+    url: https://choosealicense.com/licenses/mit/
+  version: 1.0.11
+
+tags:
+  - name: register
+    description: Register a new user
+    externalDocs:
+      description: Find out more
+      url: https://github.com/nitnub/auth-server
+  - name: signin
+    description: Sign in an existing user
+    externalDocs:
+      description: Find out more
+      url: https://github.com/nitnub/auth-server
+  - name: signin-oauth
+    description: Sign in an existing user using a third party OAuth provider
+    externalDocs:
+      description: Find out more
+      url: https://github.com/nitnub/auth-server
+  - name: signout
+    description: Sign out an existing user
+    externalDocs:
+      description: Find out more
+      url: https://github.com/nitnub/auth-server
+  - name: token
+    description: Renew current access and refresh tokens
+    externalDocs:
+      description: Find out more
+      url: https://github.com/nitnub/auth-server
+
+paths:
+  /register:
+    post:
+      tags:
+        - register
+      summary: Add a new user
+      description: Add a new user
+      operationId: addUser
+      requestBody:
+        description: Register a new user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Register'
+        required: true
+      responses:
+        '201':
+          description: successful operation
+          headers:
+            refreshToken:
+              description: authorization refresh token for the user
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterSuccess'
+        '400':
+          description: Invalid input
+
+  /token:
+    get:
+      tags:
+        - token
+      summary: Refresh security tokens
+      description: Use a valid refresh token to get a new access token and swap for a new refresh token.
+      operationId: getTokens
+      parameters:
+        - name: refresh_token
+          in: header
+          description: 'The refresh token of the user'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          headers:
+            Authorization:
+              description: refresh token 
+              schema:
+                type: string
+            
+
+        '400':
+          description: Bad request
+
+  /signin:
+    post:
+      tags:
+        - signin
+      summary: Sign in a user
+      description: Validates a user's credentials and provides a new access token and refresh token in the response.
+      operationId: signInUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+      responses:
+        '200':
+          description: successful operation
+          headers:
+            refreshToken:
+              description: authorization refresh token for the user
+              schema:
+                type: string
+
+        '401':
+          description: Unauthorized
+
+  /signout:
+    post:
+      tags:
+        - signout
+      summary: Logs the user out
+      description: 'Will remove the provided refresh token from the whitelist. A "signOutAll" flag is used to indicate a request to remove all refresh tokens assigned to the requesting user.'
+      operationId: signoutUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignOutRequestBody'
+      responses:
+        '200':
+          description: successful operation with token
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SignOutResponseSuccessBody'
+
+  /signin-oauth:
+    post:
+      tags:
+        - signin-oauth
+      summary: Sign in via OAuth
+      description: Allows a user to sign in with an approved OAuth provider. Currently, this API supports Google Oauth.
+      operationId: signInOAuth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OAuthRequest'
+      responses:
+        '200':
+          description: OK
+          headers:
+            refreshToken:
+              description: auth refresh token for the user
+              schema:
+                type: string
+        '401':
+          description: Unauthorized
+
+components:
+  schemas:
+    UserRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          example: jsmith@gmail.com
+        password:
+          type: string
+          example: secretpassword
+    Register:
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Smith
+        email:
+          type: string
+          example: jsmith@gmail.com
+        password:
+          type: string
+          example: hunter42
+        avatar:
+          type: string
+          example: /path/to/image.jpg
+        admin:
+          type: boolean
+        active:
+          type: boolean
+      xml:
+        name: Register
+    RegisterSuccess:
+      type: object
+      properties:
+        status:
+          type: string
+          example: 'succcess'
+        success:
+          type: boolean
+          example: true
+        data:
+          type: object
+          example:
+          $ref: '#/components/schemas/FormattedResponse'
+    FormattedResponse:
+      type: object
+      properties:
+        sanitizedUser:
+          type: object
+          example: '63d022aaaa41bd26ae10ac5c'
+          $ref: '#/components/schemas/SanitizedUser'
+        accessToken:
+          type: string
+          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZDAyNWM1YWE0MWJkMjZhZTEwYWQ4NCIsImZpcnN0TmFtZSI6IkpvaG4iLCJlbWFpbCI6ImpzbWl0aEB0ZXN0LmNvbSIsImF2YXRhciI6Ii9wYXRoL3RvL2ltYWdlLnBuZyIsImFkbWluIjp0cnVlLCJpYXQiOjE2NzQ1ODU1NDEsImV4cCI6MTY3NDU4NjE0MX0.TU15iiygFFPJyhcFaAgoHV4_mKxqjePcFEU85neKfrc'
+
+    OAuthRequest:
+      type: object
+      properties:
+        idToken:
+          type: object
+          example: 'eyJhbGciOiJSUzI1NiIsImtpZCI6ImY1NWU0ZDkxOGE0ODY0YWQxMzUxMDViYmRjMDEwYWY5Njc5YzM0MTMiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiTmljayBCcnlhbnQiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saHucxYFIWrXNlcmNvbnRlbnQuY29tL2EvQUVkRlRwNmRlS3NMeTlgKvwqTz_iQcN70ChGX1lxajh3UFB2dWIyYm9lZXh6NGM1WTc4c01pYXE9czk2LWMiLCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vcmVzdGF1cmFudC1hcHAtNjczYzkiLCJhdWQiO0LWFwcC02NzNjOSIsImF1dGhfdGltZSI6MTYpZCI6IkM3RDJLXFHTTc0RVg3SzIiLCJzdWIiOiJDN0QyS0RKd2lrZUZ1Uk9xSGlxR003NEVYN0syIiwiaWF0IjoxNjc0MDQxOTUyLCJleHAiOjE2NzQwNDU1NTIsImVtYWlsIjoibmlja2JyeWFudHhAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZ29vZ2xlLmNvbSI6WyIxMTQ2NDAyMTcwMzY1NzcxMTE0MjIiXiJyZXN0YXVyYW5SwiZW1haWwiOlsibmlja2JyeWFudHhAZ21haWwuY29tIl19LCJzaWduX2luX3Byb3ZpZGVyIjoiZ29vZ2xlLmNvbSJ9fQ.HwqF1XLzxGCVTn_4nz0w3NDA0MTk1MiwidXNlcl90-V_tdqUD86tFxM1MNJtEREp3aWtlRnVST3FIaAcMp8Iyx6tzMXTuyhXOoZkpkSoBkOOkUsWrvWvh3jRxq-4EmR2W191lJck8X0mJ5jRYNvKtOm3-FgvkafV_I9s97wmyqS0r9kpnPREghvmV8LBdqrqOKly4LlY4Y8IBBF4nzHFYNwxVDH8pi7W4X8G8XJOLzlip8NKgaEf_3kLAKWDmF70yKlKPbsWCgOBJXdCv6ukhP-EZYydWuQReLW1XV2hO1aRHMnk6zCXCStugWTZFTJ_e4C1W-5aQEUsqvufMVw'
+
+        provider:
+          type: string
+          example: 'www.google.com'
+
+    SanitizedUser:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '63d022aaaa41bd26ae10ac5c'
+        firstName:
+          type: string
+          example: 'John'
+        email:
+          type: string
+          example: 'jsmith@gmail.com'
+        avatar:
+          type: string
+          example: '/path/to/image.png'
+        admin:
+          type: boolean
+    SignOutRequestBody:
+      type: object
+      properties:
+        signOutAll:
+          type: boolean
+          example: true
+    SignOutResponseSuccessBody:
+      type: object
+      properties:
+        status:
+          type: string
+          example: "success"
+        success:
+          type: boolean
+          example: true

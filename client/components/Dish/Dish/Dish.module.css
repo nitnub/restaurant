@@ -1,0 +1,106 @@
+.dishCard {
+  display: flex;
+  /* width: 512px; Op1*/
+  width: 450px;
+  margin: 12px;
+  /* height: 175px; Op1 */
+  height: 125px;
+}
+
+.dishCardLoading {
+  display: flex;
+  width: 512px;
+  margin: 12px;
+  background-color: #f2f0f3;
+  height: 175px;
+}
+
+.dishImage {
+  width: 151px;
+  height: 100%
+}
+
+.dishImageLoading {
+  width: 151px;
+  height: 151px;
+  margin: 6px;
+}
+
+.cardBox {
+  display: flex;
+
+  width: 100%;
+  justify-content: space-between;
+}
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.cardContentLoading {
+  display: flex;
+  justify-content: space-between;
+  height: 100px;
+  padding: 8px;
+  margin: 0;
+}
+
+.cardBlurbLoading {
+  height: 80px;
+  width: 200px;
+}
+
+.innerContainer {
+  display: flex;
+  justify-content: space-between;
+  height: 100%;
+  height: 110px;
+}
+
+.dishHeaderLoading {
+  margin: 8px;
+  width: 300px;
+  height: 30px;
+}
+
+.disSubheaderLoading {
+  margin: 8px;
+  width: 300px;
+}
+
+.description {
+  font-size: 0.9em;
+}
+
+.counterContainer {
+  display: flex;
+  justify-content: center;
+}
+.dishCounter {
+  display: flex;
+  align-items: center;
+}
+
+.dishCounterLoading {
+  justify-self: center;
+  width: 100px;
+}
+
+.addRemove {
+  display: flex;
+  height: fit-content;
+}
+
+svg.add {
+  color: red;
+}
+
+.skeletonContainer {
+  display: flex;
+}
+
+.skeletonTitle {
+  width: 1000px;
+}

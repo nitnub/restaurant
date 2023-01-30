@@ -1,0 +1,9 @@
+dist/
+node_modules/
+local_resources/
+
+.env
+
+# Misc
+auth.log
+.env.echo

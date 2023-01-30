@@ -1,6 +1,8 @@
 version: '3.7'
 services:
-  
+  # networks:
+  #   data-service-network
+
   postgres:
       image: postgres:15.1
       restart: always
@@ -18,6 +20,33 @@ services:
         - ./sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
         - ./sql/populate_tables.sql:/docker-entrypoint-initdb.d/populate_tables.sql
          
+
+
+  mongodb_container:
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data_container:/data/db
+  auth-server:
+    depends_on:
+      - mongodb_container
+    build: /auth-server
+    environment:
+      - DATABASE_LOCAL=mongodb://mongodb_container
+    ports:
+      - 4000:4000
+    # networks:
+    #   data-service-network
+
+
+
+
+
+
+
+
+
   # mongodb_container:
   #   image: mongo:latest
   #   environment:
@@ -39,12 +68,17 @@ services:
     depends_on:
       - postgres
       - redis-cache
-    build: .
+      - auth-server
+    build: /client
     # environment:
     #   - MONGO_CONNECTION_STRING=mongodb://root:rootpassword@mongodb_container
     ports:
       - 3000:3000
 
+# volumes:
+#   # mongodb_data_container:
+#   cache:
+
 volumes:
-  # mongodb_data_container:
+  mongodb_data_container:
   cache:
