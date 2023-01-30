@@ -1,0 +1,50 @@
+version: '3.7'
+services:
+  
+  postgres:
+      image: postgres:15.1
+      restart: always
+      environment: 
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+      logging:
+        options:
+          max-size: 10m
+          max-file: "3"
+      ports:
+        - '5432:5432'
+      volumes:
+
+        - ./sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+        - ./sql/populate_tables.sql:/docker-entrypoint-initdb.d/populate_tables.sql
+         
+  # mongodb_container:
+  #   image: mongo:latest
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: root
+  #     MONGO_INITDB_ROOT_PASSWORD: rootpassword
+  #   ports:
+  #     - 27017:27017
+  #   volumes:
+  #     - mongodb_data_container:/data/db
+  redis-cache:
+    image: redis:latest
+    ports:
+      - 6379:6379
+    command: redis-server --save 20 1 --loglevel warning 
+    volumes:
+      - cache:/data
+  app:
+    # image: resstaurant-app:v1
+    depends_on:
+      - postgres
+      - redis-cache
+    build: .
+    # environment:
+    #   - MONGO_CONNECTION_STRING=mongodb://root:rootpassword@mongodb_container
+    ports:
+      - 3000:3000
+
+volumes:
+  # mongodb_data_container:
+  cache:

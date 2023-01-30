@@ -1,7 +1,7 @@
 {
 
   "rules": {
-    "node/no-unsupported-features/es-syntax": [
+    " ": [
       "error",
       { "ignores": ["modules"] }
     ]
@@ -13,8 +13,8 @@
       "plugins": ["@typescript-eslint", "unused-imports"],
       "extends": [
   
-        "next/core-web-vitals"
-     
+        "next/core-web-vitals",
+        "next"
       ],
       "parserOptions": {
         "project": "./tsconfig.json"

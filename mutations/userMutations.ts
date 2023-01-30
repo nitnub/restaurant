@@ -7,20 +7,20 @@ export const ADD_USER = gql`
     $firstName: String!
     $lastName: String!
     $email: String!
-    $passHash: String
+    # $passHash: String
     $avatar: String
   ) {
     addAppUser(
       firstName: $firstName
       lastName: $lastName
       email: $email
-      passHash: $passHash
+      # passHash: $passHash
       avatar: $avatar
     ) {
       firstName
       lastName
       email
-      passHash
+      # passHash
       avatar
     }
   }

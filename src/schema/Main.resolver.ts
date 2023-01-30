@@ -5,6 +5,7 @@ import getFormattedCart from '@/utils/getFormattedCart';
 import { prisma } from '@/configs/prisma.client';
 import { CartItem } from '@/types/cartTypes';
 import { Restaurant } from '@prisma/client';
+import { VerifiedTotalResult } from '@/types/resolverTypes';
 
 
 const resolvers = {
@@ -175,10 +176,14 @@ const resolvers = {
 
       const globalUserID = context.req.user.id;
 
+      const noCustomerId = {
+        stripeCustomerId: ''
+      }
+
       const { stripeCustomerId } =
         (await prisma.userAccount.findFirst({
           where: { globalUserId: globalUserID },
-        })) || '';
+        })) || noCustomerId;
 
       if (!stripeCustomerId) {
         log.error('Unable to find customerID in the DB!');
@@ -301,7 +306,7 @@ const resolvers = {
     },
   },
   VerifiedTotalResult: {
-    __resolveType(obj: ResolverError | VerifiedTotal, contextValue) {
+    __resolveType(obj: VerifiedTotalResult, contextValue) {
       if (Object.keys(obj).includes('nextTarget')) {
         return 'NotAuthorized';
       }

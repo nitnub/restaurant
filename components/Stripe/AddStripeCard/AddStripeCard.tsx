@@ -33,7 +33,7 @@ export default function settings() {
     return <h1>Loading Order History...</h1>;
   }
   if (error) {
-    console.log('Error oading Order History...', loading);
+    console.log('Error loading Order History...', error);
     return <h1>Loading Order History...</h1>;
   }
 

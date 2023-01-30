@@ -1,6 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
-  // provider = "postgresql"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
@@ -9,77 +9,20 @@ datasource db {
 }
 
 model Dish {
-  id                                     Int                 @id @default(autoincrement())
+  id                                     Int            @id @default(autoincrement())
   name                                   String?
   description                            String?
   image                                  String?
-  price                                  Decimal?            @db.Decimal
+  price                                  Decimal?       @db.Decimal
   restaurant                             Int?
-  vegetarian                             Boolean?            @default(false)
-  vegan                                  Boolean?            @default(false)
-  glutenFree                             Boolean?            @default(false) @map("gluten_free")
-  restaurant_dish_restaurantTorestaurant Restaurant?         @relation("dish_restaurantTorestaurant", fields: [restaurant], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  hearted_dish                           HeartedDish[]
-  order_dish                             OrderDish[]
-  test_hearted_dish                      TestHeartedDish[]
+  vegetarian                             Boolean?       @default(false)
+  vegan                                  Boolean?       @default(false)
+  glutenFree                             Boolean?       @default(false) @map("gluten_free")
+  restaurant_dish_restaurantTorestaurant Restaurant?    @relation("dish_restaurantTorestaurant", fields: [restaurant], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  hearted_dish                           hearted_dish[]
+  order_dish                             order_dish[]
+
   @@map("dish")
-}
-
-model HeartedDish {
-  userId      Int           @map("user_id")
-  dishId      Int           @map("dish_id")
-  updateDate  DateTime?     @db.Date @map("update_date")
-  dish         Dish         @relation(fields: [dishId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  user_account UserAccount  @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-
-  @@id([userId, dishId])
-  @@map("hearted_dish")
-}
-
-model HeartedRestaurant {
-  userId        Int          @map("user_id")
-  restaurantId  Int          @map("restaurant_id")
-  updateDate    DateTime?    @db.Date @map("update_date")
-  restaurant    Restaurant   @relation(fields: [restaurantId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  user_account  UserAccount  @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction) 
-
-  @@id([userId, restaurantId])
-  @@map("hearted_restaurant")
-}
-
-model Order {
-  id               Int           @id @default(autoincrement())
-  addressLineOne   String?       @map("address_line_one")
-  addressLineTwo   String?       @map("address_line_two")
-  addressCity      String?       @map("address_city")
-  addressState     String?       @map("address_state")
-  addressZip       String?       @map("address_zip")
-  token            String?
-  image            String?
-  chargeId         String?       @map("charge_id")
-  chargeAmount     Decimal?      @db.Decimal @map("charge_amount")
-  user             Int?
-  user_account     UserAccount?  @relation(fields: [user], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  order_dish       OrderDish[]
-  @@map("order")
-}
-
-model OrderDish {
-  orderId    Int        @map("order_id")
-  dishId     Int        @map("dish_id")
-  updateDate DateTime? @db.Date @map("update_date")
-  dish        Dish      @relation(fields: [dishId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  order       Order     @relation(fields: [orderId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-
-  @@id([orderId, dishId])
-  @@map("order_dish")
-}
-
-model RefreshToken {
-  id                 Int       @id @default(autoincrement())
-  refreshTokenHash String?   @map("refresh_token_hash")
-  created            DateTime? @default(now()) @db.Timestamptz(6)
-  @@map("refresh_token")
 }
 
 model Restaurant {
@@ -91,49 +34,70 @@ model Restaurant {
   image                            String?
   homePage                         String?              @map("home_page")
   dish_dish_restaurantTorestaurant Dish[]               @relation("dish_restaurantTorestaurant")
-  hearted_restaurant               HeartedRestaurant[]  
+  hearted_restaurant               hearted_restaurant[]
+
   @@map("restaurant")
-}
-
-model TestHeartedDish {
-  userId      Int @map("user_id")
-  dishId      Int @map("dish_id")
-  createdOn   DateTime?    @default(now()) @db.Timestamptz(6) @map("created_on")
-  modifiedOn  DateTime?    @default(now()) @db.Timestamptz(6) @map("modified_on")
-  dish         Dish         @relation(fields: [dishId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  user_account UserAccount  @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction) 
-
-  @@id([userId, dishId])
-  @@map("test_hearted_dish")
-}
-
-model TestTable {
-  id             Int       @id @default(autoincrement())
-  name           String
-  rating         Decimal?  @db.Decimal
-  hasVegetarian Boolean?   @map("has_vegetarian")
-  date           DateTime? @db.Date
-  dateTwo       DateTime?  @db.Timetz(6) @map("date_two")
-  @@map("testtable")
 }
 
 model UserAccount {
   id                 Int                  @id(map: "user_pkey") @default(autoincrement())
-  firstName         String?              @map("first_name")
   email              String?
-  passHash          String?              @map("pass_hash")
-  passResetToken   String?              @map("pass_reset_token")
   admin              Boolean?             @default(false)
-  lastName          String?              @map("last_name")
   avatar             String?
   active             Boolean?             @default(true)
-  stripeCustomerId String?              @map("stripe_customer_id")
-  globalUserId     String?              @map("global_user_id")
-  created            DateTime             @default(now()) @db.Timestamptz(6)              
-  last_modified      DateTime?            @default(now()) @db.Timestamptz(6)              @map("last_modified")
-  hearted_dish       HeartedDish[]               
-  hearted_restaurant HeartedRestaurant[]           
-  order              Order[]
-  test_hearted_dish  TestHeartedDish[]        
-  @@map("user_account")     
+  stripeCustomerId   String?              @map("stripe_customer_id")
+  globalUserId       String?              @map("global_user_id")
+  created            DateTime             @default(now()) @db.Timestamptz(6)
+  last_modified      DateTime?            @default(now()) @map("last_modified") @db.Timestamptz(6)
+  hearted_dish       hearted_dish[]
+  hearted_restaurant hearted_restaurant[]
+  order              order[]
+
+  @@map("user_account")
+}
+
+model hearted_dish {
+  user_id      Int
+  dish_id      Int
+  update_date  DateTime?   @db.Date
+  dish         Dish        @relation(fields: [dish_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user_account UserAccount @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([user_id, dish_id])
+}
+
+model hearted_restaurant {
+  user_id       Int
+  restaurant_id Int
+  update_date   DateTime?   @db.Date
+  restaurant    Restaurant  @relation(fields: [restaurant_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user_account  UserAccount @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([user_id, restaurant_id])
+}
+
+model order {
+  id               Int          @id @default(autoincrement())
+  address_line_one String?
+  address_line_two String?
+  address_city     String?
+  address_state    String?
+  address_zip      String?
+  token            String?
+  image            String?
+  charge_id        String?
+  charge_amount    Decimal?     @db.Decimal
+  user             Int?
+  user_account     UserAccount? @relation(fields: [user], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  order_dish       order_dish[]
+}
+
+model order_dish {
+  order_id    Int
+  dish_id     Int
+  update_date DateTime? @db.Date
+  dish        Dish      @relation(fields: [dish_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  order       order     @relation(fields: [order_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([order_id, dish_id])
 }

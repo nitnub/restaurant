@@ -23,12 +23,17 @@ export default function Dish({ dishProp }: { dishProp: CartItem }) {
 
   return (
     <Card className={styles.dishCard}>
+      <div  className={styles.dishImage}>
+       
+
       <CardMedia
         component="img"
         className={styles.dishImage}
         image={dishProp.image}
         alt={dish.description}
-      />
+        // width={151}
+        />
+        </div>
       <Box className={styles.cardContent}>
         <CardContent className={styles.cardContent}>
           <Typography component={'span'} variant="h5">

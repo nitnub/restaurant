@@ -2,9 +2,9 @@ import chalk from 'chalk';
 import fs from 'fs';
 
 export default class Logger {
-  private static stream: fs.WriteStream = fs.createWriteStream(`auth.log`, {
-    flags: 'a',
-  });
+  // private static stream: fs.WriteStream = fs.createWriteStream(`auth.log`, {
+  //   flags: 'a',
+  // });
 
   public static info(args: any) {
     const timeStamp = `[${new Date().toLocaleString()}] [INFO] `;

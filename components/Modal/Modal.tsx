@@ -38,7 +38,7 @@ export default function BasicModal(props) {
             {props.body}
             Account {(
       <strong>{props.email}</strong>
-    )} has been created! You can now place an order from the shopping cart. Any items that were in your guest cart have been moved over to your new account for you. Lastly, don't forget to add a dummy credit card number under "Settings" so that payment IDs can be generated through Stripe.
+    )} has been created! You can now place an order from the shopping cart. Any items that were in your guest cart have been moved over to your new account for you. Lastly, don&apos;t forget to add a dummy credit card number under &ldquo;Settings&rdquo; so that payment IDs can be generated through Stripe.
           </Typography>
           <br />
           <div className={styles.button}>

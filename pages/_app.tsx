@@ -1,13 +1,11 @@
 import '../styles/globals.css';
-import { useContext, useEffect, useState } from 'react';
+// import * from '../.next/static/empty.css'; // Added as workaround for sstyling bug per https://stackoverflow.com/questions/51932288/next-js-stylesheet-is-not-loaded
+import { useContext, useState } from 'react';
 import type { AppProps } from 'next/app';
 import Layout from '../components/Layout';
 import AppContext from '../components/context';
-
 import CartDrawer from '../components/cart/CartDrawer';
-
-import { ApolloProvider, gql, useQuery } from '@apollo/client';
-import { CartItem } from '@/types/cartTypes';
+import { ApolloProvider } from '@apollo/client';
 import client from '@/configs/apollo.client';
 import { cookieDuster, getCookie } from '@/utils/cookieHandler';
 import { Cart, CartButtonSet, CartItem } from '@/types/cartTypes';
