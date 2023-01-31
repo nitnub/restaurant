@@ -115,18 +115,20 @@ export default function App({ Component, pageProps }: AppProps) {
   }
 
   return (
-    <AppContext.Provider value={contextValues}>
-      <ApolloProvider client={client}>
-      {/* <Head>
+    <div style={{ backgroundColor: '#f2f0f3' }}>
+      <AppContext.Provider value={contextValues}>
+        <ApolloProvider client={client}>
+          {/* <Head>
         <title>My page title</title>
       </Head> */}
-        {/* <ApolloProvider client={client(ctx)}> */}
-        <CartDrawer />
+          {/* <ApolloProvider client={client(ctx)}> */}
+          <CartDrawer />
 
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </ApolloProvider>
-    </AppContext.Provider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </ApolloProvider>
+      </AppContext.Provider>
+    </div>
   );
 }

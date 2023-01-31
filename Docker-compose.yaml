@@ -1,7 +1,8 @@
 version: '3.7'
 services:
-  # networks:
-  #   data-service-network
+
+    # networks:
+      # - data-service-network
 
   postgres:
       image: postgres:15.1
@@ -37,7 +38,7 @@ services:
     ports:
       - 4000:4000
     # networks:
-    #   data-service-network
+    #   - data-service-network
 
 
 
@@ -74,11 +75,14 @@ services:
     #   - MONGO_CONNECTION_STRING=mongodb://root:rootpassword@mongodb_container
     ports:
       - 3000:3000
+    # networks:
+    #   - data-service-network
 
 # volumes:
 #   # mongodb_data_container:
 #   cache:
-
+# networks:
+#   - data-service-network
 volumes:
   mongodb_data_container:
   cache:

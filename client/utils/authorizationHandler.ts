@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import { Context } from '@apollo/client';
 import { newGuestID } from './newGuestID';
 
@@ -40,8 +39,6 @@ export default class AuthorizationHandler {
         credentials: 'include',
       });
 
-
-      
     } catch (err) {
       return console.log(
         'There was an issue logging into the application. Please try again later.'
@@ -107,7 +104,6 @@ export default class AuthorizationHandler {
       idToken,
       provider,
     };
-
     const response = await fetch(this.SIGN_IN_OAUTH_URL, {
       method: 'POST',
       body: JSON.stringify(requestBody),
@@ -117,15 +113,14 @@ export default class AuthorizationHandler {
       credentials: 'include',
     });
 
+   
     const data = await response.json();
-    console.log('google response:')
-    console.log(data)
+ 
     if (data instanceof Error) {
       return {
         status: 'fail',
         success: false,
         message: data.message,
-        // stack: data.stack
       };
     }
     if (!data.success) {

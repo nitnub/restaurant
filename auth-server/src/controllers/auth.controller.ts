@@ -76,6 +76,7 @@ class AuthController {
   signinOAuth = globalCatch(
     async (req: Request, res: Response): Promise<Response | void> => {
       const { idToken, provider }: OAuthRequest = req.body;
+
       if (provider === 'www.google.com') {
         const resp = await this.authService.verifyGoogleToken(idToken, res);
         res.status(200).json({

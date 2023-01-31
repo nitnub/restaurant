@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Meta from '../components/Meta';
-import Head from 'next/head'
+import Head from 'next/head';
 import SearchBar from '@/components/Filter/SearchBar';
 import RestaurantList from '@/components/Restaurant/RestaurantList';
 import { useRouter } from 'next/router';
@@ -66,7 +66,6 @@ export default function Home(props) {
 
   return (
     <div>
-   
       <Meta />
       <Head>
         <title>Restaurant App | Welcome!</title>

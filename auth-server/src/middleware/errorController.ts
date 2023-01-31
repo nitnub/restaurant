@@ -74,7 +74,6 @@ export default (
   res: Response,
   next: NextFunction
 ) => {
-  console.log(123)
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'Error';
   if (process.env.NODE_ENV === 'development') {
