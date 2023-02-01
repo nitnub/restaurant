@@ -1,12 +1,12 @@
 import { createClient } from 'redis';
 import log from '@/libs/logger';
 
-// export const client = createClient({
-//   url: process.env.NEXT_PUBLIC_REDIS_URL,
-// });
+export const client = createClient({
+  url: process.env.NEXT_PUBLIC_REDIS_URL,
+});
 
 
-export const client = createClient()
+// export const client = createClient()
 export default async function redisConnect() {
   client
     .connect()

@@ -8,30 +8,19 @@ import Logger from './libs/logger.js';
 import cors from 'cors';
 import unknownRoute from './middleware/unknownRoute';
 import logRequests from './middleware/logRequests';
-
-// Documentation
 // import swaggerUi from 'swagger-ui-express';
-// import swaggerDocument from 'swagger.json';
+// import YAML from 'yamljs';
 
 const app = express();
+
+// Documentation
+// const swaggerDocument = YAML.load(`../documentation.yaml`);
 
 // app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(express.json());
 app.use(cookieParser());
 app.use(logRequests);
-// app.use(verifyUser);
-app.use(
-  cors({
-    credentials: true,
-    origin: [
-      'http://localhost:3000',
-      'http://localhost:3001',
-      process.env.ORIGIN_URL_1!,
-      process.env.ORIGIN_URL_2!,
-    ],
-    // origin: ['http://localhost:3000', 'http://localhost:3001',],
-  })
-);
+app.use(cors());
 
 app.get('/ping', (req, res) => {
   console.log('pong');

@@ -63,6 +63,10 @@ class AuthController {
     async (req: Request, res: Response): Promise<Response | void> => {
       const { email, password } = req.body;
 
+      console.log('req is:')
+      console.log(req)
+      console.log('req body is:')
+      console.log(req.body)
       const accessToken = await this.authService.signin(email, password, res);
 
       res.status(200).json({

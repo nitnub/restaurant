@@ -5,6 +5,8 @@ import typeDefs from '@/src/schema/typeDefs.graphql';
 import { addUser } from '@/src/middleware/auth.middleware';
 import redisConnect from '@/configs/redis.connection';
 import allowCors from '@/utils/cors';
+// import cors from 'cors';
+
 
 redisConnect();
 
@@ -21,6 +23,5 @@ const server = new ApolloServer({
 const handler = startServerAndCreateNextHandler(server, {
   context: async (req, res) => ({ req, res, user: await addUser(req) }),
 });
-
 
 export default allowCors(handler);
