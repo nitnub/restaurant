@@ -33,7 +33,7 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: '/',
+        source: '/api/graphql',
         headers: [
           { key: 'Access-Control-Allow-Credentials', value: 'true' },
           { key: 'Access-Control-Allow-Private-Network', value: 'true' },
