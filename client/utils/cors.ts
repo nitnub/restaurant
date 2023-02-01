@@ -1,10 +1,12 @@
-const allowCors = (fn: Function) => async (req, res) => {
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  res.setHeader('Access-Control-Allow-Origin', '*');
+import { Request, Response } from "express";
+
+const allowCors = (fn: Function) => async (req: Request, res: Response) => {
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  // res.setHeader('Access-Control-Allow-Origin', '*');
   // another common pattern
   // console.log('request from:');
   // console.log(req.headers.origin);
-  // res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+  res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
   res.setHeader(
     'Access-Control-Allow-Methods',
     'GET,OPTIONS,PATCH,DELETE,POST,PUT'

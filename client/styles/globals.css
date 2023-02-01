@@ -40,7 +40,7 @@ a {
 }
 .formPageContainer {
   display: flex;
-  height: 100%;
+  height: fit-content;
   justify-content: center;
 }
 
