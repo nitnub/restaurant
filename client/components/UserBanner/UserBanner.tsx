@@ -26,7 +26,7 @@ function UserBanner() {
   if (typeof document !== 'undefined') {
     profile = ah.getProfile();
   }
-  const avatar = getCookie('avatar');
+  const avatar: string = getCookie('avatar');
 
   useEffect(() => {
     profile = ah.getProfile();
@@ -72,11 +72,11 @@ function UserBanner() {
     </div>
   ) : (
     <div className={styles.container}>
-      {avatar ? (
+      {avatar.startsWith('h1t') ? (
         <img
           className={styles.avatar}
           alt="An avatar image for the signed in user"
-          src={avatar}
+          src={avatar.toString()}
         />
       ) : (
         <AccountCircleIcon className={styles.avatar} />

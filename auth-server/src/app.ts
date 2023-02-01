@@ -23,7 +23,12 @@ app.use(logRequests);
 app.use(
   cors({
     credentials: true,
-    origin: ['http://localhost:3000', 'http://localhost:3001', process.env.ORIGIN_URL_1!, process.env.ORIGIN_URL_2! ],
+    origin: [
+      'http://localhost:3000',
+      'http://localhost:3001',
+      process.env.ORIGIN_URL_1!,
+      process.env.ORIGIN_URL_2!,
+    ],
     // origin: ['http://localhost:3000', 'http://localhost:3001',],
   })
 );
@@ -35,7 +40,7 @@ app.get('/ping', (req, res) => {
   Logger.error('Errors will show in red.');
 
   const refreshToken = req.cookies.refreshToken;
- 
+
   res.status(200).json({
     status: 'Success',
     message: 'Pong',
@@ -43,7 +48,6 @@ app.get('/ping', (req, res) => {
     refreshToken,
   });
 });
-
 
 app.use('/', userRouter);
 app.use(globalErrorHandler);

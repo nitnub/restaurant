@@ -115,7 +115,7 @@ export default function App({ Component, pageProps }: AppProps) {
   }
 
   return (
-    <div style={{ backgroundColor: '#f2f0f3' }}>
+    <div style={{ backgroundColor: '#f2f0f3', height: '100%' }}>
       <AppContext.Provider value={contextValues}>
         <ApolloProvider client={client}>
           {/* <Head>
