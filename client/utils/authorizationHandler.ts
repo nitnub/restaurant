@@ -36,7 +36,7 @@ export default class AuthorizationHandler {
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'include',
+        // credentials: 'include',
       });
 
     } catch (err) {
@@ -110,7 +110,7 @@ export default class AuthorizationHandler {
       headers: {
         'Content-Type': 'application/json',
       },
-      credentials: 'include',
+      // credentials: 'include',
     });
 
    
@@ -212,7 +212,7 @@ export default class AuthorizationHandler {
       headers: {
         'Content-Type': 'application/json',
       },
-      credentials: 'include',
+      // credentials: 'include',
     });
 
     document.cookie = `${this.PROFILE_KEY}=null; expires=${new Date(
@@ -250,7 +250,7 @@ export default class AuthorizationHandler {
       headers: {
         'Content-Type': 'application/json',
       },
-      credentials: 'include',
+      // credentials: 'include',
     });
 
     const data = await response.json();

@@ -16,12 +16,12 @@ const server = new ApolloServer({
   introspection: true,
 });
 
-// export default startServerAndCreateNextHandler(server, {
-//   context: async (req, res) => ({ req, res, user: await addUser(req) }),
-// });
-
-const handler = startServerAndCreateNextHandler(server, {
+export default startServerAndCreateNextHandler(server, {
   context: async (req, res) => ({ req, res, user: await addUser(req) }),
 });
 
-export default allowCors(handler);
+// const handler = startServerAndCreateNextHandler(server, {
+//   context: async (req, res) => ({ req, res, user: await addUser(req) }),
+// });
+
+// export default allowCors(handler);

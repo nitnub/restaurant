@@ -1,7 +1,7 @@
-import { Request, Response } from "express";
+import { Request, Response } from 'express';
 
 const allowCors = (fn: Function) => async (req: Request, res: Response) => {
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Credentials', 'false');
   // res.setHeader('Access-Control-Allow-Origin', '*');
   // another common pattern
   // console.log('request from:');
