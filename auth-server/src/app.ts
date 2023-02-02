@@ -12,6 +12,7 @@ import logRequests from './middleware/logRequests';
 // import YAML from 'yamljs';
 
 const app = express();
+app.use(cors());
 
 // Documentation
 // const swaggerDocument = YAML.load(`../documentation.yaml`);
@@ -20,7 +21,6 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(logRequests);
-app.use(cors());
 
 app.get('/ping', (req, res) => {
   console.log('pong');
