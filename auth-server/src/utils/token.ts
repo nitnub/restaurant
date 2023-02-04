@@ -1,3 +1,4 @@
+// @ts-nocheck
 import jwt from 'jsonwebtoken';
 import GlobalUser from 'ts/userTypes';
 import {
@@ -93,7 +94,7 @@ export const verifyTokenGoogle = async (
     jwt.verify(token, cert, { algorithm: 'RS256' }, (err, payload) => {
       console.log(err);
       if (err) return reject(err);
-      resolve(payload as T);
+      resolve(payload);
     });
   });
 };

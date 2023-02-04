@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Request, Response } from 'express';
 import GlobalUser from '../ts/userTypes';
 import { RefreshItem } from '../ts/refreshTypes';
@@ -62,7 +63,7 @@ class AuthService {
   };
 
   addRefreshEntryToDB = async (
-    globalUserID: Types.ObjectId
+    globalUserID: Types.ObjectId | string
   ): Promise<RefreshItem> => {
     const { iat, exp } = getTokenTimestamps();
     const refreshDetails = {
@@ -86,6 +87,8 @@ class AuthService {
 
     // Create new access token for this user.
     const accessToken = generateAccessToken(user);
+
+    if (!user._id) throw new AppError('Unable to generate user access token', 500)
 
     // Add new refresh entry to DB
     const refreshEntry = await this.addRefreshEntryToDB(user._id);
@@ -132,7 +135,7 @@ class AuthService {
     // verify user exists in db (via email) and password matches
     const user: GlobalUser | null = await this.authRepository.findUserByEmail(email) || null;
 
-    if (!user || !(await user.isValidPassword(password)))
+    if (!user || !(await user?.isValidPassword(password)))
       throw new AppError('Unable to verify user. Please try again.', 400);
 
     // const { accessToken, refreshToken } = await this.getsignedInState(

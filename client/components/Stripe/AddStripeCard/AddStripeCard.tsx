@@ -12,10 +12,7 @@ import CardContent from '@mui/material/CardContent';
 import styles from './AddStripeCard.module.css';
 import CardHeader from '@mui/material/CardHeader';
 
-const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PK_TEST
-
-);
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PK_TEST);
 
 export default function settings() {
   const ARGS = {
@@ -25,6 +22,7 @@ export default function settings() {
       },
     },
   };
+
 
   const { data, loading, error } = useQuery(GET_CLIENT_SECRET, ARGS);
 

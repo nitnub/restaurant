@@ -1,5 +1,6 @@
 import { Document } from 'mongoose';
 export default interface GlobalUser  {
+  _id?: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -8,7 +9,7 @@ export default interface GlobalUser  {
   admin: boolean;
   active: boolean;
   created?: Date;
-  isValidPassword(password: string): Promise<Error | boolean>;
+  isValidPassword?(password: string): Promise<Error | boolean>;
 }
 
 

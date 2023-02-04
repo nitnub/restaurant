@@ -33,7 +33,7 @@ class AuthRepository {
     return await Token.create(refreshDetails);
   };
 
-  findUserByEmail = async (email: string): Promise<GlobalUser | void> => {
+  findUserByEmail = async (email: string): Promise<GlobalUser | null> => {
     return await User.findOne({ email });
   };
 

@@ -1,7 +1,11 @@
-FROM node:16
-WORKDIR /app
-COPY package*.json .
-RUN npm install
-COPY . /app
+FROM node:alpine
+WORKDIR /usr/yourapplication-name
+COPY package.json .
+
+#RUN npm install
+RUN npm install\
+  && npm install typescript -g
+COPY . .
+RUN tsc
 EXPOSE 4000
-CMD [ "npm", "run", "start" ]
+CMD ["node", "./dist/server.js"]

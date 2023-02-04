@@ -22,7 +22,7 @@ export interface RefreshTokenPayload extends JwtPayload {
 }
 
 export interface AccessToken extends Object {
-  id: Types.ObjectId;
+  id: Types.ObjectId | string;
   firstName: string;
   email: string;
   avatar: string;

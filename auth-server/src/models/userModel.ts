@@ -1,5 +1,5 @@
 // import mongoose from 'mongoose';
-import { model, Schema } from 'mongoose';
+import { model, Mongoose, Schema } from 'mongoose';
 import GlobalUser from '../ts/userTypes';
 import isEmail from 'validator/lib/isEmail.js';
 import bcrypt from 'bcrypt';
@@ -42,7 +42,7 @@ export const userSchema = new Schema<GlobalUser>(
   { timestamps: true }
 );
 
-userSchema.pre<GlobalUser>('save', async function (next) {
+userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     return next();
   }
