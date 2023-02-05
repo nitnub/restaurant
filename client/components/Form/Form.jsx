@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Formik, Form as FormikForm } from 'formik';
 import * as Yup from 'yup';
 import FormElement from './FormElement';
-import convertToCurrency from '../../libs/formatter';
+import {convertToCurrency} from '../../libs/formatter';
 import Button from '@mui/material/Button';
 import getValidationSchema from '../../utils/getValidationSchema';
 import getInitialValues from '../../utils/getInitialValues';
