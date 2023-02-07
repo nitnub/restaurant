@@ -201,9 +201,9 @@ const resolvers = {
       const globalUserID = context.req.user.id;
 
       const { stripeCustomerId } =
-        (await prisma.userAccount.findFirst({
+        await prisma.userAccount.findFirst({
           where: { globalUserId: globalUserID },
-        })) || '';
+        });
 
       if (!stripeCustomerId) {
         log.error('Unable to find customerID in the DB!');

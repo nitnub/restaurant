@@ -1,2 +1,5 @@
 templates/
+
 nginx/nginx.conf
+nginx/nginx-ec2.conf
+nginx/docker-entrypoint.sh
