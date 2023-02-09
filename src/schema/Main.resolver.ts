@@ -186,8 +186,8 @@ const resolvers = {
         })) || noCustomerId;
 
       if (!stripeCustomerId) {
-        log.error('Unable to find customerID in the DB!');
-        throw new Error('Unable to find customerID in the DB!');
+        log.error('[E1] Unable to find customerID in the DB!');
+        throw new Error('[E1] Unable to find customerID in the DB!');
       }
 
       return await Stripe.clientSecret(stripeCustomerId);
@@ -206,8 +206,8 @@ const resolvers = {
         });
 
       if (!stripeCustomerId) {
-        log.error('Unable to find customerID in the DB!');
-        throw new Error('Unable to find customerID in the DB!');
+        log.error('[E2] Unable to find customerID in the DB!');
+        throw new Error('[E2] Unable to find customerID in the DB!');
       }
       return await Stripe.getPaymentMethod(stripeCustomerId);
     },
@@ -224,8 +224,8 @@ const resolvers = {
       });
 
       if (!stripeCustomerId) {
-        log.error('Unable to find customerID in the DB!');
-        throw new Error('Unable to find customerID in the DB!');
+        log.error('[E3] Unable to find customerID in the DB!');
+        throw new Error('[E3] Unable to find customerID in the DB!');
       }
 
       return await Stripe.getCustomerTransactionsFormatted(stripeCustomerId);
