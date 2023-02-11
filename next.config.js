@@ -22,6 +22,7 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   output: 'standalone',
+  staticPageGenerationTimeout: 1000,
   async rewrites() {
     return [
       {
