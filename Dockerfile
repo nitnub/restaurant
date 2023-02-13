@@ -10,15 +10,17 @@ WORKDIR /app
 COPY prisma ./prisma/
 
 # # Install dependencies based on the preferred package manager
-# COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
-# RUN \
-#   if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-#   elif [ -f package-lock.json ]; then npm ci; \
-#   elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && pnpm i --frozen-lockfile; \
-#   else echo "Lockfile not found." && exit 1; \
-#   fi
+COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
+RUN npm config set fetch-retry-mintimeout 20000
+RUN npm config set fetch-retry-maxtimeout 1200000
+RUN \
+  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
+  elif [ -f package-lock.json ]; then npm ci; \
+  elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && pnpm i --frozen-lockfile; \
+  else echo "Lockfile not found." && exit 1; \
+  fi
 
-RUN npm ci
+# RUN npm ci
 
 # Rebuild the source code only when needed
 FROM node:16-alpine AS builder
