@@ -6,7 +6,7 @@ const allowCors = (fn: Function) => async (req: Request, res: Response) => {
   // another common pattern
   // console.log('request from:');
   // console.log(req.headers.origin);
- // res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+ res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
   res.setHeader(
     'Access-Control-Allow-Methods',
     'GET,OPTIONS,PATCH,DELETE,POST,PUT'

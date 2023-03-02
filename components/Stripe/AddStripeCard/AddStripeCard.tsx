@@ -39,9 +39,9 @@ export default function settings() {
 
   const options = {
     clientSecret,
-    appearance: {
-      /*...*/
-    },
+    // appearance: {
+    //   /*...*/
+    // },
   };
 
   return (

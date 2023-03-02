@@ -180,6 +180,9 @@ const resolvers = {
         stripeCustomerId: ''
       }
 
+      console.log('client secret path:')
+      console.log(context.req)
+
       const { stripeCustomerId } =
         (await prisma.userAccount.findFirst({
           where: { globalUserId: globalUserID },
