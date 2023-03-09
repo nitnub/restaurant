@@ -169,7 +169,7 @@ export default function CustomPaginationActionsTable() {
                 <strong>Time</strong>
               </TableCell>
               <TableCell align="right">
-                T<strong>otal</strong>
+                <strong>Total</strong>
               </TableCell>
               <TableCell align="right">
                 <strong>Card Type</strong>

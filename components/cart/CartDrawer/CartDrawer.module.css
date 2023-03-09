@@ -10,7 +10,16 @@
   height: 120px;
 }
 
+.cartSummaryContainer {
+  width: 100%;
+  display: flex; 
+  justify-content: space-between;
+  /* display: flex; */
+  /* justify-content: space-between; */
+}
+
 .cartSummary {
+  width: 100%;
   display: flex;
   justify-content: space-between;
 }
@@ -22,8 +31,10 @@
   top: 1;
 }
 
+
 .priceSummary {
   display: flex;
+  align-items: center;
 }
 
 .priceLabel {

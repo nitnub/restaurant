@@ -30,7 +30,8 @@ export default function CartComp() {
     return null;
   }
   return (
-    <div aria-label="cart" style={{ color: iconColor }}>
+    // <div aria-label="cart" style={{ color: iconColor }}>
+    <div aria-label="cart" className="cartIcon">
       <StyledBadge badgeContent={totalCount} color="success">
         <ShoppingCartIcon />
       </StyledBadge>

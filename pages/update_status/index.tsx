@@ -8,10 +8,8 @@ import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
-import styles from './index.module.css'
+import styles from './index.module.css';
 import AppContext from '@/components/context';
-import { GET_CART } from '@/src/graphql/queries';
-import { useQuery } from '@apollo/client';
 import { getCookie } from '@/utils/cookieHandler';
 import Head from 'next/head';
 const stripePromise = loadStripe(
@@ -19,7 +17,6 @@ const stripePromise = loadStripe(
 );
 
 const Wrapper = (props) => (
-
   <Elements stripe={stripePromise}>
     <PaymentStatus {...props} />
   </Elements>
@@ -28,17 +25,16 @@ const Wrapper = (props) => (
 const PaymentStatus = (props) => {
   const ctx = useContext(AppContext);
   const stripe = useStripe();
+  const [cardTitle, setCardTitle] = useState('Verifying...');
+  const [pageTitle, setPageTitle] = useState('Updating Payment Methods...');
   const [message, setMessage] = useState(null);
-  const [title, setTitle] = useState(null);
 
   const cart = getCookie('cart') || [];
   const hasCart = Object.keys(cart).length > 0;
 
   useEffect(() => {
     hasCart && ctx.setCart(cart);
-
-  },[])
-
+  }, []);
 
   useEffect(() => {
     if (!stripe) {
@@ -62,14 +58,16 @@ const PaymentStatus = (props) => {
       // [0]: https://stripe.com/docs/payments/payment-methods#payment-notification
       switch (setupIntent.status) {
         case 'succeeded':
-          setTitle('Success!');
+          setPageTitle('Payment Methods Updated!');
+          setCardTitle('Success!');
           setMessage(
             'Success! Your payment method has been saved and will be available at checkout.'
           );
           break;
 
         case 'processing':
-          setTitle('Processing...');
+          setPageTitle('Updateing Payment Methods...');
+          setCardTitle('Processing...');
           setMessage(
             "Processing payment details. We'll update you when processing is complete."
           );
@@ -78,7 +76,8 @@ const PaymentStatus = (props) => {
         case 'requires_payment_method':
           // Redirect your user back to your payment page to attempt collecting
           // payment again
-          setTitle('Unable to Process');
+          setPageTitle('Unable to Update Payment Methods');
+          setCardTitle('Unable to Process');
           setMessage(
             'Failed to process payment details. Please try another payment method.'
           );
@@ -87,22 +86,15 @@ const PaymentStatus = (props) => {
     });
   }, [stripe]);
 
-
-  
   return (
-    
-      <div className="updateConfContainer">
-    
-       <Head>
-        <title>Restaurant App | Order Status</title>
+    <div className={styles.updateConfContainer}>
+      <Head>
+        <title>{pageTitle}</title>
       </Head>
-        <Card className="updateCard">
-        {/* <Card className={styles.updateCard}> */}
-          {/* <CardContent className="formCardContent"> */}
-          <CardContent className="formCardContent">
-          {/* <CardContent className={styles.}> */}
-            <CardHeader title={title} />
-
+      <div className={styles.cardContainer}>
+        <Card className={styles.updateCard}>
+          <CardContent className={styles.formCardContent}>
+            <CardHeader title={cardTitle} />
             {message}
             <Button>
               <Link href={'/'}>Go to restaurants</Link>
@@ -110,7 +102,7 @@ const PaymentStatus = (props) => {
           </CardContent>
         </Card>
       </div>
-    
+    </div>
   );
 };
 

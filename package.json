@@ -33,6 +33,7 @@
     "eslint-plugin-unused-imports": "^2.0.0",
     "firebase": "^9.15.0",
     "formik": "^2.2.9",
+    "graphql": "^16.6.0",
     "jose": "^4.11.2",
     "jsonwebtoken": "^9.0.0",
     "module-alias": "^2.2.2",

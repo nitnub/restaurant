@@ -35,6 +35,14 @@ export default function App({ Component, pageProps }: AppProps) {
   const [clientSecret, setClientSecret] = useState('');
   const [customerID, setCustomerID] = useState('');
 
+
+  const destination = process.env.NEXT_PUBLIC_RESOURCE_PATH || 'http://localhost'
+
+  console.log('destination is:', destination)
+
+
+
+
   const contextValues = {
     cart,
     setCart: (cart: Cart) => setCart(cart),

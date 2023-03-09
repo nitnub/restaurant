@@ -214,19 +214,18 @@ export default function CartDrawer() {
             <div className={styles.drawerHeader}>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <DrawerHeader className={styles.cartSummary}>
-                  <div style={{display: 'flex', justifyContent: 'space-between'}}>
-
-                  <div>
-                    <IconButton onClick={handleDrawerClose}>
-                      <CartComp />
-                    </IconButton>
-                  </div>
-                  <div className={styles.priceSummary}>
-                    <div className={styles.priceLabel}>Total:&nbsp;</div>
-                    <div className={styles.priceAmount}>
-                      {convertToCurrency(ctx.cart.totalCost)}
+                  <div className={styles.cartSummaryContainer}>
+                    <div>
+                      <IconButton onClick={handleDrawerClose}>
+                        <CartComp />
+                      </IconButton>
                     </div>
-                  </div>
+                    <div className={styles.priceSummary}>
+                      <div className={styles.priceLabel}>Total:&nbsp;</div>
+                      <div className={styles.priceAmount}>
+                        {convertToCurrency(ctx.cart.totalCost)}
+                      </div>
+                    </div>
                   </div>
                 </DrawerHeader>
               </div>
@@ -243,35 +242,9 @@ export default function CartDrawer() {
             <Divider />
 
             <div>
-              {/* <div>
-                <b>Total:</b>
-              </div>
-              {convertToCurrency(ctx.cart.totalCost)} */}
+ 
             </div>
-            {/* <button
-              onClick={() => {
-                const parseCookie = (key) => {
-                  const cookie = document.cookie;
-                  try {
-                    const test = cookie.split(`${key}=`)[1];
-                    const test2 = test.split(';')[0];
-                    const test3 = JSON.parse(test2);
-                    return test3;
-                  } catch {
-                    return false;
-                  }
-                };
-              }}
-            >
-              test button
-            </button>
-            <button
-              onClick={() => {
-                lc.DEBUG_emptyAllCarts();
-              }}
-            >
-              Clear All Carts
-            </button> */}
+         
           </Drawer>
         </>
       </Box>

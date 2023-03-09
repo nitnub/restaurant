@@ -1,6 +1,7 @@
 :root {
   --clr-lt-bkgd: #f2f0f3;
-  --clr-lt-hdr: #db5f68;
+  --clr-lt-hdr: #ec989d;
+  /* --clr-lt-hdr: #db5f68; */
   --clr-lt-blk: #4e4740;
   --val-hdr-gap: 450px;
 }
@@ -93,7 +94,6 @@ a {
 
 .headerBackgroundSpan {
   position: absolute;
-  background-color: red;
   background-color: var(--clr-lt-blk);
   width: 100vw;
   height: 250px;
@@ -101,6 +101,7 @@ a {
   top: 0;
   opacity: 0.5;
 }
+
 .mainBackground {
   height: 100vh;
   width: 100vw;
@@ -126,13 +127,20 @@ a {
   color: white;
   font-size: 4em;
 }
+
 .resTitleStyle {
   color: white;
   font-size: 2em;
 }
+
 .resTitleDescription {
   color: white;
   font-size: 1.5em;
+}
+
+.cartIcon {
+  /* color: var(--clr-lt-hdr) */
+  color: black;
 }
 
 /* Card Update Page */
