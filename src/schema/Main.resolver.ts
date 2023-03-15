@@ -180,8 +180,8 @@ const resolvers = {
         stripeCustomerId: ''
       }
 
-      console.log('client secret path:')
-      console.log(context.req)
+      // console.log('client secret path:')
+      // console.log(context.req)
 
       const { stripeCustomerId } =
         (await prisma.userAccount.findFirst({
@@ -189,6 +189,9 @@ const resolvers = {
         })) || noCustomerId;
 
       if (!stripeCustomerId) {
+
+
+        
         log.error('[E1] Unable to find customerID in the DB!');
         throw new Error('[E1] Unable to find customerID in the DB!');
       }

@@ -99,8 +99,6 @@ export default function Register() {
       return;
     }
 
-    // Auth.setProfile(accessToken); //
-
     // // Generally, if profile is updated, should check the cookie state first
 
     setErrorMessage(() => '');
@@ -150,6 +148,7 @@ export default function Register() {
       const result = await cartQuery(ARGS);
       if (loading) return console.log(loading);
       if (error) return console.log(error);
+
       cart = result.data.getCartResult;
     }
 

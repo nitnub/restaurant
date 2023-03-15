@@ -7,7 +7,12 @@ export default async function verifyToken(token: string, secret: string) {
     token,
     encodedSecret
   ).catch((error) => {
+    console.log('[1] Token Error. Invalid Access Token.')
   });
   console.log('jose payload:', payload)
   return payload;
+}
+
+export function readToken(token: string) {
+  return jose.decodeJwt(token)
 }

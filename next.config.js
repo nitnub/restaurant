@@ -1,12 +1,5 @@
 /** @type {import('next').NextConfig} */
 
-// const destination ='http://localhost'
-// process.env.NODE_ENV === 'production'
-//   ? process.env.NEXT_PUBLIC_RESOURCE_PATH
-//   : 'http://localhost';
-const destination = process.env.NEXT_PUBLIC_RESOURCE_PATH || 'http://localhost'
-
-
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
@@ -35,8 +28,8 @@ const nextConfig = {
     return [
       {
         source: '/api/graphql',
-        // destination: process.env.NEXT_PUBLIC_RESOURCE_PATH,
-        destination,
+        destination: process.env.NEXT_PUBLIC_RESOURCE_PATH,
+
       },
     ];
   },

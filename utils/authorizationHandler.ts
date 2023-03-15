@@ -115,6 +115,9 @@ export default class AuthorizationHandler {
 
    
     const data = await response.json();
+
+    console.log('auth response:')
+    console.log(data)
  
     if (data instanceof Error) {
       return {
@@ -131,8 +134,7 @@ export default class AuthorizationHandler {
       };
     }
     if (data.status === 'success') {
-      const accessToken = data.data.resp;
-
+      const accessToken = data.data.resp.accessToken;
       const parsedUser = JSON.parse(
         Buffer.from(accessToken.split('.')[1], 'base64').toString()
       );

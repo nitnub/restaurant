@@ -45,12 +45,18 @@ export default function Restaurant(props: RestaurantProps) {
       <div className={styles.rating}>
         <StarRating rating={Number(rating)} />
       </div>
+      <Link
+        href="restaurants/[id]/[name]"
+        as={`/restaurants/${id}/${name?.replaceAll(' ', '-')}`}
+      >
       <CardMedia
         className={styles.image}
         component="img"
         image={image}
         alt={name}
       />
+</Link>
+
       <CardContent>
         <Typography variant="body2" color="text.secondary">
           {description}
