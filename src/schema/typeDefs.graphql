@@ -27,6 +27,7 @@ const typeDefs = `#graphql
     style: String
     rating: String
     image: String
+    imageSm: String 
     homePage: String
     dish: [Dish]
   }

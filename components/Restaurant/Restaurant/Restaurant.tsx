@@ -31,8 +31,10 @@ interface RestaurantProps {
 }
 
 export default function Restaurant(props: RestaurantProps) {
-  const { name, style, image, rating, description, id, homePage } =
+  const { name, style, imageSm, rating, description, id, homePage } =
     props.restaurant;
+
+    console.log(props.restaurant)
 
   return (
     <Card className={styles.card}>
@@ -52,7 +54,7 @@ export default function Restaurant(props: RestaurantProps) {
       <CardMedia
         className={styles.image}
         component="img"
-        image={image}
+        image={`/images/restaurants/sm/${imageSm}`}
         alt={name}
       />
 </Link>

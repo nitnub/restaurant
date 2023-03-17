@@ -11,6 +11,7 @@ export const GET_RESTAURANT = gql`
         style
         rating
         image
+        imageSm
         dish {
           id
           name
@@ -44,6 +45,7 @@ export const GET_ALL_RESTAURANTS = gql`
           style
           rating
           image
+          imageSm
           homePage
         }
       }

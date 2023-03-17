@@ -8,6 +8,7 @@ query GetRestaurant($id: Int!) {
       style
       rating
       image
+      imageSm
       homePage
       dish {
         id
@@ -40,6 +41,7 @@ query GetAllRestaurants {
         style
         rating
         image
+        imageSm
         homePage
       }
     }

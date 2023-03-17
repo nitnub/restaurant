@@ -48,7 +48,7 @@ const Restaurant: React.FunctionComponent = () => {
         <title>Restaurant App | {location.name}</title>
       </Head>
 
-      <img className="headerImage" src={location.image} alt={location.name} />
+      <img className="headerImage" src={`/images/restaurants/lg/${location.image}`} alt={location.name} />
       <div className="headerBackgroundSpan" />
       <div className="mainBackground"></div>
 

@@ -2,11 +2,10 @@ import { ApolloServer } from '@apollo/server';
 import { startServerAndCreateNextHandler } from '@as-integrations/next';
 import resolvers from '@/src/schema/Main.resolver';
 import typeDefs from '@/src/schema/typeDefs.graphql';
-import { addUser } from '@/src/middleware/auth.middleware';
+import { addUser } from 'middleware/auth.middleware';
 import redisConnect from '@/configs/redis.connection';
 import allowCors from '@/utils/cors';
 // import cors from 'cors';
-
 
 redisConnect();
 
