@@ -48,7 +48,7 @@ export default function PaymentSelector({ setPaymentMethod, setCcVerified }) {
             const { brand, expMonth, expYear, last4 } = option.card;
             const paymentProps = { brand, expMonth, expYear, last4 };
             return (
-              <div className={styles.selection}>
+              <div key={index} className={styles.selection}>
                 <Radio
                   value={option.id}
                   onClick={() => {

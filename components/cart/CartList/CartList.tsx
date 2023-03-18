@@ -9,6 +9,7 @@ import { CartItem as ICartItem } from '@/types/cartTypes';
 import { getCookie } from '@/utils/cookieHandler';
 import { RestaurantTuple } from '@/types/restaurantTypes';
 import { sortName, sortObjByName } from '@/utils/genUtils';
+
 export default function CartList() {
   const [hydro, setHydro] = useState(false);
   const [items, setItems] = useState<ICartItem[]>([]);

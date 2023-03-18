@@ -5,15 +5,15 @@ import { AuthProvider } from '@/types/utilTypes';
 
 export default class AuthorizationHandler {
   private SUPPORTED_OAUTH_PROVIDERS = ['www.google.com'];
-  private SIGN_IN_URL = process.env.NEXT_PUBLIC_AUTH_SERVER_SIGN_IN_URL 
-  private SIGN_IN_OAUTH_URL = process.env.NEXT_PUBLIC_AUTH_SERVER_SIGN_IN_OAUTH_URL
-  private REGISTER_URL = process.env.NEXT_PUBLIC_AUTH_SERVER_REGISTER_URL 
-  private SIGN_OUT_URL = process.env.NEXT_PUBLIC_AUTH_SERVER_SIGN_OUT_URL 
-  private TOKEN_URL = process.env.NEXT_PUBLIC_AUTH_SERVER_TOKEN_URL 
+  private SIGN_IN_URL = process.env.NEXT_PUBLIC_AUTH_SERVER_SIGN_IN_URL;
+  private SIGN_IN_OAUTH_URL =
+    process.env.NEXT_PUBLIC_AUTH_SERVER_SIGN_IN_OAUTH_URL;
+  private REGISTER_URL = process.env.NEXT_PUBLIC_AUTH_SERVER_REGISTER_URL;
+  private SIGN_OUT_URL = process.env.NEXT_PUBLIC_AUTH_SERVER_SIGN_OUT_URL;
+  private TOKEN_URL = process.env.NEXT_PUBLIC_AUTH_SERVER_TOKEN_URL;
   private PROFILE_KEY = 'loggedInUser';
   private TOKEN_KEY = 'accessToken';
   private ctx: Context;
-
 
   static token: string = '';
   constructor(ctx?) {
@@ -21,7 +21,6 @@ export default class AuthorizationHandler {
   }
 
   public async signIn(email: string, password: string) {
-
     // create request
     const requestBody = {
       email,
@@ -29,7 +28,6 @@ export default class AuthorizationHandler {
     };
     let response;
     try {
-
       response = await fetch(this.SIGN_IN_URL, {
         method: 'POST',
         body: JSON.stringify(requestBody),
@@ -38,7 +36,6 @@ export default class AuthorizationHandler {
         },
         // credentials: 'include',
       });
-
     } catch (err) {
       return console.log(
         'There was an issue logging into the application. Please try again later.'
@@ -57,6 +54,7 @@ export default class AuthorizationHandler {
         Buffer.from(data.data.accessToken.split('.')[1], 'base64').toString()
       );
 
+      this.ctx.setAuthProvider(parsedUser.authProvider);
       const { accessToken } = data.data;
       document.cookie = `accessToken=${JSON.stringify(
         accessToken
@@ -113,12 +111,9 @@ export default class AuthorizationHandler {
       // credentials: 'include',
     });
 
-   
     const data = await response.json();
 
-    console.log('auth response:')
-    console.log(data)
- 
+
     if (data instanceof Error) {
       return {
         status: 'fail',
@@ -135,9 +130,14 @@ export default class AuthorizationHandler {
     }
     if (data.status === 'success') {
       const accessToken = data.data.resp.accessToken;
+
       const parsedUser = JSON.parse(
         Buffer.from(accessToken.split('.')[1], 'base64').toString()
       );
+
+
+   
+      this.ctx.setAuthProvider(parsedUser.authProvider);
 
       document.cookie = `accessToken=${JSON.stringify(
         accessToken

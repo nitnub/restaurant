@@ -7,11 +7,9 @@ import { CartItem } from '@/types/cartTypes';
 import { Restaurant } from '@prisma/client';
 import { VerifiedTotalResult } from '@/types/resolverTypes';
 
-
 const resolvers = {
   Mutation: {
     createPaymentResult: async (parent, args, context, otehr) => {
-      
       // Authenticate user
       if (!context.req.isAuthenticated) {
         log.error('User is not authenticated. Unable to get payment method.');
@@ -39,10 +37,15 @@ const resolvers = {
       });
 
       if (userExists) {
-        log.info('User already exists');
-        return {
-          message: `User ${args.email} already exists`,
-        };
+        log.info('User already exists; returning existing record...');
+        console.log(userExists)
+
+        // console.log
+        return userExists;
+        // {
+        //   result: userExists
+        //   // message: `User ${args.email} already exists`,
+        // };
       }
 
       const { email, id } = await Stripe.addStripeCustomer(args);
@@ -177,8 +180,8 @@ const resolvers = {
       const globalUserID = context.req.user.id;
 
       const noCustomerId = {
-        stripeCustomerId: ''
-      }
+        stripeCustomerId: '',
+      };
 
       // console.log('client secret path:')
       // console.log(context.req)
@@ -188,10 +191,11 @@ const resolvers = {
           where: { globalUserId: globalUserID },
         })) || noCustomerId;
 
+
+console.log('GLOBAL USER ID:')
+console.log(globalUserID)
+
       if (!stripeCustomerId) {
-
-
-        
         log.error('[E1] Unable to find customerID in the DB!');
         throw new Error('[E1] Unable to find customerID in the DB!');
       }
@@ -206,10 +210,9 @@ const resolvers = {
       }
       const globalUserID = context.req.user.id;
 
-      const { stripeCustomerId } =
-        await prisma.userAccount.findFirst({
-          where: { globalUserId: globalUserID },
-        });
+      const { stripeCustomerId } = await prisma.userAccount.findFirst({
+        where: { globalUserId: globalUserID },
+      });
 
       if (!stripeCustomerId) {
         log.error('[E2] Unable to find customerID in the DB!');
@@ -218,7 +221,6 @@ const resolvers = {
       return await Stripe.getPaymentMethod(stripeCustomerId);
     },
     customerTransactionsResult: async (source, args, context) => {
-    
       if (!context.req.isAuthenticated) {
         log.error('User is not authenticated. Unable to get payment method.');
         return context.req.errorResponse;
@@ -235,7 +237,6 @@ const resolvers = {
       }
 
       return await Stripe.getCustomerTransactionsFormatted(stripeCustomerId);
-
     },
   },
 
@@ -379,4 +380,3 @@ type ResolverError = NotAuthorizedError | StripeError;
 export interface VerifiedTotal {
   verifiedTotal: number;
 }
-

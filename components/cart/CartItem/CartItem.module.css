@@ -17,9 +17,22 @@
   opacity: .80;
 }
 
-.itemDetails {}
+.itemName,
+.productDetails {
+  text-align: center;
+  padding: 0 6px;
+}
 
 .itemCount {
   text-align: center;
   font-size: 22px;
+}
+
+.productDetails {
+  display: flex;
+  justify-content: space-between;
+  /* background-color: red; */
+  /* text-align: right; */
+  font-style: italic; 
+
 }

@@ -7,7 +7,7 @@ import { convertToCurrency } from '@/libs/formatter';
 import { CartItem as ICartItem } from '@/types/cartTypes';
 import Dish from '@/components/Dish/Dish';
 import { getCookie } from '@/utils/cookieHandler';
-import {RestaurantTuple} from '@/types/restaurantTypes'
+import { RestaurantTuple } from '@/types/restaurantTypes';
 import { Paper } from '@mui/material';
 
 export default function CheckoutList() {
@@ -58,6 +58,7 @@ export default function CheckoutList() {
           const [id, restaurantName] = el;
           return (
             <Paper
+              key={index}
               className={styles.resContainer}
               elevation={5}
               sx={{
@@ -80,7 +81,9 @@ export default function CheckoutList() {
                         } else {
                           totals[restaurantName] = item.price * item.count;
                         }
-                        return <Dish key={item.id} dishProp={item} loading={false}/>;
+                        return (
+                          <Dish key={item.id} dishProp={item} loading={false} />
+                        );
                       }
                     })}
                   <div className={styles.subtotal}>

@@ -11,7 +11,6 @@ import Launch from '@mui/icons-material/Launch';
 import styles from './Restaurant.module.css';
 import StarRating from '../StarRating';
 
-
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
 }
@@ -23,24 +22,24 @@ interface RestaurantProfile {
   style: string;
   rating: number;
   image: string;
+  imageSm: string;
   homePage?: string;
 }
 
 interface RestaurantProps {
-   restaurant: RestaurantProfile
+  restaurant: RestaurantProfile;
 }
 
 export default function Restaurant(props: RestaurantProps) {
   const { name, style, imageSm, rating, description, id, homePage } =
     props.restaurant;
 
-    console.log(props.restaurant)
-
   return (
     <Card className={styles.card}>
       <Link
-        href="restaurants/[id]/[name]"
-        as={`/restaurants/${id}/${name?.replaceAll(' ', '-')}`}
+      href={`/restaurants/${id}/${name?.replaceAll(' ', '-')}`}
+        // href="restaurants/[id]/[name]"
+        // as={`/restaurants/${id}/${name?.replaceAll(' ', '-')}`}
       >
         <CardHeader className={styles.header} title={name} subheader={style} />
       </Link>
@@ -48,16 +47,17 @@ export default function Restaurant(props: RestaurantProps) {
         <StarRating rating={Number(rating)} />
       </div>
       <Link
-        href="restaurants/[id]/[name]"
-        as={`/restaurants/${id}/${name?.replaceAll(' ', '-')}`}
+        href={`/restaurants/${id}/${name?.replaceAll(' ', '-')}`}
+        // href="restaurants/[id]/[name]"
+        // as={`/restaurants/${id}/${name?.replaceAll(' ', '-')}`}
       >
-      <CardMedia
-        className={styles.image}
-        component="img"
-        image={`/images/restaurants/sm/${imageSm}`}
-        alt={name}
-      />
-</Link>
+        <CardMedia
+          className={styles.image}
+          component="img"
+          image={`/images/restaurants/sm/${imageSm}`}
+          alt={name}
+        />
+      </Link>
 
       <CardContent>
         <Typography variant="body2" color="text.secondary">

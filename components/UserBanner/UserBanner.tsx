@@ -5,7 +5,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AppContext from '../context';
 import Link from 'next/link';
 import AuthorizationHandler from '@/utils/authorizationHandler';
-
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 
@@ -17,75 +17,92 @@ import MenuItem from '@mui/material/MenuItem';
 import app from '@/utils/firebaseConfig';
 import { getAuth, signOut } from 'firebase/auth';
 import { getCookie } from '@/utils/cookieHandler';
+import UserMenu from './UserMenu';
 
 function UserBanner() {
   let profile = { email: '' };
   const ctx = useContext(AppContext);
-  const ah = new AuthorizationHandler(ctx);
+  const authHandler = new AuthorizationHandler(ctx);
 
   if (typeof document !== 'undefined') {
-    profile = ah.getProfile();
+    profile = authHandler.getProfile();
   }
   const avatar: string = getCookie('avatar');
 
   useEffect(() => {
-    profile = ah.getProfile();
+    profile = authHandler.getProfile();
     const label = (profile.email as string) || 'Sign In';
 
     ctx.setEmail(label);
     ctx.setAvatar(avatar);
   }, [ctx.email]);
 
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  console.log('CTX IS:');
+  console.log(ctx);
+  console.log('xxxxxxxxxxxxxxxxxxxxxxxx');
+  console.log();
+  console.log();
 
-  const signOutHandler = async () => {
-    const auth = getAuth(app);
+  console.log('avatar is...');
+  console.log(avatar);
 
-    // Sign out
-    ah.signOut(false);
+  // const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  // const open = Boolean(anchorEl);
+  // const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  //   setAnchorEl(event.currentTarget);
+  // };
+  // const handleClose = () => {
+  //   setAnchorEl(null);
+  // };
 
-    // Sign out firebase OAuth users
-    if (auth.currentUser?.emailVerified) {
-      signOut(auth)
-        .then(() => {
-          console.log('signed out of firebase');
-        })
-        .catch((error) => {
-          console.log('error signing out of firebase');
-        });
-    }
-  };
+  // const signOutHandler = async () => {
+  //   const auth = getAuth(app);
+
+  //   // Sign out
+  //   authHandler.signOut(false);
+
+  //   // Sign out firebase OAuth users
+  //   // if (auth.currentUser?.emailVerified) {
+
+  //   if (ctx.authProvider === 'google') {
+  //     signOut(auth)
+  //       .then(() => {
+  //         ctx.setAuthProvider('standard');
+  //         console.log('Signed out of firebase...');
+  //       })
+  //       .catch((error) => {
+  //         console.log('Error signing out of firebase...');
+  //       });
+  //   }
+  // };
 
   return ctx.email === 'Sign In' ? (
     <div className={styles.container}>
-      <AccountCircleIcon sx={{ width: 30, height: 30 }} />
+      {/* <AccountCircleIcon sx={{ width: 30, height: 30 }} /> */}
+      <AccountBoxIcon sx={{ width: 30, height: 30 }} />
       <Link href="/signin" className={styles.link}>
         {ctx.email}
       </Link>
     </div>
   ) : (
     <div className={styles.container}>
-      {avatar.startsWith('h1t') ? (
+      {avatar.startsWith('h') ? (
         <img
           className={styles.avatar}
           alt="An avatar image for the signed in user"
           src={avatar.toString()}
+          referrerPolicy="no-referrer" // Required to eliminate inconsistent rendering in Chrome
         />
       ) : (
-        <AccountCircleIcon className={styles.avatar} />
+        <AccountBoxIcon sx={{ width: 30, height: 30 }} />
       )}
-      {/* <div className={styles.link}> */}
-      <div style={{ color: 'white' }}>
+
+      <UserMenu authHandler={authHandler} context={ctx} />
+
+      {/* <div >
         <Button
           className={styles.link}
-          style={{ color: 'white' }}
+         
           id="basic-button"
           aria-controls={open ? 'basic-menu' : undefined}
           aria-haspopup="true"
@@ -131,7 +148,7 @@ function UserBanner() {
             <ListItemText>Logout</ListItemText>
           </Link>
         </MenuItem>
-      </Menu>
+      </Menu> */}
     </div>
   );
 }

@@ -30,8 +30,7 @@
 
 .actionsContainer {
   justify-self: flex-end;
-  justify-self: end;
-  align-content: end;
+  align-content: flex-end;
   padding-bottom: 0;
   margin-bottom: 0;
 }
@@ -41,5 +40,5 @@
   height: auto;
   width: 100%;
   align-items: center;
-  justify-content: end;
+  justify-content: flex-end;
 }

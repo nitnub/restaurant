@@ -40,6 +40,8 @@ export default function SignIn() {
 
   const auth = getAuth(app);
   const googleSignInHandler = async () => {
+
+
     try {
       console.log('[1]');
 
@@ -92,6 +94,8 @@ export default function SignIn() {
         return;
       }
 
+      ctx.setAvatar(user.photoURL);
+     
       console.log('[3]');
       console.log('readToken(accessToken)');
       console.log(accessToken);
@@ -102,7 +106,9 @@ export default function SignIn() {
       // const { email, id: globalUserId } = readToken(testAccessToken);
 
       // Add the App User
-      const { email, id: globalUserId, newUser } = readToken(accessToken);
+      const { email, id: globalUserId, newUser, authProvider } = readToken(accessToken);
+
+
 
       const VARIABLES = {
         email,
@@ -117,6 +123,7 @@ export default function SignIn() {
         },
       };
 
+      // const newAppUser = await addNewAppUser(ARGS);
       const newAppUser = await addNewAppUser(ARGS);
       console.log('1111111111');
       console.log(newAppUser);
@@ -207,7 +214,7 @@ export default function SignIn() {
           '/'
         );
       }
-      
+
       return router.push('/');
     } catch (error) {
       console.log(error);

@@ -155,7 +155,6 @@ export default function CustomPaginationActionsTable() {
           sx={{ flex: '1 1 100%' }}
           variant="h6"
           id="tableTitle"
-          component="div"
         >
           Transactions
         </Typography>

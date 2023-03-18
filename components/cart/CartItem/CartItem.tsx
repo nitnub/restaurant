@@ -35,12 +35,23 @@ export default function CartItem({ item }) {
           </div>
           <IconAdd dishProp={item} setCount={setCount} />
         </div>
-        <Typography className={styles.itemDetails}>
-          {item.name} {item.count > 1 ? ' x ' + item.count : ''}
+        <div >
+
+        <Typography className={styles.itemName}>
+          {/* {item.name} {item.count > 1 ? ' x ' + item.count : ''} */}
+          {item.name} 
         </Typography>
-        <Typography>
-          Subtotal: {convertToCurrency(item.price * item.count)}
+        <Typography className={styles.productDetails}>
+          {/* Subtotal: {convertToCurrency(item.price * item.count)} */}
+          <div>
+
+          {item.count > 1 ? `${item.count} x ${convertToCurrency(item.price)}`  : 'Price'}
+          </div>
+          <div>
+          {convertToCurrency(item.count * item.price)}
+          </div>
         </Typography>
+        </div>
       </div>
       <br />
     </div>

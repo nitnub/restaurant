@@ -28,6 +28,7 @@ export default function App({ Component, pageProps }: AppProps) {
     totalCount: 0,
   });
   const [email, setEmail] = useState(ctx.email || 'Sign In');
+  const [authProvider, setAuthProvider] = useState(ctx.authProvider || 'standard');
   const [avatar, setAvatar] = useState(ctx.avatar || getCookie('avatar') || '');
   const [accessToken, setAccessToken] = useState('');
   const [profile, setProfile] = useState('');
@@ -53,8 +54,10 @@ export default function App({ Component, pageProps }: AppProps) {
     setTotalCost: (cost: number) => setTotalCost(cost),
     setTotalCount: (count: number) => setTotalCount(count),
     setCartCount: (count: number) => setState(count),
-    setEmail: (email: string) => setEmail(email),
     email,
+    setEmail: (email: string) => setEmail(email),
+    authProvider,
+    setAuthProvider: (authProvider: string) => setAuthProvider(authProvider),
     avatar,
     setAvatar: (avatar: string) => setAvatar(avatar),
     accessToken,

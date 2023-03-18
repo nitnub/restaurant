@@ -6,7 +6,7 @@
 .subtotal {
   display: flex;
   width: 100%;
-  justify-content: end;
+  justify-content: flex-end;
   gap: 10px;
   padding: 0 50px 8px;
 }
