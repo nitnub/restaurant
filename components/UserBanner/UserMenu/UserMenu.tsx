@@ -10,7 +10,8 @@ import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
 import { getAuth, signOut } from 'firebase/auth';
 import app from '@/utils/firebaseConfig';
-import AuthorizationHandler from '@/utils/authorizationHandler';
+
+
 function UserMenu({authHandler, context}) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
