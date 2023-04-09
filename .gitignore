@@ -32,6 +32,7 @@ yarn-error.log*
 .env*.local
 .env
 .env.dev
+.env.development
 # vercel
 .vercel
 

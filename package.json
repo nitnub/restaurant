@@ -19,7 +19,6 @@
     "@mui/material": "^5.11.5",
     "@mui/system": "^5.10.16",
     "@mui/x-data-grid": "^5.17.20",
-    "@nestjs/schedule": "^2.1.0",
     "@prisma/client": "^4.8.1",
     "@stripe/react-stripe-js": "^1.16.2",
     "@stripe/stripe-js": "^1.46.0",
@@ -58,7 +57,7 @@
   },
   "_moduleAliases": {
     "@/root": "/",
-    "@/components": "/components",
+    "@/controllers": "/controllers",
     "@/configs": "/configs",
     "@/graphql": "/graphql",
     "@/libs": "/libs",

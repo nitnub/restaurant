@@ -38,14 +38,7 @@ const resolvers = {
 
       if (userExists) {
         log.info('User already exists; returning existing record...');
-        console.log(userExists)
-
-        // console.log
         return userExists;
-        // {
-        //   result: userExists
-        //   // message: `User ${args.email} already exists`,
-        // };
       }
 
       const { email, id } = await Stripe.addStripeCustomer(args);
@@ -183,17 +176,11 @@ const resolvers = {
         stripeCustomerId: '',
       };
 
-      // console.log('client secret path:')
-      // console.log(context.req)
-
       const { stripeCustomerId } =
         (await prisma.userAccount.findFirst({
           where: { globalUserId: globalUserID },
         })) || noCustomerId;
 
-
-console.log('GLOBAL USER ID:')
-console.log(globalUserID)
 
       if (!stripeCustomerId) {
         log.error('[E1] Unable to find customerID in the DB!');

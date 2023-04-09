@@ -25,7 +25,7 @@ export default function CartItem({ item }) {
     });
   return (
     <div className={styles.container}>
-      <img src={item.image} width="100%" height={128} alt={item.name} />
+      <img src={`${item.image}`} width="100%" height={128} alt={item.name} />
       <div className={styles.cartCounterContainer}>
         <div className={styles.cartCounter}>
           <IconSubtract dishProp={item} setCount={setCount} />
@@ -41,16 +41,15 @@ export default function CartItem({ item }) {
           {/* {item.name} {item.count > 1 ? ' x ' + item.count : ''} */}
           {item.name} 
         </Typography>
-        <Typography className={styles.productDetails}>
+        <div className={styles.productDetails}>
           {/* Subtotal: {convertToCurrency(item.price * item.count)} */}
           <div>
-
           {item.count > 1 ? `${item.count} x ${convertToCurrency(item.price)}`  : 'Price'}
           </div>
           <div>
           {convertToCurrency(item.count * item.price)}
           </div>
-        </Typography>
+        </div>
         </div>
       </div>
       <br />

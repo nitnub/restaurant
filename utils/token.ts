@@ -7,9 +7,9 @@ export default async function verifyToken(token: string, secret: string) {
     token,
     encodedSecret
   ).catch((error) => {
-    console.log('[1] Token Error. Invalid Access Token.')
+    console.log('[1] Token Error. Invalid Access Token.', error)
   });
-  console.log('jose payload:', payload)
+  // console.log('jose payload:', payload)
   return payload;
 }
 

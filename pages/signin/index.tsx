@@ -43,67 +43,28 @@ export default function SignIn() {
 
 
     try {
-      console.log('[1]');
-
-      // const testAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0MGMwNWVmOTY4ZDI5NTkwMmZlMTMwZCIsImZpcnN0TmFtZSI6Ik1hcnkiLCJlbWFpbCI6Im5ld3Rlc3RhdmFhYXhAZ21haWwuY29tIiwiYXZhdGFyIjoiL2ltZy9waWMvbWFyeS5wbmciLCJhZG1pbiI6dHJ1ZSwiaWF0IjoxNjc4NTA5NTUyLCJleHAiOjE2Nzg1MTAxNTJ9.I4G14YsHsXQLcjaI4dMOMdbDnhNyuTQE7hFUmIOmxCI'
-
-      // // Add the App User
-      // // const { email, id: globalUserId } = readToken(accessToken);
-      // const { emailTest, id: globalUserIdTest } = readToken(testAccessToken);
-      // const VARIABLES_TEST = {
-      //   emailTest,
-      //   globalUserIdTest,
-      // };
-      // const ARGS_TEST = {
-      //   variables: VARIABLES_TEST,
-      //   context: {
-      //     headers: {
-      //       Authorization: `Bearer ${testAccessToken}`,
-      //     },
-      //   },
-      // };
-
-      // const newAppUserTest = await addNewAppUser(ARGS_TEST);
-      // console.log('1111111111')
-      // console.log(newAppUserTest)
-      // console.log('1111111111')
+     
 
       const prevUser = getCookie('accessToken');
       const prevCart = getCookie('cart')?.items || [];
       const result = await signInWithPopup(auth, provider);
 
-      // This gives you a Google Access Token. You can use it to access the Google API.
-      const credential = await GoogleAuthProvider.credentialFromResult(result);
-      const token = credential.accessToken;
       // The signed-in user info.
       const user = result.user;
       const idToken = await user.getIdToken();
-      const idTokenResult = await user.getIdTokenResult();
-      console.log('[2]');
-      console.log(idToken);
-      console.log('[2.5]');
-
+ 
       const { success, message, accessToken } = await Auth.signInOAuth(
         idToken,
         'www.google.com',
         { image: user.photoURL }
       );
-      console.log('[2.75]');
+
       if (message === 'invalid signature') {
         setOAuthError(() => 'Unable to identify user.');
         return;
       }
 
       ctx.setAvatar(user.photoURL);
-     
-      console.log('[3]');
-      console.log('readToken(accessToken)');
-      console.log(accessToken);
-      console.log('readToken(accessToken)');
-      console.log(readToken(accessToken));
-
-      // const testAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0MGMwNWVmOTY4ZDI5NTkwMmZlMTMwZCIsImZpcnN0TmFtZSI6Ik1hcnkiLCJlbWFpbCI6Im5ld3Rlc3RhdmFhYXhAZ21haWwuY29tIiwiYXZhdGFyIjoiL2ltZy9waWMvbWFyeS5wbmciLCJhZG1pbiI6dHJ1ZSwiaWF0IjoxNjc4NTA5NTUyLCJleHAiOjE2Nzg1MTAxNTJ9.I4G14YsHsXQLcjaI4dMOMdbDnhNyuTQE7hFUmIOmxCI'
-      // const { email, id: globalUserId } = readToken(testAccessToken);
 
       // Add the App User
       const { email, id: globalUserId, newUser, authProvider } = readToken(accessToken);
@@ -123,23 +84,8 @@ export default function SignIn() {
         },
       };
 
-      // const newAppUser = await addNewAppUser(ARGS);
       const newAppUser = await addNewAppUser(ARGS);
-      console.log('1111111111');
-      console.log(newAppUser);
-      console.log(newUser);
-      console.log('1111111111');
-      // Return to the main page after login
-      // router.push('/');
-
-      // router.push(
-      //   {
-      //     pathname: '/',
-      //     query: { newUser: true, email },
-      //   },
-      //   '/'
-      // );
-
+     
       // // Generally, if profile is updated, should check the cookie state first
 
       setErrorMessage(() => '');
@@ -271,7 +217,6 @@ export default function SignIn() {
         if (errorLoading) return console.log(error);
 
         cart = result.data.incrementCartResult;
-        console.log('cart is [1]..', cart);
       } else {
         const VARIABLES = {
           items: [],

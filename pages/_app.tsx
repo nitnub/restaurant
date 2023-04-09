@@ -11,7 +11,10 @@ import { cookieDuster, getCookie } from '@/utils/cookieHandler';
 import { Cart, CartButtonSet, CartItem } from '@/types/cartTypes';
 import { Dish } from '@/types/dishTypes';
 import Head from 'next/head';
+import dotenv from 'dotenv';
 
+// process.env.NODE_ENV === 'development' && dotenv.config({ path: `.env.development'}` });
+console.log(process.env.TEST);
 export default function App({ Component, pageProps }: AppProps) {
   const ctx = useContext(AppContext);
   const [state, setState] = useState({ cartCount: 0 });
@@ -28,15 +31,15 @@ export default function App({ Component, pageProps }: AppProps) {
     totalCount: 0,
   });
   const [email, setEmail] = useState(ctx.email || 'Sign In');
-  const [authProvider, setAuthProvider] = useState(ctx.authProvider || 'standard');
+  const [authProvider, setAuthProvider] = useState(
+    ctx.authProvider || 'standard'
+  );
   const [avatar, setAvatar] = useState(ctx.avatar || getCookie('avatar') || '');
   const [accessToken, setAccessToken] = useState('');
   const [profile, setProfile] = useState('');
   const [checkoutTotal, setCheckoutTotal] = useState(0);
   const [clientSecret, setClientSecret] = useState('');
   const [customerID, setCustomerID] = useState('');
-
-
 
   const contextValues = {
     cart,

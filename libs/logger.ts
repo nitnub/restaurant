@@ -30,16 +30,4 @@ export default class Logger {
     console.log(chalk.red(timeStamp) + message);
   };
 
-  // public static warn = (args: any) => {
-  //   console.log(
-  //     chalk.yellow`[${new Date().toLocaleString()}] [WARN] `,
-  //     typeof args === 'string' ? chalk.yellow(args) : args
-  //   );
-  // };
-  // public static error = (args: any) => {
-  //   console.log(
-  //     chalk.red`[${new Date().toLocaleString()}] [ERROR] `,
-  //     typeof args === 'string' ? chalk.red(args) : args
-  //   );
-  // };
 }

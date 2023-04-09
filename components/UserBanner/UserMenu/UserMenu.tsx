@@ -32,13 +32,11 @@ function UserMenu({authHandler, context}) {
     authHandler.signOut(false);
 
     // Sign out firebase OAuth users
-    // if (auth.currentUser?.emailVerified) {
-
     if (context.authProvider === 'google') {
       signOut(auth)
         .then(() => {
           context.setAuthProvider('standard');
-          console.log('Signed out of firebase...');
+          // console.log('Signed out of firebase...');
         })
         .catch((error) => {
           console.log('Error signing out of firebase...');
@@ -57,6 +55,7 @@ function UserMenu({authHandler, context}) {
           aria-haspopup="true"
           aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
+          style={{ color: 'white' }}
         >
           {context.email}
         </Button>

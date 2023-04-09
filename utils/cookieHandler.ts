@@ -84,6 +84,8 @@ export const cookieDuster = (
     if (empty) {
       console.log(`${cookieName} cookie is empty:`, empty);
       console.log(targetCookie);
+      console.log('Remaining cookies:')
+      console.log(document.cookie)
       fn();
     }
   }, interval);
