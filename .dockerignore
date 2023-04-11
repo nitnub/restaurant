@@ -1,7 +1,7 @@
 .local-files/
 node_modules/
 
-.env
+# .env
 .env.*
 
 .git

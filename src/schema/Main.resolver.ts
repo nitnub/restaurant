@@ -133,7 +133,7 @@ const resolvers = {
 
     verifiedTotalResult: async (parent, args, context) => {
       if (!context.req.isAuthenticated) {
-        log.error('User is not authenticated. Unable to get client secret.');
+        log.error('User is not authenticated. Unable to verify total result.');
         return context.req.errorResponse;
       }
 

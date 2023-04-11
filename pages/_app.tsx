@@ -1,5 +1,6 @@
 import '../styles/globals.css';
 // import * from '../.next/static/empty.css'; // Added as workaround for sstyling bug per https://stackoverflow.com/questions/51932288/next-js-stylesheet-is-not-loaded
+
 import { useContext, useState } from 'react';
 import type { AppProps } from 'next/app';
 import Layout from '../components/Layout';
@@ -11,10 +12,8 @@ import { cookieDuster, getCookie } from '@/utils/cookieHandler';
 import { Cart, CartButtonSet, CartItem } from '@/types/cartTypes';
 import { Dish } from '@/types/dishTypes';
 import Head from 'next/head';
-import dotenv from 'dotenv';
 
-// process.env.NODE_ENV === 'development' && dotenv.config({ path: `.env.development'}` });
-console.log(process.env.TEST);
+
 export default function App({ Component, pageProps }: AppProps) {
   const ctx = useContext(AppContext);
   const [state, setState] = useState({ cartCount: 0 });

@@ -1,3 +1,13 @@
-.searchBar {
-  width: 100%;
+.searchBar,
+.searchBarLoading {
+  width: 400px;
 }
+
+.searchBarLoading {
+  height: 53px;
+  background-color: white;
+}
+
+/* .groupHeader {
+  background: red;
+} */

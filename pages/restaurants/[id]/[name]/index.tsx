@@ -9,12 +9,13 @@ import { GET_RESTAURANT } from '@/src/graphql/queries';
 import SearchBar from '@/components/Filter/SearchBar';
 import { getCookie } from '@/utils/cookieHandler';
 import Head from 'next/head';
+import CircularProgress from '@mui/material/CircularProgress';
+import { Skeleton } from '@mui/material';
+import RestaurantHeader from '@/components/Restaurant/RestaurantHeader';
 
 const Restaurant: React.FunctionComponent = () => {
   const ctx = useContext(AppContext);
   const [query, setQuery] = useState('');
-
-
 
   const router = useRouter();
 
@@ -32,11 +33,14 @@ const Restaurant: React.FunctionComponent = () => {
 
   const { data, loading, error } = useQuery(GET_RESTAURANT, ARGS);
 
-  if (loading) {
-    return (<div>Loading...</div>);
+  if (false) {
+    return (
+   <RestaurantHeader loading/>
+    );
   }
+
   if (error) {
-    return (<div>Unable to load page. Please try again!</div>);
+    return <div>Unable to load page. Please try again!</div>;
   }
   const location = data.restaurantResult;
 
@@ -48,7 +52,11 @@ const Restaurant: React.FunctionComponent = () => {
         <title>Restaurant App | {location.name}</title>
       </Head>
 
-      <img className="headerImage" src={`/images/restaurants/lg/${location.image}`} alt={location.name} />
+      <img
+        className="headerImage"
+        src={`/images/restaurants/lg/${location.image}`}
+        alt={location.name}
+      />
       <div className="headerBackgroundSpan" />
       <div className="mainBackground"></div>
 
@@ -64,14 +72,15 @@ const Restaurant: React.FunctionComponent = () => {
             setQuery={setQuery}
             searchPool={location.dish}
             label="Search menu"
+            loading={loading}
           />
+
           <DishList
             dishes={location.dish}
             query={query}
             restaurantName={location.name}
-            loading={false}
+            loading={loading}
           />
-     
         </Container>
       </div>
     </>

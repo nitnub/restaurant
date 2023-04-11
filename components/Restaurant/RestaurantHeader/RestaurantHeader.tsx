@@ -1,33 +1,33 @@
 import { useQuery, gql } from '@apollo/client';
-// import styles from "../styles/Home.module.css";
+// // import styles from "../styles/Home.module.css";
 
-// /**
-//  * Below works as general query
-//  */
+// // /**
+// //  * Below works as general query
+// //  */
+// // const QUERY = gql`
+// //   query {
+// //     restaurants {
+// //       name
+// //       rating
+// //       description
+// //       style
+// //       img
+// //     }
+// //   }
+// // `;
+
 // const QUERY = gql`
-//   query {
-//     restaurants {
+//   query GetRestaurant($id: Int!) {
+//     getRestaurant(id: $id) {
+//       id
 //       name
-//       rating
 //       description
 //       style
-//       img
+//       rating
+//       image
 //     }
 //   }
 // `;
-
-const QUERY = gql`
-  query GetRestaurant($id: Int!) {
-    getRestaurant(id: $id) {
-      id
-      name
-      description
-      style
-      rating
-      image
-    }
-  }
-`;
 
 const RestaurantHeader = ({ id }) => {
   const VARIABLES = { id };

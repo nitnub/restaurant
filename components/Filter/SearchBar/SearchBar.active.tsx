@@ -10,14 +10,18 @@ const GroupHeader = styled('div')(({ theme }) => ({
   top: '-8px',
   padding: '4px 10px',
   color: 'white',
-  backgroundColor: 'purple',
+  backgroundColor: '#4e4740',
+  // backgroundColor: '#ec989d',
+  // backgroundColor: '#db5f68',
 }));
 
 const GroupItems = styled('ul')({
   padding: 0,
 });
 
-export default function SearchBar(props) {
+export default function SearchBar({props}) {
+
+ 
   const [query, setQuery] = useState('');
   const ctx = useContext(AppContext);
 
@@ -31,6 +35,7 @@ export default function SearchBar(props) {
     value ? setQuery(value.toLocaleLowerCase())
      : setQuery(' ')
   };
+
   const options = props.searchPool.map((option) => {
     let firstLetter = '';
       if (option.name.toLowerCase().startsWith('the') && option.name.length > 3) {
@@ -79,7 +84,8 @@ export default function SearchBar(props) {
       )}
       renderGroup={(params) => (
         <li>
-          <GroupHeader>{params.group}</GroupHeader>
+          <GroupHeader >{params.group}</GroupHeader>
+          {/* <GroupHeader className={'groupHeader'}>{params.group}</GroupHeader> */}
           <GroupItems onClick={(e) => handler(e.target.textContent)}>
             {params.children}
           </GroupItems>

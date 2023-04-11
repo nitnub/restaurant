@@ -1,0 +1,110 @@
+/* @import '../../../styles/globals.css'; */
+
+.parentContainer {
+  max-width: 'sm';
+}
+
+.parentContainerLoading {
+  padding: 95px 46px;
+}
+
+.headerTextLoading {
+  width: 384px;
+  height: 48px;
+  /* background-color:  var(--clr-lt-blk); */
+  /* opacity: 33%;
+   */
+   margin-bottom: 20px;
+}
+
+.styleTextLoading {
+  width: 192px;
+  height: 24px;
+  margin-bottom: 14px;
+}
+.descriptionTextLoading {
+  width: 288px;
+  height: 16px;
+}
+
+
+.resInputContainer {
+  /* position: absolute; */
+  height: 250px;
+  display: flex;
+  flex-wrap: wrap;
+  z-index: 2;
+  background-color: var(--clr-lt-blk);
+  /* background-color: #4e4740; */
+  /* background-color: var(--clr-lt-hdr); */
+  opacity: 1;
+  /* background-color: red */
+}
+
+.resInputContainerLoading {
+  /* position: absolute; */
+  height: 250px;
+  /* display: flex; */
+  flex-wrap: wrap;
+  /* z-index: 2; */
+  background-color: var(--clr-lt-blk);
+  /* background-color: #4e4740; */
+  /* background-color: var(--clr-lt-hdr); */
+  /* opacity: 1; */
+  /* background-color: red */
+}
+
+.resTitleContainer {
+  /* margin-top: 400px; */
+}
+
+.headerImage {
+  height: 100%;
+  width: 100vw;
+  left: 0px;
+  top: -45px;
+  position: absolute;
+  z-index: 0.5;
+  opacity: 0.33;
+}
+
+.headerImageLoading {
+  height: 100%;
+  width: 100vw;
+  left: 0px;
+  top: -45px;
+  /* position: absolute; */
+  /* z-index: 0.5; */
+  /* opacity: 0.33; */
+  /* background-color: var(--clr-lt-blk); */
+  /* background-color: green; */
+  background-color: green;
+}
+
+.headerBackgroundSpanLoading {
+  position: absolute;
+  /* margin-top: -64px; */
+  /* background-color: var(--clr-lt-blk); */
+  /* background-color: purple; */
+  width: 100vw;
+  height: 450px;
+  left: 0;
+  top: 0;
+  opacity: 0.85;
+}
+
+.imageSpacerLoading {
+  height: 200px;
+  background-color: var(--clr-lt-blk);
+  opacity: 33%;
+}
+
+.mainBackground {
+  height: 100vh;
+  width: 100vw;
+  left: 0px;
+  top: var(--val-hdr-gap);
+  position: absolute;
+  z-index: 0;
+  background-color: var(--clr-lt-bkgd);
+}

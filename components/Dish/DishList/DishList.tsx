@@ -3,6 +3,17 @@ import styles from './DishList.module.css';
 import { DishObject } from '../../models/dishModel';
 
 export default function DishList({ dishes, loading, query, restaurantName }) {
+  const skeletonCount = new Array(10);
+  if (loading) {
+    return (
+      <div className={styles.listContainer}>
+        {[...skeletonCount].map((dish: DishObject, index: number) => {
+          return <Dish key={index} loading={true} dishProp={dish} />;
+        })}
+      </div>
+    );
+  }
+
   const queryName = query.name || '';
 
   const dishList: DishObject[] = [];

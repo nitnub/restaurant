@@ -23,9 +23,11 @@ export default function CartItem({ item }) {
         initialCount = el.count;
       }
     });
+
+
   return (
     <div className={styles.container}>
-      <img src={`${item.image}`} width="100%" height={128} alt={item.name} />
+      <img src={`/images/dishes/${item.image}`} width="100%" height={128} alt={item.name} />
       <div className={styles.cartCounterContainer}>
         <div className={styles.cartCounter}>
           <IconSubtract dishProp={item} setCount={setCount} />

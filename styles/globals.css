@@ -6,6 +6,17 @@
   --val-hdr-gap: 450px;
 }
 
+@value blue: #0c77f8;
+@value red: #ff0000;
+@value green: #aaf200;
+@value --clr-lt-bkgd: #f2f0f3;
+@value --clr-lt-hdr: #ec989d;
+/* @value --clr-lt-hdr: #db5f68; */
+@value --clr-lt-blk: #4e4740;
+@value --val-hdr-gap: 450px;
+
+
+
 * {
   box-sizing: border-box;
   font-size: 10pt;
@@ -86,6 +97,17 @@ a {
   opacity: 0.33;
 }
 
+.headerImageLoading {
+  height: 100%;
+  width: 100vw;
+  left: 0px;
+  top: -45px;
+  position: absolute;
+  z-index: 0.5;
+  opacity: 0.33;
+  background-color: var(--clr-lt-blk);
+}
+
 .headerImageSpacer {
   width: 100px;
   height: calc(var(--val-hdr-gap) - 175px);
@@ -102,6 +124,16 @@ a {
   opacity: 0.5;
 }
 
+.headerBackgroundSpanLoading {
+  position: absolute;
+  background-color: var(--clr-lt-blk);
+  width: 100vw;
+  height: 250px;
+  left: 0;
+  top: 0;
+  opacity: 0.25;
+}
+
 .mainBackground {
   height: 100vh;
   width: 100vw;
@@ -110,6 +142,13 @@ a {
   position: absolute;
   z-index: 0;
   background-color: var(--clr-lt-bkgd);
+}
+
+.loadingContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height:50%;
 }
 
 .resInputContainer {

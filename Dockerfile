@@ -32,6 +32,7 @@ COPY . .
 # Learn more here: https://nextjs.org/telemetry
 # Uncomment the following line in case you want to disable telemetry during the build.
 ENV NEXT_TELEMETRY_DISABLED 1
+ENV NEXT_PUBLIC_RESOURCE_PATH https://restaurants.nickbryant.dev
 
 # If using npm comment out above and use below instead
 RUN npm run build
@@ -45,7 +46,6 @@ ENV NODE_ENV production
 
 # Uncomment the following line in case you want to disable telemetry during runtime.
 ENV NEXT_TELEMETRY_DISABLED 1
-
 RUN addgroup --system --gid 1001 nodejs
 
 RUN adduser --system --uid 1001 nextjs

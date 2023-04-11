@@ -61,6 +61,7 @@ export default function CheckoutList() {
               key={index}
               className={styles.resContainer}
               elevation={5}
+              component={'div'}
               sx={{
                 m: 2,
               }}

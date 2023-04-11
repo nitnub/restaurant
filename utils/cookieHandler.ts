@@ -82,10 +82,6 @@ export const cookieDuster = (
     const targetCookie = getCookie(cookieName);
     const empty = Object.keys(targetCookie).length === 0;
     if (empty) {
-      console.log(`${cookieName} cookie is empty:`, empty);
-      console.log(targetCookie);
-      console.log('Remaining cookies:')
-      console.log(document.cookie)
       fn();
     }
   }, interval);

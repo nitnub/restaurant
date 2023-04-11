@@ -238,13 +238,8 @@ export default function CartDrawer() {
             </div>
             <Divider />
             <CartList />
-
             <Divider />
-
-            <div>
- 
-            </div>
-         
+            <div></div>
           </Drawer>
         </>
       </Box>

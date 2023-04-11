@@ -11,6 +11,7 @@ import { Restaurant, RestaurantQueryResult } from '@/types/restaurantTypes';
 import ChipToggleContainer from '@/components/Filter/Chip/ChipToggleContainer';
 import { useEffect } from 'react';
 import Container from '@mui/material/Container';
+import CircularProgress from '@mui/material/CircularProgress';
 
 export default function Home(props) {
   const defaultQueryResult: RestaurantQueryResult = {
@@ -46,8 +47,13 @@ export default function Home(props) {
   const [query, setQuery] = useState(defaultQueryResult);
 
   const { data, loading, error } = useQuery(GET_ALL_RESTAURANTS);
-
-  if (loading) return console.log(loading);
+  if (loading) {
+    return (
+      <div className="loadingContainer">
+        <CircularProgress />
+      </div>
+    );
+  } 
   if (error) return console.log(error);
 
   const { restaurants } = data.restaurantsResult;

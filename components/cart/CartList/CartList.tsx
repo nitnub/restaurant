@@ -63,6 +63,7 @@ export default function CartList() {
                       } else {
                         totals[restaurantName] = item.price * item.count;
                       }
+                      
                       return <CartItem key={item.id} item={item} />;
                     }
                   })}
