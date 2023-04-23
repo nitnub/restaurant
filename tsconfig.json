@@ -16,20 +16,36 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "@/components/*": ["components/*"],
-      "@/configs/*": ["configs/*"],
+      "@/components/*": ["src/components/*"],
+      "@/configs/*": ["src/configs/*"],
+      "@/dbConfigs/*": ["src/db/configs/*"],
       "@/graphql/*": ["graphql/*"],
-      "@/libs/*": ["libs/*"],
+      "@/libs/*": ["src/libs/*"],
       "@/models/*": ["models/*"],
-      "@/mutations/*": ["mutations/*"],
+      "@/middleware/*": ["src/middleware/*"],
+      "@/mutations/*": ["src/db/graphql/mutations/*"],
       "@/pages/*": ["pages/*"],
-      "@/queries/*": [".local-files/to-be-deleted/queries/*"],
+      "@/queries/*": ["src/db/graphql/queries/*"],
+      "@/schema/*": ["src/db/schema/*"],
       "@/src/*": ["src/*"],
       "@/styles/*": ["styles/*"],
-      "@/types/*": ["types/*"],
-      "@/utils/*": ["utils/*"]
+      "@/types/*": ["src/types/*"],
+      "@/utils/*": ["src/utils/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "../User.resolver.ts", ".local-files/to-be-deleted/Stripe.resolver copy.ts", ".local-files/to-be-deleted/index.tsx", ".local-files/to-be-deleted/update-amount.ts", ".local-files/LEGACY_schema.ts", ".local-files/pingHandler.ts", ".local-files/fetchTransactionHistory.ts", ".local-files/getClientSecret.ts", ".local-files/getOfficialTotal.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "../User.resolver.ts",
+    ".local-files/to-be-deleted/Stripe.resolver copy.ts",
+    ".local-files/to-be-deleted/index.tsx",
+    ".local-files/to-be-deleted/update-amount.ts",
+    ".local-files/LEGACY_schema.ts",
+    ".local-files/pingHandler.ts",
+    ".local-files/fetchTransactionHistory.ts",
+    ".local-files/getClientSecret.ts",
+    ".local-files/getOfficialTotal.ts"
+  ],
   "exclude": ["node_modules"]
 }

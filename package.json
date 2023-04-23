@@ -57,17 +57,21 @@
   },
   "_moduleAliases": {
     "@/root": "/",
+    "@/components": "src/components",
     "@/controllers": "/controllers",
-    "@/configs": "/configs",
+    "@/configs": "src/configs",
+    "@/dbConfigs": "src/db/configs",
     "@/graphql": "/graphql",
-    "@/libs": "/libs",
+    "@/libs": "/src/libs",
     "@/models": "/models",
-    "@/mutations": "/mutations",
+    "@/middleware": "/src/middleware",
+    "@/mutations": "/src/db/graphql/mutations",
     "@/pages": "/pages",
-    "@/queries": "/queries",
+    "@/queries": "/src/db/graphql/queries",
+    "@/schema": "src/db/schema",
     "@/src": "/src",
     "@/styles": "/styles",
-    "@/types": "/types",
-    "@/utils": "/utils"
+    "@/types": "/src/types",
+    "@/utils": "src/utils"
   }
 }
