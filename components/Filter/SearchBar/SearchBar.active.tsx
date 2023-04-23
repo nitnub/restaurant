@@ -10,8 +10,8 @@ const GroupHeader = styled('div')(({ theme }) => ({
   top: '-8px',
   padding: '4px 10px',
   color: 'white',
-  backgroundColor: '#4e4740',
-  // backgroundColor: '#ec989d',
+  // backgroundColor: '#4e4740',
+  backgroundColor: '#ec989d',
   // backgroundColor: '#db5f68',
 }));
 
