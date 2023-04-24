@@ -76,18 +76,18 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 export default function CartDrawer() {
   const router = useRouter();
   const [cartIsEmpty, setCartIsEmpty] = useState(true);
-  const [checkoutLabel, setCheckoutLabel] = useState('');
-  const theme = useTheme();
+  // const [checkoutLabel, setCheckoutLabel] = useState('');
+  // const theme = useTheme();
   const ctx = useContext(AppContext);
   const ah = new AuthorizationHandler(ctx);
-  const userID = ah.getProfile().id || 'guest';
-  const lc = new LocalCart();
+  // const userID = ah.getProfile().id || 'guest';
+  // const lc = new LocalCart();
   const [open, setOpen] = useState(false);
   const [userIsGuest, setUserIsGuest] = useState();
   const user = getCookie('accessToken') || 'guest';
   const cart = getCookie('cart') || [];
 
-  const hasCart = Object.keys(cart).length > 0;
+  // const hasCart = Object.keys(cart).length > 0;
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -115,7 +115,8 @@ export default function CartDrawer() {
         unchecked = false;
       };
     };
-    setOpen(() => router.pathname !== '/checkout');
+    // setOpen(() => router.pathname !== '/checkout');
+    router.pathname === '/checkout' ? setOpen(false) : null;
     cookieDuster('accessToken', uat, ctx);
   }, [user, ctx]);
 
