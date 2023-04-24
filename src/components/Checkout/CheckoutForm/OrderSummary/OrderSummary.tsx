@@ -35,9 +35,9 @@ export default function OrderSummary({ props }) {
         <AccordionSummary
           className={itemsVerified ? styles.verified : styles.pending}
           // onClick={() => setItemsVerified(() => true)}
-          onClick={() =>
-            setCheckoutState({ ...checkoutState, itemsVerified: true })
-          }
+          // onClick={() =>
+          //   setCheckoutState({ ...checkoutState, itemsVerified: 'true' })
+          // }
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1bh-content"
           disabled={orderConfirmed}

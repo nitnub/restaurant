@@ -27,16 +27,9 @@ export default function SubmitOrder({ props }) {
   const {
     checkoutState,
     setCheckoutState,
-    // itemsVerified,
     styles,
-    // orderConfirmed,
-    // expanded,
-    // checkoutTotal,
-    // paymentMethod,
     handleChange,
     cartData,
-    // ccVerified,
-    // setOrderConfirmed,
   } = props;
 
   const {
@@ -183,7 +176,3 @@ export default function SubmitOrder({ props }) {
   );
 }
 
-function createCartLabel(count: string | number) {
-  if (Number(count) === 1) return '1 Item';
-  return `${count} items`;
-}
