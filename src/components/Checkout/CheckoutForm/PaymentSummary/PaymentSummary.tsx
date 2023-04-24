@@ -25,11 +25,12 @@ export default function PaymentSummary({ props }) {
 
 
 const {expanded, ccVerified, orderConfirmed, paymentMethod} = checkoutState
-
+console.log('checkoutstate', checkoutState)
   return (
   
       <Accordion
         expanded={expanded === 'panel2'}
+        
         onChange={handleChange('panel2')}
       >
         <div className={ccVerified ? styles.verified : styles.pending}>
@@ -60,9 +61,13 @@ const {expanded, ccVerified, orderConfirmed, paymentMethod} = checkoutState
         <AccordionDetails>
           <div className={styles.paymentPane}>
             <PaymentSelector
-              setPaymentMethod={(e: string) => setCheckoutState({...checkoutState, paymentMethod: e})}
+              // setCcVerified={(e: boolean) => setCheckoutState({...checkoutState, ccVerified: e})}
+              // setPaymentMethod={(e: string) => setCheckoutState({...checkoutState, paymentMethod: e})}
+
+              checkoutState={checkoutState}
+              setCheckoutState={setCheckoutState}
               // setCcVerified={setCheckoutState.setCcVerified}
-              setCcVerified={(e: string) => setCheckoutState({...checkoutState, ccVerified: e})}
+              // setCcVerified={(e: boolean) => console.log({vv: e})}
             />
             <Link className={styles.settingsLink} href={'/settings'}>
               Go to Settings to add a card

@@ -24,15 +24,13 @@ export default function OrderSummary({ props }) {
   } = props;
 
   const { expanded, itemsVerified, orderConfirmed, cartCount } = checkoutState;
-  console.log('expanded: ', expanded)
+  console.log('expanded: ', expanded);
   return (
     <Accordion
-    expanded={expanded === 'panel1'}
+      expanded={expanded === 'panel1'}
       defaultExpanded={true}
       onChange={handleChange('panel1')}
     >
-      {/* <OrderSummary props={orderSummaryProps} /> */}
-
       <div className={itemsVerified ? styles.verified : styles.pending}>
         <AccordionSummary
           className={itemsVerified ? styles.verified : styles.pending}

@@ -47,40 +47,36 @@ export default function Checkout(props) {
     last4: '',
   };
 
-
   const defaultCheckoutState = {
-    expanded: 'panel1',
+    expanded: 'panel2' || false,
     itemsVerified: true,
     ccVerified: false,
     orderConfirmed: false,
     cartCount: ctx.cart.totalCount || cartCookie?.totalCount,
     checkoutCart: ctx.cart || cartCookie?.cart,
-    checkoutTotal:ctx.cart.totalCost || cartCookie?.totalCost,
-    paymentMethod: defaultPaymentLabel
-  }
+    checkoutTotal: ctx.cart.totalCost || cartCookie?.totalCost,
+    paymentMethod: defaultPaymentLabel,
+  };
 
   const [checkoutState, setCheckoutState] = useState(defaultCheckoutState);
 
+  // const [itemsVerified, setItemsVerified] = useState(true);
+  // const [ccVerified, setCcVerified] = useState(false);
+  // const [orderConfirmed, setOrderConfirmed] = useState(false);
+  // const [cartCount, setCartCount] = useState(
+  //   ctx.cart.totalCount || cartCookie?.totalCount
+  // );
 
-  const [itemsVerified, setItemsVerified] = useState(true);
-  const [ccVerified, setCcVerified] = useState(false);
-  const [orderConfirmed, setOrderConfirmed] = useState(false);
-  const [cartCount, setCartCount] = useState(
-    ctx.cart.totalCount || cartCookie?.totalCount
-  );
+  // const [expanded, setExpanded] = useState<string | false>('panel1');
+  // const [checkoutCart, setCheckoutCart] = useState<Cart>(
+  //   ctx.cart || cartCookie?.cart
+  // );
+  // const [checkoutTotal, setCheckoutTotal] = useState<number>(
+  //   ctx.cart.totalCost || cartCookie?.totalCost
+  // );
 
-  const [expanded, setExpanded] = useState<string | false>('panel1');
-  const [checkoutCart, setCheckoutCart] = useState<Cart>(
-    ctx.cart || cartCookie?.cart
-  );
-  const [checkoutTotal, setCheckoutTotal] = useState<number>(
-    ctx.cart.totalCost || cartCookie?.totalCost
-  );
-
- 
-
-  const [paymentMethod, setPaymentMethod] =
-    useState<PaymentLabel>(defaultPaymentLabel);
+  // const [paymentMethod, setPaymentMethod] =
+  //   useState<PaymentLabel>(defaultPaymentLabel);
 
   if (!defaultCheckoutState.checkoutCart) {
     return (
@@ -116,25 +112,28 @@ export default function Checkout(props) {
   const handleChange =
     (panel: string) => (event: SyntheticEvent, isExpanded: boolean) => {
       // setExpanded(isExpanded ? panel : false);
-      console.log('logs:')
+      console.log('logs:');
       console.log({
         panel,
-        event, isExpanded
-      })
-      setCheckoutState({...checkoutState, expanded: isExpanded ? panel : 'false'});
+        event,
+        isExpanded,
+      });
+      setCheckoutState({
+        ...checkoutState,
+        expanded: isExpanded ? panel : false,
+      });
     };
 
   useEffect(() => {
     if (ctx.cart) {
       // setCartCount(ctx.cart.totalCount);
       // setCartCount(ctx.cart.totalCount);
-      setCheckoutState({...checkoutState, cartCount: ctx.cart.totalCount });
-      setCheckoutState({...checkoutState, checkoutTotal: ctx.cart.totalCost });
-      
-      
+      setCheckoutState({ ...checkoutState, cartCount: ctx.cart.totalCount });
+      setCheckoutState({ ...checkoutState, checkoutTotal: ctx.cart.totalCost });
+
       // setCheckoutTotal(ctx.cart.totalCost);
     }
-  // }, [ctx.cart.items, cartData]);
+    // }, [ctx.cart.items, cartData]);
   }, [ctx.cart]);
 
   // function panelOneChange() {

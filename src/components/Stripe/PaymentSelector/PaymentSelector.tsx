@@ -8,7 +8,12 @@ import GET_PAYMENT_METHODS from '@/queries/payment/GetStripePaymentMethods';
 import { useQuery } from '@apollo/client';
 import { getCookie } from '@/utils/cookieHandler';
 
-export default function PaymentSelector({ setPaymentMethod, setCcVerified }) {
+export default function PaymentSelector({
+  // setPaymentMethod,
+  // setCcVerified,
+  setCheckoutState,
+  checkoutState,
+}) {
   const ARGS = {
     context: {
       headers: {
@@ -37,15 +42,23 @@ export default function PaymentSelector({ setPaymentMethod, setCcVerified }) {
     );
   }
 
-  const handler = (option, expYear, expMonth) => {
-    setCcVerified(true);
-    setPaymentMethod({
+  const handler = (option, expYear: number, expMonth: number) => {
+    const paymentMethod = {
       id: option.id,
       brand: option.card.brand,
       last4: option.card.last4,
       expYear,
       expMonth,
-    });
+    };
+    setCheckoutState({ ...checkoutState, paymentMethod, ccVerified: true });
+    // setCcVerified(true);
+    // setPaymentMethod({
+    //   id: option.id,
+    //   brand: option.card.brand,
+    //   last4: option.card.last4,
+    //   expYear,
+    //   expMonth,
+    // });
   };
 
   return (
