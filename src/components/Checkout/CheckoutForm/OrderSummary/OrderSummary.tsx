@@ -46,7 +46,7 @@ export default function OrderSummary({ props }) {
           <Typography sx={{ width: '33%', flexShrink: 0 }}>
             Order Summary
           </Typography>
-          <Typography sx={{ color: 'text.secondary' }}>
+          <Typography sx={{ color: 'text.secondary' }} variant={'div'}>
             <div className={itemsVerified ? styles.verified : styles.pending}>
               {orderConfirmed ? 'Order Complete!' : createCartLabel(cartCount)}
             </div>

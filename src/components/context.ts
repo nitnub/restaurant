@@ -1,7 +1,7 @@
 
 import { Cart, CartButtonSet } from '@/types/cartTypes';
 import { createContext } from 'react';
-import { DishObject } from '../models/dishModel';
+import { DishObject } from '@/types/dishTypes';
 
 const AppContext = createContext({
   // isAuthenticated: true,

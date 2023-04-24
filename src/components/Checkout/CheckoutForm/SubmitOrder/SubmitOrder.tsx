@@ -1,17 +1,15 @@
-import { useContext, useEffect, useState, SyntheticEvent } from 'react';
+import { useContext } from 'react';
 import AppContext from '@/src/components/context';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Button from '@mui/material/Button';
 import Link from 'next/link';
-import CheckoutList from '@/src/components/Checkout/CheckoutList';
-import GET_CART from '@/queries/cart/GetCart';
 import CLEAR_CART from '@/mutations/cart/ClearCart.mutation';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { convertToCurrency } from '@/libs/formatter';
-import { getCookie } from '@/utils/cookieHandler';
+import { getCookie, updateCookieObject } from '@/utils/cookieHandler';
 import { useMutation, useQuery } from '@apollo/client';
 import CREATE_STRIPE_PAYMENT from '@/mutations/payment/CreatePayment.mutation';
 
@@ -24,13 +22,8 @@ interface PaymentLabel {
 export default function SubmitOrder({ props }) {
   const ctx = useContext(AppContext);
 
-  const {
-    checkoutState,
-    setCheckoutState,
-    styles,
-    handleChange,
-    cartData,
-  } = props;
+  const { checkoutState, setCheckoutState, styles, handleChange, cartData } =
+    props;
 
   const {
     expanded,
@@ -41,34 +34,20 @@ export default function SubmitOrder({ props }) {
     paymentMethod,
   } = checkoutState;
 
-  const PAYMENT_VARIABLES = {
-    amount: cartData?.getCartResult.totalCost,
+  const CLEAR_CART_ARGS = createClearCartArgs();
 
-    path: '/',
-    paymentMethodID: paymentMethod.id,
-  };
-
-  const PAYMENT_ARGS = {
-    variables: PAYMENT_VARIABLES,
-    context: {
-      headers: {
-        Authorization: `Bearer ${getCookie('accessToken')}`,
-      },
-    },
-  };
+  const PAYMENT_ARGS = createPaymentArgs(
+    // cartData?.getCartResult.totalCost,
+    checkoutTotal,
+    paymentMethod.id
+  );
 
   const [
     createStripePayment,
     { data: paymentData, loading: paymentLoading, error: paymentError },
   ] = useMutation(CREATE_STRIPE_PAYMENT, PAYMENT_ARGS);
 
-  const CLEAR_CART_ARGS = {
-    context: {
-      headers: {
-        Authorization: `Bearer ${getCookie('accessToken')}`,
-      },
-    },
-  };
+  // useEffect(() => {}, [cartData, paymentMethod]);
 
   const [
     clearCartCache,
@@ -77,23 +56,26 @@ export default function SubmitOrder({ props }) {
 
   const submitPayment = async (e) => {
     e.preventDefault();
+
     const response = await createStripePayment();
 
-    if (response.data.createPaymentResult.__typename !== 'StripeError') {
-      // empty cart
-      const freshCart = { items: [], totalCost: 0, totalCount: 0 };
-
-      document.cookie = `cart=${JSON.stringify(freshCart)}`;
-      ctx.setCart(freshCart);
-
-      // clear out cart in redis
-      await clearCartCache();
-      // setOrderConfirmed(true);
-      setCheckoutState({
-        ...checkoutState,
-        orderConfirmed: true,
-      });
+    if (response.data.createPaymentResult.__typename === 'StripeError') {
+      return;
     }
+
+    // empty cart
+    const freshCart = { items: [], totalCost: 0, totalCount: 0 };
+    
+    updateCookieObject('cart', freshCart);
+    ctx.setCart(freshCart);
+
+    // clear out cart in redis
+    await clearCartCache();
+
+    setCheckoutState({
+      ...checkoutState,
+      orderConfirmed: true,
+    });
   };
 
   if (paymentLoading) console.log('Loading official total...');
@@ -176,3 +158,33 @@ export default function SubmitOrder({ props }) {
   );
 }
 
+function createPaymentArgs(amount: string, paymentMethodID: string) {
+  const PAYMENT_VARIABLES = {
+    // amount: cartData?.getCartResult.totalCost,
+    amount,
+    path: '/',
+    // paymentMethodID: paymentMethod.id,
+    paymentMethodID,
+  };
+
+  const PAYMENT_ARGS = {
+    variables: PAYMENT_VARIABLES,
+    context: {
+      headers: {
+        Authorization: `Bearer ${getCookie('accessToken')}`,
+      },
+    },
+  };
+
+  return PAYMENT_ARGS;
+}
+
+function createClearCartArgs() {
+  return {
+    context: {
+      headers: {
+        Authorization: `Bearer ${getCookie('accessToken')}`,
+      },
+    },
+  };
+}

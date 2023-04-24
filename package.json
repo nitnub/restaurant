@@ -63,7 +63,7 @@
     "@/dbConfigs": "src/db/configs",
     "@/graphql": "/graphql",
     "@/libs": "/src/libs",
-    "@/models": "/models",
+    "@/models": "src/models",
     "@/middleware": "/src/middleware",
     "@/mutations": "/src/db/graphql/mutations",
     "@/pages": "/pages",

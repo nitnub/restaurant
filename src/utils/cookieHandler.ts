@@ -88,3 +88,7 @@ export const cookieDuster = (
 
   return () => clearInterval(event);
 };
+
+export const updateCookieObject = (cookieName: string, value: object) => {
+  document.cookie = `${cookieName}=${JSON.stringify(value)}`;
+};
