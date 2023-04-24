@@ -2,7 +2,7 @@ import AuthorizationHandler from '@/utils/authorizationHandler';
 import { gql, useMutation } from '@apollo/client';
 import { useContext, useEffect, useState } from 'react';
 // import { DECREMENT_CART } from '@/src/graphql/mutations';
-import { DECREMENT_CART } from '@/mutations/cart/RemoveItemFromCart.mutation';
+import DECREMENT_CART from '@/mutations/cart/RemoveItemFromCart.mutation';
 import AppContext from '../../context';
 import { getCookie } from '@/utils/cookieHandler';
 import { Cart, CartItem } from '@/types/cartTypes';

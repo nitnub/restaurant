@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from 'react';
 import AuthorizationHandler from '@/utils/authorizationHandler';
 import AppContext from '@/src/components/context';
 // import { INCREMENT_CART } from '@/src/graphql/mutations';
-import { INCREMENT_CART } from '@/mutations/cart/AddItemsToCart.mutation';
+import INCREMENT_CART from '@/mutations/cart/AddItemsToCart.mutation';
 import { getCookie } from '@/utils/cookieHandler';
 import { Cart, CartItem } from '@/types/cartTypes';
 

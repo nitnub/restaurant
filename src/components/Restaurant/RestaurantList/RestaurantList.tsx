@@ -39,7 +39,6 @@ export default function RestaurantList(props: any) {
   return (
     <div className={styles.restaurants}>
       {restaurantList.map((restaurant: IRestaurant, index: number) => {
-        console.log(restaurant)
         return <Restaurant key={restaurant.id} restaurant={restaurant} />;
         
       })}

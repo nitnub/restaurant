@@ -1,6 +1,7 @@
 import { gql } from '@apollo/client';
 
-export const GET_PAYMENT_METHODS = gql`
+// export const GET_PAYMENT_METHODS = gql`
+export default gql`
   query GetStripePaymentMethods {
     paymentMethodsResult {
       __typename

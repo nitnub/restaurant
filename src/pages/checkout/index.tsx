@@ -8,13 +8,12 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CheckoutList from '@/src/components/Checkout/CheckoutList';
 import PaymentSelector from '@/src/components/Stripe/PaymentSelector';
 import { clearCookie, getCookie } from '@/utils/cookieHandler';
-
 import Button from '@mui/material/Button';
 import Link from 'next/link';
-
 import { convertToCurrency } from '@/libs/formatter';
-import { CLEAR_CART, CREATE_STRIPE_PAYMENT } from '@/src/graphql/mutations';
-import { GET_CART, GET_OFFICIAL_TOTAL } from '@/src/graphql/queries';
+import CREATE_STRIPE_PAYMENT from '@/mutations/payment/CreatePayment.mutation';
+import CLEAR_CART from '@/mutations/cart/ClearCart.mutation';
+import GET_CART from '@/queries/cart/GetCart';
 import { useMutation, useQuery } from '@apollo/client';
 import styles from './index.module.css';
 import PaymentOption from '@/src/components/Stripe/PaymentOption';
@@ -245,6 +244,7 @@ export default function Checkout(props) {
               </div>
             </AccordionDetails>
           </Accordion>
+          
           <Accordion
             expanded={expanded === 'panel3'}
             onChange={handleChange('panel3')}

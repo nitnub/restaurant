@@ -1,6 +1,7 @@
 import { gql } from '@apollo/client';
 
-export const GET_RESTAURANT = gql`
+// export const GET_RESTAURANT = gql`
+export default gql`
   query GetRestaurant($id: Int!) {
     restaurantResult(id: $id) {
       __typename
@@ -11,6 +12,7 @@ export const GET_RESTAURANT = gql`
         style
         rating
         image
+        imageSm
         dish {
           id
           name

@@ -17,7 +17,7 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import Typography from '@mui/material/Typography';
 import { TablePaginationActionsProps } from '@/types/utilTypes';
-import { GET_CUSTOMER_TRANSACTIONS } from '@/src/graphql/queries';
+import GET_CUSTOMER_TRANSACTIONS from '@/queries/payment/GetCustomerTransactions.query';
 import { useQuery } from '@apollo/client';
 import { getCookie } from '@/utils/cookieHandler';
 import { convertToCurrency } from '@/libs/formatter';
@@ -185,8 +185,8 @@ export default function CustomPaginationActionsTable() {
             {(rowsPerPage > 0
               ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               : rows
-            ).map((row) => (
-              <TableRow key={row.name}>
+            ).map((row, index) => (
+              <TableRow key={index}>
                 <TableCell component="th" scope="row">
                   {row.date}
                 </TableCell>

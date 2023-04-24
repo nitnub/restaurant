@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import AppContext from '@/src/components/context';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -21,6 +21,8 @@ const GroupItems = styled('ul')({
 
 export default function SearchBar({ props }) {
   const [query, setQuery] = useState('');
+  const [options, setOptions] = useState([]);
+
   const ctx = useContext(AppContext);
 
   const handler = (value: string) => {
@@ -33,20 +35,23 @@ export default function SearchBar({ props }) {
     value ? setQuery(value.toLocaleLowerCase()) : setQuery(' ');
   };
 
-  const options = props.searchPool.map((option) => {
-    let firstLetter = '';
-    if (option.name.toLowerCase().startsWith('the') && option.name.length > 3) {
-      firstLetter = option.name[4].toUpperCase();
-    } else {
-      firstLetter = option.name[0].toUpperCase();
-    }
+  useEffect(() => {
+    const getOptions = () => {
+      const newOptions = props.searchPool.map((option, index) => {
+        const firstLetter = option.name.toLowerCase().startsWith('the ')
+          ? option.name[4].toUpperCase()
+          : option.name[0].toUpperCase();
 
-    return {
-      firstLetter: /[0-9]/.test(firstLetter) ? '0-9' : firstLetter,
-      ...option,
-      key: option.id,
+        return {
+          ...option,
+          firstLetter: /[0-9]/.test(firstLetter) ? '0-9' : firstLetter,
+          key: index,
+        };
+      });
+      setOptions(newOptions);
     };
-  });
+    getOptions();
+  }, []);
 
   return (
     <Autocomplete
@@ -78,7 +83,7 @@ export default function SearchBar({ props }) {
         />
       )}
       renderGroup={(params) => (
-        <li>
+        <li key={params.key}>
           <GroupHeader>{params.group}</GroupHeader>
           {/* <GroupHeader className={'groupHeader'}>{params.group}</GroupHeader> */}
           <GroupItems onClick={(e) => handler(e.target.textContent)}>

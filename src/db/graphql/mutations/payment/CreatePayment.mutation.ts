@@ -1,6 +1,7 @@
 import { gql } from '@apollo/client';
 
-export const CREATE_STRIPE_PAYMENT = gql`
+// export const CREATE_STRIPE_PAYMENT = gql`
+export default gql`
   mutation CreatePayment($paymentMethodID: String!, $amount: Int!) {
     createPaymentResult(paymentMethodID: $paymentMethodID, amount: $amount) {
       __typename

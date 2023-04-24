@@ -1,6 +1,7 @@
 import { gql } from '@apollo/client';
 
-export const GET_CUSTOMER_TRANSACTIONS = gql`
+// export const GET_CUSTOMER_TRANSACTIONS = gql`
+export default gql`
   query GetCustomerTransactions {
     customerTransactionsResult {
       __typename

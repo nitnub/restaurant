@@ -1,6 +1,7 @@
 import { gql } from '@apollo/client';
 
-export const GET_ALL_RESTAURANTS = gql`
+// export const GET_ALL_RESTAURANTS = gql`
+export default gql`
   query GetAllRestaurants {
     restaurantsResult {
       __typename

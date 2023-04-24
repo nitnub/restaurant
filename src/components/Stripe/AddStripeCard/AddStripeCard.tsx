@@ -2,7 +2,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import SettingsForm from '@/src/components/Settings/SettingsForm';
 import { useQuery } from '@apollo/client';
-import { GET_CLIENT_SECRET } from '@/src/graphql/queries';
+import GET_CLIENT_SECRET from '@/queries/payment/GetStripeClientSecret';
 import { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import AppContext from '@/src/components/context';

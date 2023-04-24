@@ -1,6 +1,7 @@
 import { gql } from '@apollo/client';
 
-export const INCREMENT_CART = gql`
+// export const INCREMENT_CART = gql`
+export default gql`
   mutation AddItemsToCart($items: [DishInput]) {
     incrementCartResult(items: $items) {
       __typename

@@ -4,6 +4,22 @@ import styles from './PaymentExamples.module.css';
 import CardHeader from '@mui/material/CardHeader';
 
 export default function PaymentExamples() {
+  const cardList = [
+    { name: 'Visa', number: '4242-4242-4242-4242' },
+    { name: 'Mastercard', number: '5555-5555-5555-4444' },
+    { name: 'American Express', number: '3782-822463-10005' },
+    { name: 'Discover', number: '6011-1111-1111-1117' },
+  ];
+
+  const getCardListItem = (card: string, number: string) => {
+    return (
+      <li key={number} style={{ marginBottom: '12px' }}>
+        <strong>{card}: </strong>
+        {number}
+      </li>
+    );
+  };
+
   return (
     <>
       <div className={styles.cardContainer}>
@@ -13,29 +29,9 @@ export default function PaymentExamples() {
               title="Sample dummy card numbers"
               subheader="(Use any 3-digit code end exp date)"
             />
-
-            <div>
-              <ul>
-                <li>
-                  <strong>Visa: </strong>4242-4242-4242-4242
-                </li>
-              </ul>
-              <ul>
-                <li>
-                  <strong>Mastercard: </strong>5555-5555-5555-4444
-                </li>
-              </ul>
-              <ul>
-                <li>
-                  <strong>American Express: </strong> 3782-822463-10005
-                </li>
-              </ul>
-              <ul>
-                <li>
-                  <strong>Discover: </strong>6011-1111-1111-1117
-                </li>
-              </ul>
-            </div>
+            <ul>
+              {cardList.map((card) => getCardListItem(card.name, card.number))}
+            </ul>
           </CardContent>
         </Card>
       </div>

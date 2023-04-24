@@ -1,6 +1,7 @@
 import { gql } from '@apollo/client';
 
-export const DECREMENT_CART = gql`
+// export const DECREMENT_CART = gql`
+export default gql`
   mutation RemoveItemFromCart($id: String!) {
     decrementCartResult(id: $id) {
       __typename

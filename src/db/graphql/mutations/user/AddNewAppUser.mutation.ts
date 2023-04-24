@@ -1,6 +1,7 @@
 import { gql } from '@apollo/client';
 
-export const ADD_APP_USER = gql`
+// export const ADD_APP_USER = gql`
+export default gql`
   mutation AddNewAppUser($email: String!, $globalUserId: String!) {
     addAppUserResult(email: $email, globalUserId: $globalUserId) {
       __typename

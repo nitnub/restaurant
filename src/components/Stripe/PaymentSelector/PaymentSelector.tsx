@@ -2,9 +2,9 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-import PaymentOption from '../PaymentOption';
+import PaymentOption from '@/components/Stripe/PaymentOption';
 import styles from './PaymentSelector.module.css';
-import { GET_PAYMENT_METHODS } from '@/src/graphql/queries';
+import GET_PAYMENT_METHODS from '@/queries/payment/GetStripePaymentMethods';
 import { useQuery } from '@apollo/client';
 import { getCookie } from '@/utils/cookieHandler';
 
@@ -36,6 +36,18 @@ export default function PaymentSelector({ setPaymentMethod, setCcVerified }) {
       </>
     );
   }
+
+  const handler = (option, expYear, expMonth) => {
+    setCcVerified(true);
+    setPaymentMethod({
+      id: option.id,
+      brand: option.card.brand,
+      last4: option.card.last4,
+      expYear,
+      expMonth,
+    });
+  };
+
   return (
     <FormControl>
       <FormLabel id="radio-group-label">Available Cards</FormLabel>
@@ -51,16 +63,17 @@ export default function PaymentSelector({ setPaymentMethod, setCcVerified }) {
               <div key={index} className={styles.selection}>
                 <Radio
                   value={option.id}
-                  onClick={() => {
-                    setCcVerified(true);
-                    setPaymentMethod({
-                      id: option.id,
-                      brand: option.card.brand,
-                      last4: option.card.last4,
-                      expYear,
-                      expMonth,
-                    });
-                  }}
+                  onClick={() => handler(option, expYear, expMonth)}
+                  // onClick={() => {
+                  //   setCcVerified(true);
+                  //   setPaymentMethod({
+                  //     id: option.id,
+                  //     brand: option.card.brand,
+                  //     last4: option.card.last4,
+                  //     expYear,
+                  //     expMonth,
+                  //   });
+                  // }}
                 />
                 <PaymentOption paymentProps={paymentProps} />
               </div>

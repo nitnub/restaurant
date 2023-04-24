@@ -1,12 +1,12 @@
-import Form from '../../src/components/Form';
+import Form from '@/components/Form';
 import { useMutation } from '@apollo/client';
 import { useContext, useState } from 'react';
-import AppContext from '../../src/components/context';
+import AppContext from '@/components/context';
 import AuthorizationHandler from '@/utils/authorizationHandler';
 import { getCookie } from '@/utils/cookieHandler';
-import { GET_CART } from '@/src/graphql/queries';
+import GET_CART from '@/queries/cart/GetCart';
 import { useLazyQuery } from '@apollo/client';
-import { INCREMENT_CART } from '@/src/graphql/mutations';
+import INCREMENT_CART from '@/mutations/cart/AddItemsToCart.mutation';
 import { Cart } from '@/types/cartTypes';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -17,7 +17,7 @@ import app from '@/utils/firebaseConfig';
 import GoogleButton from 'react-google-button';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import Head from 'next/head';
-import { ADD_APP_USER } from '@/src/graphql/mutations/user/AddNewAppUser.mutation';
+import ADD_APP_USER  from '@/mutations/user/AddNewAppUser.mutation';
 import verifyToken, { readToken } from '@/utils/token';
 
 const provider = new GoogleAuthProvider();
@@ -151,6 +151,7 @@ export default function SignIn() {
       }
 
       if (newUser) {
+        
         return router.push(
           {
             pathname: '/',

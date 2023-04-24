@@ -26,9 +26,11 @@ export const snakeToCamel = (
 ) => {
   let newStr = '';
   const strArr = str.split('_');
+
   for (let word of strArr) {
     newStr += word.charAt(0).toUpperCase() + word.slice(1);
   }
+  
   if (!capitalizeFirsLetterOnLeadingString) {
     newStr = newStr.charAt(0).toLocaleLowerCase() + newStr.slice(1);
   }

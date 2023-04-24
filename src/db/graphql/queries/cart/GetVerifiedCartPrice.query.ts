@@ -1,6 +1,7 @@
 import { gql } from '@apollo/client';
 
-export const GET_OFFICIAL_TOTAL = gql`
+// export const GET_OFFICIAL_TOTAL = gql`
+export default gql`
   query GetVerifiedCartPrice($dishes: [DishInput!]) {
     verifiedTotalResult(dishes: $dishes) {
       __typename
