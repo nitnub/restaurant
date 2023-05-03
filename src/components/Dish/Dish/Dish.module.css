@@ -118,3 +118,139 @@ svg.add {
 .skeletonTitle {
   width: 1000px;
 }
+
+
+/* Tablets and under */
+@media(max-width: 768px) {
+
+
+
+}
+
+/* Mobile */
+@media(max-width: 500px) {
+.dishCard {
+  display: flex;
+  /* width: 512px; Op1*/
+  /* width: 450px; */
+  width: 100%;
+  margin: 12px;
+  /* height: 175px; Op1 */
+  height: 125px;
+}
+
+.dishCardLoading {
+  display: flex;
+  width: 450px;
+  margin: 12px;
+  /* background-color: #aa00ff; */
+  /* height: 175px; */
+  height: 125px;
+}
+
+.dishImage {
+  width: 151px;
+  height: 100%
+}
+
+.dishImageLoading {
+  width: 151px; 
+  height: 113px;
+  margin: 6px;
+  /* width: 100%;
+  height: 100% */
+}
+
+.cardBox {
+  display: flex;
+
+  width: 100%;
+  justify-content: space-between;
+}
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.cardContentLoading {
+  /* background-color: red; */
+  /* width: 100% */
+  width: 100%
+}
+
+.cardDetailsLoading {
+  display: flex;
+  justify-content: space-between;
+  height: 100px;
+  padding: 8px;
+  margin: 0;
+  /* background-color: red; */
+}
+
+.cardBlurbLoading {
+  height: 48px;
+  /* width: 200px; */
+  width: 50%;
+}
+
+.innerContainer {
+  display: flex;
+  justify-content: space-between;
+  height: 100%;
+  height: 110px;
+}
+
+.dishHeaderLoading {
+  margin: 8px;
+
+  width: 66%;
+  height: 24px;
+}
+
+.disSubheaderLoading {
+  margin: 0 8px;
+  width: 25%;
+}
+
+.description {
+  font-size: 0.9em;
+}
+
+.counterContainer {
+  display: flex;
+  justify-content: center;
+}
+.dishCounter {
+  display: flex;
+  align-items: center;
+}
+
+.dishCounterLoading {
+  justify-self: center;
+  width: 100px;
+}
+
+.addRemove {
+  display: flex;
+  height: fit-content;
+}
+
+svg.add {
+  color: red;
+}
+
+.skeletonContainer {
+  display: flex;
+  /* background-color: blue; */
+  width: 100%
+}
+
+.skeletonTitle {
+  width: 1000px;
+}
+
+
+}
+

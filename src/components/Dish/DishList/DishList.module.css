@@ -3,8 +3,18 @@
   flex-wrap: wrap;
 }
 
-
 .emptyText {
   padding-top: 48px;
   text-align: center;
+}
+
+/* Tablets and under */
+@media (max-width: 768px) {
+  .listContainer {
+    justify-content: center; 
+  }
+}
+
+/* Mobile */
+@media (max-width: 500px) {
 }
