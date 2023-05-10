@@ -24,7 +24,7 @@ export default function PaymentSelector({
 
   const { data, loading, error } = useQuery(GET_PAYMENT_METHODS, ARGS);
   if (loading) {
-    console.log('Loading payment options...');
+    // console.log('Loading payment options...');
     return <h3>Loading...</h3>;
   }
 
