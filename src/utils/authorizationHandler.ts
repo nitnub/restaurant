@@ -2,13 +2,25 @@ import { Context } from '@apollo/client';
 import { newGuestID } from './newGuestID';
 
 import { AuthProvider } from '@/types/utilTypes';
+import { clearCookie, getCookie, setCookie } from './cookieHandler';
+
+const guestProfile = {
+  admin: false,
+  avatar: '',
+  email: 'Sign In',
+  exp: 0,
+  firstName: '',
+  iat: 0,
+  id: 'Guest',
+};
+
+const emptyCart = { items: [], totalCost: 0, totalCount: 0 };
 
 export default class AuthorizationHandler {
   private SUPPORTED_OAUTH_PROVIDERS = ['www.google.com'];
   private SIGN_IN_URL = process.env.NEXT_PUBLIC_AUTH_SERVER_SIGN_IN_URL;
   private SIGN_IN_OAUTH_URL =
     process.env.NEXT_PUBLIC_AUTH_SERVER_SIGN_IN_OAUTH_URL;
-  private REGISTER_URL = process.env.NEXT_PUBLIC_AUTH_SERVER_REGISTER_URL;
   private SIGN_OUT_URL = process.env.NEXT_PUBLIC_AUTH_SERVER_SIGN_OUT_URL;
   private TOKEN_URL = process.env.NEXT_PUBLIC_AUTH_SERVER_TOKEN_URL;
   private PROFILE_KEY = 'loggedInUser';
@@ -16,7 +28,7 @@ export default class AuthorizationHandler {
   private ctx: Context;
 
   static token: string = '';
-  constructor(ctx?) {
+  constructor(ctx: Context) {
     this.ctx = ctx;
   }
 
@@ -34,7 +46,6 @@ export default class AuthorizationHandler {
         headers: {
           'Content-Type': 'application/json',
         },
-        // credentials: 'include',
       });
     } catch (err) {
       return console.log(
@@ -42,23 +53,16 @@ export default class AuthorizationHandler {
       );
     }
     const data = await response.json();
-    if (data.status === 'fail') {
-      return {
-        status: data.status,
-        success: false,
-        message: data.message,
-      };
-    }
+
     if (data.status === 'success') {
+      const { accessToken } = data.data;
       const parsedUser = JSON.parse(
-        Buffer.from(data.data.accessToken.split('.')[1], 'base64').toString()
+        Buffer.from(accessToken.split('.')[1], 'base64').toString()
       );
 
       this.ctx.setAuthProvider(parsedUser.authProvider);
-      const { accessToken } = data.data;
-      document.cookie = `accessToken=${JSON.stringify(
-        accessToken
-      )}; expires=${new Date(parsedUser.exp * 1000).toUTCString()}`;
+
+      setCookie('accessToken', accessToken, parsedUser.exp);
 
       this.ctx.setAccessToken(() => accessToken);
       this.setProfile(accessToken); //
@@ -69,26 +73,26 @@ export default class AuthorizationHandler {
         accessToken: data.data.accessToken,
       };
     }
+
+    const message =
+      data.status === 'fail'
+        ? data.message
+        : 'Systm error. Please contact a system administrator.';
+
     return {
       status: 'fail',
       success: false,
-      message: 'Systm error. Please contact a system administrator.',
+      message,
     };
-    // receive response
-
-    // handle response errors
-
-    // receive access token
-
-    // set access token to variable -> handled on page.
-
-    // return accessToken;
   }
+
   public async signInOAuth(
     idToken: string,
     provider: AuthProvider,
-    additionalData
+    additionalData: { image: string }
   ) {
+    const adImage = additionalData.image;
+
     if (!this.SUPPORTED_OAUTH_PROVIDERS.includes(provider)) {
       return {
         status: 'fail',
@@ -102,6 +106,7 @@ export default class AuthorizationHandler {
       idToken,
       provider,
     };
+
     const response = await fetch(this.SIGN_IN_OAUTH_URL, {
       method: 'POST',
       body: JSON.stringify(requestBody),
@@ -113,7 +118,6 @@ export default class AuthorizationHandler {
 
     const data = await response.json();
 
-
     if (data instanceof Error) {
       return {
         status: 'fail',
@@ -121,41 +125,23 @@ export default class AuthorizationHandler {
         message: data.message,
       };
     }
-    if (!data.success) {
-      return {
-        status: data.status,
-        success: false,
-        message: data.message,
-      };
-    }
+
     if (data.status === 'success') {
       const accessToken = data.data.resp.accessToken;
 
-      const parsedUser = JSON.parse(
+      const { authProvider, avatar, exp } = JSON.parse(
         Buffer.from(accessToken.split('.')[1], 'base64').toString()
       );
 
+      setCookie('accessToken', accessToken, exp);
+      
+      adImage && setCookie('avatar', adImage, exp);
+      avatar && setCookie('avatar', avatar, exp);
 
-   
-      this.ctx.setAuthProvider(parsedUser.authProvider);
-
-      document.cookie = `accessToken=${JSON.stringify(
-        accessToken
-      )}; expires=${new Date(parsedUser.exp * 1000).toUTCString()}`;
-
-      if (additionalData.image) {
-        document.cookie = `avatar=${JSON.stringify(
-          additionalData.image
-        )}; expires=${new Date(parsedUser.exp * 1000).toUTCString()}`;
-      }
-      if (parsedUser.avatar) {
-        document.cookie = `avatar=${JSON.stringify(
-          parsedUser.avatar
-        )}; expires=${new Date(parsedUser.exp * 1000).toUTCString()}`;
-      }
-
+      this.ctx.setAuthProvider(authProvider);
       this.ctx.setAccessToken(() => accessToken);
-      this.setProfile(accessToken); //
+
+      this.setProfile(accessToken);
 
       return {
         status: data.status,
@@ -163,10 +149,16 @@ export default class AuthorizationHandler {
         accessToken,
       };
     }
+
+    const message =
+      data.status === 'fail'
+        ? data.message
+        : 'Systm error. Please contact a system administrator.';
+
     return {
       status: 'fail',
       success: false,
-      message: 'Systm error. Please contact a system administrator.',
+      message,
     };
   }
 
@@ -175,75 +167,53 @@ export default class AuthorizationHandler {
       Buffer.from(accessToken.split('.')[1], 'base64').toString()
     );
 
-    document.cookie = `${this.PROFILE_KEY}=${JSON.stringify(
-      parsedUser
-    )}; expires=${new Date(parsedUser.exp * 1000).toUTCString()}`;
-    document.cookie = `${this.TOKEN_KEY}=${JSON.stringify(
-      accessToken
-    )}; expires=${new Date(parsedUser.exp * 1000).toUTCString()}`;
+    setCookie(this.PROFILE_KEY, parsedUser, parsedUser.exp);
+    setCookie(this.TOKEN_KEY, accessToken, parsedUser.exp);
 
     this.ctx.setEmail(parsedUser.email);
   }
 
   public getProfile() {
-    // return the user's profile info
-    // extract loggedInUser details on page load
-    // update page components with extracted loggedInUser details
-
-    try {
-      const cookie = document.cookie;
-      const cInitial = cookie.split(`${this.PROFILE_KEY}=`)[1];
-      const cFinal = cInitial.split(';')[0];
-      const profile = JSON.parse(cFinal);
-      return profile;
-    } catch {
-      return false;
-    }
+    return getCookie(this.PROFILE_KEY) === ''
+      ? false
+      : getCookie(this.PROFILE_KEY);
   }
 
   public async signOut(signOutAll: boolean) {
-    // create request
+    // Create request
     const guestID = newGuestID();
     const requestBody = {
       signOutAll,
     };
 
-    const response = await fetch(this.SIGN_OUT_URL, {
+    // Send sign-out request
+    await fetch(this.SIGN_OUT_URL, {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
         'Content-Type': 'application/json',
       },
-      // credentials: 'include',
     });
 
-    document.cookie = `${this.PROFILE_KEY}=null; expires=${new Date(
-      0
-    ).toUTCString()}`;
-    document.cookie = `avatar=null; expires=${new Date(0).toUTCString()}`;
+    clearCookie(this.PROFILE_KEY);
 
-    // clear cart
-    this.ctx.setCart(() => {
-      return { items: [], totalCost: 0, totalCount: 0 };
-    });
+    clearCookie('avatar');
+
+    // Clear cart
+    this.ctx.setCart(() => emptyCart);
+
     this.ctx.setTotalCount(0);
     this.ctx.setTotalCost(0);
-    document.cookie = `cart=null; expires=${new Date(0).toUTCString()}`;
 
-    // remove access token from ctx
-    this.ctx.setAccessToken(() => guestID);
-    document.cookie = `accessToken=${guestID}`;
-    // this.ctx.setAccessToken(() => null);
+    clearCookie('cart');
+
+    // Remove access token from context
+
+    setCookie('accessToken', guestID, -1, false);
+
     this.ctx.setEmail('Sign In');
-    this.ctx.setProfile({
-      admin: false,
-      avatar: '',
-      email: 'Sign In',
-      exp: 0,
-      firstName: '',
-      iat: 0,
-      id: 'Guest',
-    });
+    this.ctx.setProfile(guestProfile);
+    this.ctx.setAccessToken(() => guestID);
   }
 
   public async updateAccessToken(ctx: Context) {
@@ -252,7 +222,6 @@ export default class AuthorizationHandler {
       headers: {
         'Content-Type': 'application/json',
       },
-      // credentials: 'include',
     });
 
     const data = await response.json();
@@ -270,9 +239,8 @@ export default class AuthorizationHandler {
         Buffer.from(accessToken.split('.')[1], 'base64').toString()
       );
 
-      document.cookie = `accessToken=${JSON.stringify(
-        accessToken
-      )}; expires=${new Date(parsedUser.exp * 1000).toUTCString()}`;
+      setCookie('accessToken', accessToken, parsedUser.exp);
+
       ctx.setAccessToken(() => accessToken);
 
       ctx.setEmail(() => parsedUser.email);
@@ -290,5 +258,4 @@ export default class AuthorizationHandler {
       message: 'Unable to verify user. Please log in again...',
     };
   }
-  // public register() {}
 }

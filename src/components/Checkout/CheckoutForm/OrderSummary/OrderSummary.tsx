@@ -6,25 +6,10 @@ import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 export default function OrderSummary({ props }) {
-  // const orderSummaryProps = {
-  //   itemsVerified,
-  //   styles
-  // }
-
-  const {
-    checkoutState,
-    setCheckoutState,
-    // itemsVerified,
-    styles,
-    // orderConfirmed,
-    // setItemsVerified,
-    // cartCount,
-    // expanded,
-    handleChange,
-  } = props;
+  const { checkoutState, styles, handleChange } = props;
 
   const { expanded, itemsVerified, orderConfirmed, cartCount } = checkoutState;
-  console.log('expanded: ', expanded);
+
   return (
     <Accordion
       expanded={expanded === 'panel1'}
@@ -34,10 +19,6 @@ export default function OrderSummary({ props }) {
       <div className={itemsVerified ? styles.verified : styles.pending}>
         <AccordionSummary
           className={itemsVerified ? styles.verified : styles.pending}
-          // onClick={() => setItemsVerified(() => true)}
-          // onClick={() =>
-          //   setCheckoutState({ ...checkoutState, itemsVerified: 'true' })
-          // }
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1bh-content"
           disabled={orderConfirmed}

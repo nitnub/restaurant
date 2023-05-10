@@ -16,8 +16,7 @@ export const getCookie = (cookieName: string) => {
 
     const step2 = step1.split(';')[0];
 
-    // return JSON.parse(step2)
-    // check if string is object
+    // check if string is formatted as object
     if (
       (step2.startsWith('{') && step2.endsWith('}')) ||
       (step2.startsWith('"') && step2.endsWith('"'))
@@ -41,8 +40,7 @@ export const getCookieFromString = (cookieName: string, string: string) => {
 
     const step2 = step1.split(';')[0];
 
-    // return JSON.parse(step2)
-    // check if string is object
+    // check if string is formatted as object
     if (
       (step2.startsWith('{') && step2.endsWith('}')) ||
       (step2.startsWith('"') && step2.endsWith('"'))
@@ -60,12 +58,12 @@ export const cookieIsEmpty = (cookieName: string) => {
   if (typeof document === 'undefined') return;
 
   const cookie = getCookie(cookieName);
-  // if (cookie === '' || Object.keys(cookie).length === 0);
+
   if (cookie === '') {
     return true;
   }
   return false;
-  // return Object.keys(cookie).length === 0;
+ 
 };
 
 export const clearCookie = (cookieName: string) => {
@@ -91,4 +89,23 @@ export const cookieDuster = (
 
 export const updateCookieObject = (cookieName: string, value: object) => {
   document.cookie = `${cookieName}=${JSON.stringify(value)}`;
+};
+
+export const setCookie = (
+  cookieName: string,
+  value: string | object,
+  numericDate: number,
+  useExpiration: boolean = true
+) => {
+  if (typeof value == 'object') {
+    value = JSON.stringify(value);
+  }
+
+  if (!useExpiration) {
+    document.cookie = `${cookieName}=${value};`;
+  } else {
+    document.cookie = `${cookieName}=${value}; expires=${new Date(
+      numericDate * 1000
+    ).toUTCString()}`;
+  }
 };
