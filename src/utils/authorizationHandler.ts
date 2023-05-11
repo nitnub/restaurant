@@ -17,15 +17,15 @@ const guestProfile = {
 const emptyCart = { items: [], totalCost: 0, totalCount: 0 };
 
 export default class AuthorizationHandler {
-  private SUPPORTED_OAUTH_PROVIDERS = ['www.google.com'];
+  // private SUPPORTED_OAUTH_PROVIDERS = ['www.google.com'];
   private SIGN_IN_URL = process.env.NEXT_PUBLIC_AUTH_SERVER_SIGN_IN_URL;
-  private SIGN_IN_OAUTH_URL =
-    process.env.NEXT_PUBLIC_AUTH_SERVER_SIGN_IN_OAUTH_URL;
+  // private SIGN_IN_OAUTH_URL =
+  // process.env.NEXT_PUBLIC_AUTH_SERVER_SIGN_IN_OAUTH_URL;
   private SIGN_OUT_URL = process.env.NEXT_PUBLIC_AUTH_SERVER_SIGN_OUT_URL;
   private TOKEN_URL = process.env.NEXT_PUBLIC_AUTH_SERVER_TOKEN_URL;
   private PROFILE_KEY = 'loggedInUser';
   private TOKEN_KEY = 'accessToken';
-  private ctx: Context;
+  protected ctx: Context;
 
   static token: string = '';
   constructor(ctx: Context) {
@@ -86,81 +86,81 @@ export default class AuthorizationHandler {
     };
   }
 
-  public async signInOAuth(
-    idToken: string,
-    provider: AuthProvider,
-    additionalData: { image: string }
-  ) {
-    const adImage = additionalData.image;
+  // public async signInOAuth(
+  //   idToken: string,
+  //   provider: AuthProvider,
+  //   additionalData: { image: string }
+  // ) {
+  //   const adImage = additionalData.image;
 
-    if (!this.SUPPORTED_OAUTH_PROVIDERS.includes(provider)) {
-      return {
-        status: 'fail',
-        success: false,
-        message: `Unsupported OAuth provider "${provider}"`,
-      };
-    }
+  //   if (!this.SUPPORTED_OAUTH_PROVIDERS.includes(provider)) {
+  //     return {
+  //       status: 'fail',
+  //       success: false,
+  //       message: `Unsupported OAuth provider "${provider}"`,
+  //     };
+  //   }
 
-    // create request
-    const requestBody = {
-      idToken,
-      provider,
-    };
+  //   // create request
+  //   const requestBody = {
+  //     idToken,
+  //     provider,
+  //   };
 
-    const response = await fetch(this.SIGN_IN_OAUTH_URL, {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      // credentials: 'include',
-    });
+  //   const response = await fetch(this.SIGN_IN_OAUTH_URL, {
+  //     method: 'POST',
+  //     body: JSON.stringify(requestBody),
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     // credentials: 'include',
+  //   });
 
-    const data = await response.json();
+  //   const data = await response.json();
 
-    if (data instanceof Error) {
-      return {
-        status: 'fail',
-        success: false,
-        message: data.message,
-      };
-    }
+  //   if (data instanceof Error) {
+  //     return {
+  //       status: 'fail',
+  //       success: false,
+  //       message: data.message,
+  //     };
+  //   }
 
-    if (data.status === 'success') {
-      const accessToken = data.data.resp.accessToken;
+  //   if (data.status === 'success') {
+  //     const accessToken = data.data.resp.accessToken;
 
-      const { authProvider, avatar, exp } = JSON.parse(
-        Buffer.from(accessToken.split('.')[1], 'base64').toString()
-      );
+  //     const { authProvider, avatar, exp } = JSON.parse(
+  //       Buffer.from(accessToken.split('.')[1], 'base64').toString()
+  //     );
 
-      setCookie('accessToken', accessToken, exp);
+  //     setCookie('accessToken', accessToken, exp);
       
-      adImage && setCookie('avatar', adImage, exp);
-      avatar && setCookie('avatar', avatar, exp);
+  //     adImage && setCookie('avatar', adImage, exp);
+  //     avatar && setCookie('avatar', avatar, exp);
 
-      this.ctx.setAuthProvider(authProvider);
-      this.ctx.setAccessToken(() => accessToken);
+  //     this.ctx.setAuthProvider(authProvider);
+  //     this.ctx.setAccessToken(() => accessToken);
 
-      this.setProfile(accessToken);
+  //     this.setProfile(accessToken);
 
-      return {
-        status: data.status,
-        success: true,
-        accessToken,
-      };
-    }
+  //     return {
+  //       status: data.status,
+  //       success: true,
+  //       accessToken,
+  //     };
+  //   }
 
-    const message =
-      data.status === 'fail'
-        ? data.message
-        : 'Systm error. Please contact a system administrator.';
+  //   const message =
+  //     data.status === 'fail'
+  //       ? data.message
+  //       : 'Systm error. Please contact a system administrator.';
 
-    return {
-      status: 'fail',
-      success: false,
-      message,
-    };
-  }
+  //   return {
+  //     status: 'fail',
+  //     success: false,
+  //     message,
+  //   };
+  // }
 
   public setProfile(accessToken: string) {
     const parsedUser = JSON.parse(
@@ -201,14 +201,12 @@ export default class AuthorizationHandler {
 
     // Clear cart
     this.ctx.setCart(() => emptyCart);
-
     this.ctx.setTotalCount(0);
     this.ctx.setTotalCost(0);
 
     clearCookie('cart');
 
     // Remove access token from context
-
     setCookie('accessToken', guestID, -1, false);
 
     this.ctx.setEmail('Sign In');

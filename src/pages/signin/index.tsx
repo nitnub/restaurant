@@ -17,8 +17,17 @@ import app from '@/utils/firebaseConfig';
 import GoogleButton from 'react-google-button';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import Head from 'next/head';
-import ADD_APP_USER  from '@/mutations/user/AddNewAppUser.mutation';
+import ADD_APP_USER from '@/mutations/user/AddNewAppUser.mutation';
 import verifyToken, { readToken } from '@/utils/token';
+import OAauthHandler from '@/src/utils/OAuthHandler';
+
+import addNewAppUser2, { formatAppUserArgs } from '@/utils/addNewAppUser';
+import incrementCart, {
+  formatIncrementCartArgs,
+} from '@/src/utils/incrementCart';
+import confirmGoogleUser from '@/src/utils/signInHandlers/firebase/confirmGoogleUser';
+
+// import googleSignInHandler from '@/src/utils/signInHandlers/signIn.oAuth';
 
 const provider = new GoogleAuthProvider();
 
@@ -26,9 +35,10 @@ export default function SignIn() {
   const [oAuthError, setOAuthError] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const ctx = useContext(AppContext);
-  const [cartQuery, { data, loading, error }] = useLazyQuery(GET_CART);
+  // const [cartQuery, { data, loading, error }] = useLazyQuery(GET_CART);
 
   const Auth = new AuthorizationHandler(ctx);
+  const OAuth = new OAauthHandler(ctx);
   const router = useRouter();
 
   const [
@@ -39,7 +49,99 @@ export default function SignIn() {
   const [addNewAppUser] = useMutation(ADD_APP_USER);
 
   const auth = getAuth(app);
+
   const googleSignInHandler = async () => {
+    // const GOOGLE_ID = 'www.google.com';
+
+    try {
+      // const confirmGoogleUser = async (auth, provider) => {
+      //   // Query Google Firebase
+      //   const googleResponse = await signInWithPopup(auth, provider);
+      //   const user = googleResponse.user;
+      //   const { photoURL } = user;
+      //   const idToken = await user.getIdToken();
+
+      //   const { success, message, accessToken } = await OAuth.signInOAuth(
+      //     idToken,
+      //     GOOGLE_ID,
+      //     { image: photoURL }
+      //   );
+
+      //   return { success, message, accessToken, photoURL };
+      // };
+
+      // const { success, message, accessToken } = await OAuth.signInOAuth(
+      //   idToken,
+      //   GOOGLE_ID,
+      //   { image: photoURL }
+      // );
+
+      const { success, message, accessToken, photoURL } =
+      // const {  photoURL } =
+        await confirmGoogleUser(ctx, auth, provider);
+
+      if (message === 'invalid signature') {
+        setOAuthError(() => 'Unable to identify user.');
+        return;
+      }
+
+      // ctx.setAvatar(user.photoURL);
+      ctx.setAvatar(photoURL);
+
+      // Add the App User
+      const { email, id, newUser } = readToken(accessToken);
+
+      const userArgs = formatAppUserArgs(email, id, accessToken);
+
+      await addNewAppUser(userArgs);
+
+      setErrorMessage(() => '');
+
+      let cart: Cart = {
+        items: [],
+        totalCount: 0,
+        totalCost: 0,
+      };
+
+      const prevCart = getCookie('cart')?.items || [];
+
+      const incrementCartArgs = formatIncrementCartArgs(prevCart, accessToken);
+
+      const result = await addItem(incrementCartArgs);
+
+      cart = result.data.incrementCartResult;
+
+      if (typeof cart === 'undefined') {
+        return;
+      }
+
+      // If there are items in the cart response, populate the local cart
+      if (cart.items.length > 0) {
+        document.cookie = `cart=${JSON.stringify(cart)}`;
+        ctx.setCart(cart);
+        ctx.setTotalCount(cart.totalCount);
+        ctx.setTotalCost(cart.totalCost);
+      }
+
+      if (newUser) {
+        return router.push(
+          {
+            pathname: '/',
+            query: { newUser: true, email },
+          },
+          '/'
+        );
+      }
+
+      return router.push('/');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const googleSignInHandler2 = async () => {
+    const GOOGLE_ID = 'www.google.com';
+
     try {
       const prevUser = getCookie('accessToken');
       const prevCart = getCookie('cart')?.items || [];
@@ -49,9 +151,9 @@ export default function SignIn() {
       const user = result.user;
       const idToken = await user.getIdToken();
 
-      const { success, message, accessToken } = await Auth.signInOAuth(
+      const { success, message, accessToken } = await OAuth.signInOAuth(
         idToken,
-        'www.google.com',
+        GOOGLE_ID,
         { image: user.photoURL }
       );
 
@@ -110,11 +212,11 @@ export default function SignIn() {
 
         const result = await addItem(ARGS);
 
-        if (addItemLoading) console.log('LOADING ADD ITEM');
-        if (errorLoading) console.log('ERROR LOADING ITEMS');
+        // if (addItemLoading) console.log('LOADING ADD ITEM');
+        // if (errorLoading) console.log('ERROR LOADING ITEMS');
 
-        if (addItemLoading) return console.log(loading);
-        if (errorLoading) return console.log(error);
+        // if (addItemLoading) return console.log(loading);
+        // if (errorLoading) return console.log(error);
 
         cart = result.data.incrementCartResult;
       } else {
@@ -132,8 +234,8 @@ export default function SignIn() {
         };
 
         const result = await addItem(ARGS);
-        if (loading) console.log(loading);
-        if (error) return console.log(error);
+        // if (loading) console.log(loading);
+        // if (error) return console.log(error);
 
         cart = result.data.incrementCartResult;
       }
@@ -151,7 +253,6 @@ export default function SignIn() {
       }
 
       if (newUser) {
-        
         return router.push(
           {
             pathname: '/',
@@ -166,6 +267,8 @@ export default function SignIn() {
       console.log(error);
     }
   };
+
+  const googleSignInHandler3 = async () => {};
 
   /**
    * Auth Server...
@@ -210,11 +313,11 @@ export default function SignIn() {
         const result = await addItem(ARGS);
         // await addItem(ARGS);
 
-        if (addItemLoading) console.log('LOADING ADD ITEM');
-        if (errorLoading) console.log('ERROR LOADING ITEMS');
+        // if (addItemLoading) console.log('LOADING ADD ITEM');
+        // if (errorLoading) console.log('ERROR LOADING ITEMS');
 
-        if (addItemLoading) return console.log(loading);
-        if (errorLoading) return console.log(error);
+        // if (addItemLoading) return console.log(loading);
+        // if (errorLoading) return console.log(error);
 
         cart = result.data.incrementCartResult;
       } else {
@@ -232,8 +335,8 @@ export default function SignIn() {
         };
 
         const result = await addItem(ARGS);
-        if (loading) return console.log(loading);
-        if (error) return console.log(error);
+        // if (loading) return console.log(loading);
+        // if (error) return console.log(error);
 
         cart = result.data.incrementCartResult;
       }
@@ -267,12 +370,23 @@ export default function SignIn() {
 
   const signOutHandler = async () => {
     Auth.signOut(false);
+
+    console.log('app')
+    console.log(app)
   };
 
   const formFooter = {
     submitButton: { buttonText: ' Sign In' },
     link: { text: 'Create an account', url: '/create_account' },
   };
+
+  // Cart loading
+  // if (loading) return console.log(loading);
+  // if (error) return console.log(error);
+
+  // Cart loading error
+  if (errorLoading) console.log('ERROR LOADING ITEMS');
+  if (errorLoading) return console.log(error);
 
   return (
     <>
@@ -297,6 +411,7 @@ export default function SignIn() {
           <GoogleButton
             style={{ width: '200px' }}
             onClick={googleSignInHandler}
+            // onClick={() => googleSignInHandler(ctx)}
           />
 
           {oAuthError ? (
