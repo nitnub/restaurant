@@ -3,42 +3,41 @@ import { useMutation } from '@apollo/client';
 import { useContext, useState } from 'react';
 import AppContext from '@/components/context';
 import AuthorizationHandler from '@/utils/authorizationHandler';
-import { getCookie } from '@/utils/cookieHandler';
-import GET_CART from '@/queries/cart/GetCart';
-import { useLazyQuery } from '@apollo/client';
+import {  updateCookieObject } from '@/utils/cookieHandler';
 import INCREMENT_CART from '@/mutations/cart/AddItemsToCart.mutation';
 import { Cart } from '@/types/cartTypes';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
-import { useRouter } from 'next/router';
+import {  useRouter } from 'next/router';
 import app from '@/utils/firebaseConfig';
-
 import GoogleButton from 'react-google-button';
-import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { getAuth, , GoogleAuthProvider } from 'firebase/auth';
 import Head from 'next/head';
 import ADD_APP_USER from '@/mutations/user/AddNewAppUser.mutation';
-import verifyToken, { readToken } from '@/utils/token';
-import OAauthHandler from '@/src/utils/OAuthHandler';
-
-import addNewAppUser2, { formatAppUserArgs } from '@/utils/addNewAppUser';
-import incrementCart, {
-  formatIncrementCartArgs,
-} from '@/src/utils/incrementCart';
+import { readToken } from '@/utils/token';
+import { formatAppUserArgs } from '@/utils/addNewAppUser';
 import confirmGoogleUser from '@/src/utils/signInHandlers/firebase/confirmGoogleUser';
+import consolidateGuestAndUserCarts from '@/src/utils/cart/consolidateGuestAndUserCarts';
+import routeUserToHomepage from '@/utils/routing/routeUserToHomepage';
 
 // import googleSignInHandler from '@/src/utils/signInHandlers/signIn.oAuth';
 
 const provider = new GoogleAuthProvider();
 
 export default function SignIn() {
+  let cart: Cart | null = {
+    items: [],
+    totalCount: 0,
+    totalCost: 0,
+  };
+
   const [oAuthError, setOAuthError] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const ctx = useContext(AppContext);
-  // const [cartQuery, { data, loading, error }] = useLazyQuery(GET_CART);
+
 
   const Auth = new AuthorizationHandler(ctx);
-  const OAuth = new OAauthHandler(ctx);
   const router = useRouter();
 
   const [
@@ -48,237 +47,52 @@ export default function SignIn() {
 
   const [addNewAppUser] = useMutation(ADD_APP_USER);
 
-  const auth = getAuth(app);
-
   const googleSignInHandler = async () => {
-    // const GOOGLE_ID = 'www.google.com';
+    const googleAuth = getAuth(app);
 
     try {
-      // const confirmGoogleUser = async (auth, provider) => {
-      //   // Query Google Firebase
-      //   const googleResponse = await signInWithPopup(auth, provider);
-      //   const user = googleResponse.user;
-      //   const { photoURL } = user;
-      //   const idToken = await user.getIdToken();
-
-      //   const { success, message, accessToken } = await OAuth.signInOAuth(
-      //     idToken,
-      //     GOOGLE_ID,
-      //     { image: photoURL }
-      //   );
-
-      //   return { success, message, accessToken, photoURL };
-      // };
-
-      // const { success, message, accessToken } = await OAuth.signInOAuth(
-      //   idToken,
-      //   GOOGLE_ID,
-      //   { image: photoURL }
-      // );
-
       const { success, message, accessToken, photoURL } =
-      // const {  photoURL } =
-        await confirmGoogleUser(ctx, auth, provider);
+        await confirmGoogleUser(ctx, googleAuth, provider);
 
       if (message === 'invalid signature') {
         setOAuthError(() => 'Unable to identify user.');
         return;
       }
 
-      // ctx.setAvatar(user.photoURL);
+      if (!success) {
+        setErrorMessage(() => message);
+        return;
+      }
+
       ctx.setAvatar(photoURL);
 
       // Add the App User
       const { email, id, newUser } = readToken(accessToken);
-
       const userArgs = formatAppUserArgs(email, id, accessToken);
 
       await addNewAppUser(userArgs);
 
       setErrorMessage(() => '');
 
-      let cart: Cart = {
-        items: [],
-        totalCount: 0,
-        totalCost: 0,
-      };
+      cart = await consolidateGuestAndUserCarts(accessToken, addItem);
 
-      const prevCart = getCookie('cart')?.items || [];
-
-      const incrementCartArgs = formatIncrementCartArgs(prevCart, accessToken);
-
-      const result = await addItem(incrementCartArgs);
-
-      cart = result.data.incrementCartResult;
-
-      if (typeof cart === 'undefined') {
-        return;
-      }
+      if (!cart) return;
 
       // If there are items in the cart response, populate the local cart
+      updateCookieObject('cart', cart);
+
       if (cart.items.length > 0) {
-        document.cookie = `cart=${JSON.stringify(cart)}`;
         ctx.setCart(cart);
-        ctx.setTotalCount(cart.totalCount);
-        ctx.setTotalCost(cart.totalCost);
       }
 
-      if (newUser) {
-        return router.push(
-          {
-            pathname: '/',
-            query: { newUser: true, email },
-          },
-          '/'
-        );
-      }
-
-      return router.push('/');
+      return routeUserToHomepage(router, email, newUser);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const googleSignInHandler2 = async () => {
-    const GOOGLE_ID = 'www.google.com';
-
-    try {
-      const prevUser = getCookie('accessToken');
-      const prevCart = getCookie('cart')?.items || [];
-      const result = await signInWithPopup(auth, provider);
-
-      // The signed-in user info.
-      const user = result.user;
-      const idToken = await user.getIdToken();
-
-      const { success, message, accessToken } = await OAuth.signInOAuth(
-        idToken,
-        GOOGLE_ID,
-        { image: user.photoURL }
-      );
-
-      if (message === 'invalid signature') {
-        setOAuthError(() => 'Unable to identify user.');
-        return;
-      }
-
-      ctx.setAvatar(user.photoURL);
-
-      // Add the App User
-      const {
-        email,
-        id: globalUserId,
-        newUser,
-        authProvider,
-      } = readToken(accessToken);
-
-      const VARIABLES = {
-        email,
-        globalUserId,
-      };
-      const ARGS = {
-        variables: VARIABLES,
-        context: {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        },
-      };
-
-      const newAppUser = await addNewAppUser(ARGS);
-
-      // // Generally, if profile is updated, should check the cookie state first
-
-      setErrorMessage(() => '');
-
-      let cart: Cart = {
-        items: [],
-        totalCount: 0,
-        totalCost: 0,
-      };
-      if (prevUser.startsWith('Guest') && prevCart.length > 0) {
-        const VARIABLES = {
-          items: prevCart,
-        };
-
-        const ARGS = {
-          variables: VARIABLES,
-          context: {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          },
-        };
-
-        const result = await addItem(ARGS);
-
-        // if (addItemLoading) console.log('LOADING ADD ITEM');
-        // if (errorLoading) console.log('ERROR LOADING ITEMS');
-
-        // if (addItemLoading) return console.log(loading);
-        // if (errorLoading) return console.log(error);
-
-        cart = result.data.incrementCartResult;
-      } else {
-        const VARIABLES = {
-          items: [],
-        };
-
-        const ARGS = {
-          variables: VARIABLES,
-          context: {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          },
-        };
-
-        const result = await addItem(ARGS);
-        // if (loading) console.log(loading);
-        // if (error) return console.log(error);
-
-        cart = result.data.incrementCartResult;
-      }
-
-      if (typeof cart === 'undefined') {
-        return;
-      }
-
-      // If there are items in the cart response, populate the local cart
-      if (cart.items.length > 0) {
-        document.cookie = `cart=${JSON.stringify(cart)}`;
-        ctx.setCart(cart);
-        ctx.setTotalCount(cart.totalCount);
-        ctx.setTotalCost(cart.totalCost);
-      }
-
-      if (newUser) {
-        return router.push(
-          {
-            pathname: '/',
-            query: { newUser: true, email },
-          },
-          '/'
-        );
-      }
-
-      return router.push('/');
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const googleSignInHandler3 = async () => {};
-
-  /**
-   * Auth Server...
-   *
-   */
   const signInAuthServerHandler = async ({ email, password }) => {
     try {
-      const prevUser = getCookie('accessToken');
-      const prevCart = getCookie('cart')?.items || [];
-
       const { success, message, accessToken } = (await Auth.signIn(
         email,
         password
@@ -289,69 +103,21 @@ export default function SignIn() {
         return;
       }
 
-      router.push('/');
-
-      // Generally, if profile is updated, should check the cookie state first
-      // Clear error message
       setErrorMessage(() => '');
 
-      let cart: Cart;
-      if (prevUser.startsWith('Guest') && prevCart.length > 0) {
-        const VARIABLES = {
-          items: prevCart,
-        };
+      cart = await consolidateGuestAndUserCarts(accessToken, addItem);
 
-        const ARGS = {
-          variables: VARIABLES,
-          context: {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          },
-        };
-
-        const result = await addItem(ARGS);
-        // await addItem(ARGS);
-
-        // if (addItemLoading) console.log('LOADING ADD ITEM');
-        // if (errorLoading) console.log('ERROR LOADING ITEMS');
-
-        // if (addItemLoading) return console.log(loading);
-        // if (errorLoading) return console.log(error);
-
-        cart = result.data.incrementCartResult;
-      } else {
-        const VARIABLES = {
-          items: [],
-        };
-
-        const ARGS = {
-          variables: VARIABLES,
-          context: {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          },
-        };
-
-        const result = await addItem(ARGS);
-        // if (loading) return console.log(loading);
-        // if (error) return console.log(error);
-
-        cart = result.data.incrementCartResult;
-      }
-
-      if (typeof cart === 'undefined') {
-        return;
-      }
+      if (!cart) return;
 
       // If there are items in the cart response, populate the local cart
+      updateCookieObject('cart', cart);
+
       if (cart.items.length > 0) {
-        document.cookie = `cart=${JSON.stringify(cart)}`;
         ctx.setCart(cart);
-        ctx.setTotalCount(cart.totalCount);
-        ctx.setTotalCost(cart.totalCost);
       }
+
+      // return router.push('/');
+      return routeUserToHomepage(router);
     } catch (err) {
       console.log(
         'There was an error logging into the application. Please try again later.'
@@ -368,25 +134,13 @@ export default function SignIn() {
     }
   };
 
-  const signOutHandler = async () => {
-    Auth.signOut(false);
-
-    console.log('app')
-    console.log(app)
-  };
-
   const formFooter = {
     submitButton: { buttonText: ' Sign In' },
     link: { text: 'Create an account', url: '/create_account' },
   };
 
-  // Cart loading
-  // if (loading) return console.log(loading);
-  // if (error) return console.log(error);
-
-  // Cart loading error
   if (errorLoading) console.log('ERROR LOADING ITEMS');
-  if (errorLoading) return console.log(error);
+  if (errorLoading) return console.log(errorLoading);
 
   return (
     <>
@@ -411,7 +165,6 @@ export default function SignIn() {
           <GoogleButton
             style={{ width: '200px' }}
             onClick={googleSignInHandler}
-            // onClick={() => googleSignInHandler(ctx)}
           />
 
           {oAuthError ? (

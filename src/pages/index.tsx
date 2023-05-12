@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import { useQuery } from '@apollo/client';
 import Modal from '@/components/Modal';
 // import { GET_ALL_RESTAURANTS } from '@/src/graphql/queries';
-import GET_ALL_RESTAURANTS from '@/queries/restaurant/GetAllRestaurants';
+import GET_ALL_RESTAURANTS from '@/queries/restaurant/GetAllRestaurants.query';
 import { Restaurant, RestaurantQueryResult } from '@/types/restaurantTypes';
 import ChipToggleContainer from '@/src/components/Filter/Chip/ChipToggleContainer';
 import { useEffect } from 'react';

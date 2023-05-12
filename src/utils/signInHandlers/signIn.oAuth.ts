@@ -4,7 +4,7 @@ import { useContext, useState } from 'react';
 import AppContext from '@/components/context';
 import AuthorizationHandler from '@/utils/authorizationHandler';
 import { getCookie } from '@/utils/cookieHandler';
-import GET_CART from '@/queries/cart/GetCart';
+import GET_CART from '@/queries/cart/GetCart.query';
 import { useLazyQuery } from '@apollo/client';
 import INCREMENT_CART from '@/mutations/cart/AddItemsToCart.mutation';
 import { Cart } from '@/types/cartTypes';
@@ -24,8 +24,6 @@ import incrementCart, { formatincrementCartArgs } from '../incrementCart';
 
 const provider = new GoogleAuthProvider();
 const auth = getAuth(app);
-
-
 
 const googleSignInHandler = async (ctx) => {
   const OAuth = new OAauthHandler(ctx);
@@ -48,8 +46,10 @@ const googleSignInHandler = async (ctx) => {
       return { success, message, accessToken, photoURL };
     };
 
-    const { success, message, accessToken, photoURL } =
-      await confirmGoogleUser(auth, provider);
+    const { success, message, accessToken, photoURL } = await confirmGoogleUser(
+      auth,
+      provider
+    );
 
     if (message === 'invalid signature') {
       setOAuthError(() => 'Unable to identify user.');
@@ -109,10 +109,6 @@ const googleSignInHandler = async (ctx) => {
     console.log(error);
   }
 };
-
-
-
-
 
 // const googleSignInHandler = async (ctx) => {
 //   const OAuth = new OAauthHandler(ctx);
@@ -203,7 +199,7 @@ const googleSignInHandler = async (ctx) => {
 //       //   const VARIABLES = {
 //       //     items: prevCart,
 //       //   };
-  
+
 //       //   const ARGS = {
 //       //     variables: VARIABLES,
 //       //     context: {
@@ -212,7 +208,7 @@ const googleSignInHandler = async (ctx) => {
 //       //       },
 //       //     },
 //       //   };
-  
+
 //       // }
 
 //       // const VARIABLES = {
@@ -290,9 +286,5 @@ const googleSignInHandler = async (ctx) => {
 //     console.log(error);
 //   }
 // };
-
-
-
-
 
 export default googleSignInHandler;

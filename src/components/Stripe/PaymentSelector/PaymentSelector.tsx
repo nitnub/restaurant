@@ -4,7 +4,7 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import PaymentOption from '@/components/Stripe/PaymentOption';
 import styles from './PaymentSelector.module.css';
-import GET_PAYMENT_METHODS from '@/queries/payment/GetStripePaymentMethods';
+import GET_PAYMENT_METHODS from '@/queries/payment/GetStripePaymentMethods.query';
 import { useQuery } from '@apollo/client';
 import { getCookie } from '@/utils/cookieHandler';
 

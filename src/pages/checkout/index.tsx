@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { convertToCurrency } from '@/libs/formatter';
 import CREATE_STRIPE_PAYMENT from '@/mutations/payment/CreatePayment.mutation';
 import CLEAR_CART from '@/mutations/cart/ClearCart.mutation';
-import GET_CART from '@/queries/cart/GetCart';
+import GET_CART from '@/queries/cart/GetCart.query';
 import { useMutation, useQuery } from '@apollo/client';
 import styles from './index.module.css';
 import PaymentOption from '@/src/components/Stripe/PaymentOption';
@@ -105,12 +105,10 @@ export default function Checkout(props) {
     handleChange,
   };
 
-
   const submitOrderProps = {
     ...checkoutProps,
     cartData,
   };
-
 
   return (
     <>

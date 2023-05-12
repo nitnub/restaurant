@@ -1,11 +1,14 @@
-import Form from '../../src/components/Form';
+import Form from '@/components/Form';
 import { useMutation } from '@apollo/client';
 import { useContext, useState } from 'react';
-import AppContext from '../../src/components/context';
+import AppContext from '@/components/context';
 import AuthorizationHandler from '@/utils/authorizationHandler';
 import { getCookie } from '@/utils/cookieHandler';
-import { GET_CART } from '@/src/graphql/queries';
-import { ADD_APP_USER, INCREMENT_CART } from '@/src/graphql/mutations';
+import GET_CART from '@/queries/cart/GetCart.query';
+// import { GET_CART } from '@/graphql/queries/cart/getCart';
+// import { ADD_APP_USER, INCREMENT_CART } from '@/src/graphql/mutations';
+import ADD_APP_USER from '@/mutations/user/AddNewAppUser.mutation';
+import INCREMENT_CART from '@/mutations/cart/AddItemsToCart.mutation';
 import { useLazyQuery } from '@apollo/client';
 import { Cart, CartItem } from '@/types/cartTypes';
 import Card from '@mui/material/Card';
@@ -92,7 +95,7 @@ export default function Register() {
     const { success, message, accessToken } = await Auth.signIn(
       email,
       password
-    );
+    )!;
 
     if (!success) {
       setErrorMessage(() => message);

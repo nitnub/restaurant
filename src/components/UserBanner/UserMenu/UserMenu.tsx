@@ -36,7 +36,7 @@ function UserMenu({authHandler, context}) {
       signOut(auth)
         .then(() => {
           context.setAuthProvider('standard');
-          // console.log('Signed out of firebase...');
+          console.log('Signed out of firebase...');
         })
         .catch((error) => {
           console.log('Error signing out of firebase...');
