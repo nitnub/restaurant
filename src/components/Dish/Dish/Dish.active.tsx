@@ -9,7 +9,7 @@ import { convertToCurrency } from '../../../libs/formatter';
 import styles from './Dish.module.css';
 import DishCounter from '../DishCounter';
 import { CartItem } from '@/types/cartTypes';
-import DietaryList from '@/src/components/AllergyBar';
+import DietaryList from '@/components/AllergyBar';
 
 export default function Dish({ dishProp }: { dishProp: CartItem }) {
   const ctx = useContext(AppContext);
@@ -40,7 +40,7 @@ export default function Dish({ dishProp }: { dishProp: CartItem }) {
       </div>
       <Box className={styles.cardContent}>
         <CardContent className={styles.cardContent}>
-          <Typography component={'span'} variant="h5">
+          <Typography role="heading" component={'span'} variant="h5">
             {dishProp.name}
           </Typography>
           <div>
@@ -48,7 +48,7 @@ export default function Dish({ dishProp }: { dishProp: CartItem }) {
               <div>
                 <DietaryList dietaryProps={dietaryProps} />
 
-                <Typography className={styles.description}>
+                <Typography role="paragraph" className={styles.description}>
                   {dishProp.description}
                 </Typography>
                 <Typography>{convertToCurrency(dishProp.price)}</Typography>

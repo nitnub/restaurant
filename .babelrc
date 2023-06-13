@@ -1,0 +1,5 @@
+{
+  "presets": ["next/babel", "@babel/preset-typescript"],
+  "plugins": [],
+  // "ignore": [".css", ".scss"]
+}

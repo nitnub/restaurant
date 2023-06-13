@@ -1,7 +1,7 @@
 import Typography from '@mui/material/Typography';
 import styles from './CartItem.module.css';
 import { convertToCurrency } from '../../../libs/formatter';
-import IconAdd from '@/src/components/Dish/IconAdd';
+import IconAdd from '@/components/Dish/IconAdd';
 import IconSubtract from '../../Dish/IconSubtract';
 import { useState } from 'react';
 import { getCookie } from '@/utils/cookieHandler';

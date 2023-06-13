@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState, SyntheticEvent } from 'react';
-import AppContext from '@/src/components/context';
+import AppContext from '@/components/context';
 import { clearCookie, getCookie } from '@/utils/cookieHandler';
 import Button from '@mui/material/Button';
 import Link from 'next/link';
@@ -9,7 +9,7 @@ import CLEAR_CART from '@/mutations/cart/ClearCart.mutation';
 import GET_CART from '@/queries/cart/GetCart.query';
 import { useMutation, useQuery } from '@apollo/client';
 import styles from './index.module.css';
-import PaymentOption from '@/src/components/Stripe/PaymentOption';
+import PaymentOption from '@/components/Stripe/PaymentOption';
 import { Cart } from '@/types/cartTypes';
 import Head from 'next/head';
 import OrderSummary from '@/components/Checkout/CheckoutForm/OrderSummary';

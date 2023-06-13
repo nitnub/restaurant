@@ -9,7 +9,7 @@ import Link from 'next/link';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import CartComp from '@/src/components/cart/CartComp';
+import CartComp from '@/components/cart/CartComp';
 // import AppContext from '../../context';
 import AppContext from '@/components/context';
 import { convertToCurrency } from '@/libs/formatter';

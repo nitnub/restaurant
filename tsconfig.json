@@ -1,4 +1,4 @@
-{
+ {
   "compilerOptions": {
     "target": "ES2015",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -29,6 +29,7 @@
       "@/schema/*": ["src/db/schema/*"],
       "@/src/*": ["src/*"],
       "@/styles/*": ["styles/*"],
+      "@/test_resources/*": ["test_resources/*"],
       "@/types/*": ["src/types/*"],
       "@/utils/*": ["src/utils/*"]
     }
@@ -46,6 +47,6 @@
     ".local-files/fetchTransactionHistory.ts",
     ".local-files/getClientSecret.ts",
     ".local-files/getOfficialTotal.ts"
-  ],
+, "src/pages/__tests__/index.test.tsx"  ],
   "exclude": ["node_modules"]
 }

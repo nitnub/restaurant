@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import AppContext from '@/src/components/context';
+import AppContext from '@/components/context';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -65,7 +65,7 @@ export default function SubmitOrder({ props }) {
 
     // empty cart
     const freshCart = { items: [], totalCost: 0, totalCount: 0 };
-    
+
     updateCookieObject('cart', freshCart);
     ctx.setCart(freshCart);
 

@@ -1,10 +1,10 @@
 import AuthorizationHandler from './authorizationHandler';
-import AppContext from '@/src/components/context';
+import AppContext from '@/components/context';
 import { useContext } from 'react';
 import { Context } from '@apollo/client';
 
 // const ctx = useContext(AppContext)
-const ah = new AuthorizationHandler();
+// const ah = new AuthorizationHandler();
 
 export const getCookie = (cookieName: string) => {
   if (typeof document === 'undefined') return;
@@ -63,7 +63,6 @@ export const cookieIsEmpty = (cookieName: string) => {
     return true;
   }
   return false;
- 
 };
 
 export const clearCookie = (cookieName: string) => {

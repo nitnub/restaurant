@@ -3,9 +3,9 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import AddStripeCard from '@/src/components/Stripe/AddStripeCard';
-import TransactionsGrid from '@/src/components/Settings/TransactionsGrid';
-import PaymentExamples from '@/src/components/Stripe/PaymentExamples';
+import AddStripeCard from '@/components/Stripe/AddStripeCard';
+import TransactionsGrid from '@/components/Settings/TransactionsGrid';
+import PaymentExamples from '@/components/Stripe/PaymentExamples';
 import styles from './SettingsTabs.module.css';
 interface TabPanelProps {
   children?: React.ReactNode;

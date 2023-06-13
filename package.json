@@ -7,7 +7,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "jest"
   },
   "dependencies": {
     "@apollo/client": "^3.4.16",
@@ -48,30 +49,36 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@babel/preset-typescript": "^7.22.5",
     "@next/eslint-plugin-next": "^13.1.6",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^14.0.0",
     "@types/cron": "^2.0.0",
     "@types/jsonwebtoken": "^9.0.0",
     "@types/pg": "^8.6.5",
     "@types/uuid": "^9.0.0",
+    "cross-fetch": "^3.1.6",
+    "jest-environment-jsdom": "^29.5.0",
     "prisma": "^4.8.1"
   },
   "_moduleAliases": {
     "@/root": "/",
-    "@/components": "src/components",
+    "@/components": "/src/components",
     "@/controllers": "/controllers",
-    "@/configs": "src/configs",
+    "@/configs": "/src/configs",
     "@/dbConfigs": "src/db/configs",
     "@/graphql": "/graphql",
     "@/libs": "/src/libs",
-    "@/models": "src/models",
+    "@/models": "/src/models",
     "@/middleware": "/src/middleware",
     "@/mutations": "/src/db/graphql/mutations",
     "@/pages": "/pages",
     "@/queries": "/src/db/graphql/queries",
-    "@/schema": "src/db/schema",
+    "@/schema": "/src/db/schema",
     "@/src": "/src",
     "@/styles": "/styles",
     "@/types": "/src/types",
-    "@/utils": "src/utils"
+    "@/utils": "/src/utils",
+    "@/test_resources": "test_resources"
   }
 }

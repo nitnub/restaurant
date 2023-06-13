@@ -11,9 +11,6 @@
 .headerTextLoading {
   width: 384px;
   height: 48px;
-  /* background-color:  var(--clr-lt-blk); */
-  /* opacity: 33%;
-   */
    margin-bottom: 20px;
 }
 
@@ -29,29 +26,18 @@
 
 
 .resInputContainer {
-  /* position: absolute; */
   height: 250px;
   display: flex;
   flex-wrap: wrap;
   z-index: 2;
   background-color: var(--clr-lt-blk);
-  /* background-color: #4e4740; */
-  /* background-color: var(--clr-lt-hdr); */
   opacity: 1;
-  /* background-color: red */
 }
 
 .resInputContainerLoading {
-  /* position: absolute; */
   height: 250px;
-  /* display: flex; */
   flex-wrap: wrap;
-  /* z-index: 2; */
   background-color: var(--clr-lt-blk);
-  /* background-color: #4e4740; */
-  /* background-color: var(--clr-lt-hdr); */
-  /* opacity: 1; */
-  /* background-color: red */
 }
 
 .resTitleContainer {
@@ -60,7 +46,6 @@
 
 .headerImage {
   height: 100%;
-  /* width: 100vw; */
   width: 100%;
   left: 0px;
   top: -45px;
@@ -71,24 +56,13 @@
 
 .headerImageLoading {
   height: 100%;
-  /* width: 100vw; */
   width: 100%;
   left: 0px;
   top: -45px;
-  /* position: absolute; */
-  /* z-index: 0.5; */
-  /* opacity: 0.33; */
-  /* background-color: var(--clr-lt-blk); */
-  /* background-color: green; */
-  background-color: green;
 }
 
 .headerBackgroundSpanLoading {
   position: absolute;
-  /* margin-top: -64px; */
-  /* background-color: var(--clr-lt-blk); */
-  /* background-color: purple; */
-  /* width: 100vw; */
   width: 100%;
   height: 450px;
   left: 0;
@@ -104,7 +78,6 @@
 
 .mainBackground {
   height: 100vh;
-  /* width: 100vw; */
   width: 100%;
   left: 0px;
   top: var(--val-hdr-gap);

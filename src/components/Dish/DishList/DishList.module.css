@@ -9,9 +9,9 @@
 }
 
 /* Tablets and under */
-@media (max-width: 768px) {
+@media (max-width: 1022px) {
   .listContainer {
-    justify-content: center; 
+    justify-content: center;
   }
 }
 

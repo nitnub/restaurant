@@ -1,27 +1,25 @@
-import Form from '@/components/Form';
-import { useMutation } from '@apollo/client';
 import { useContext, useState } from 'react';
+import Form from '@/components/Form';
+import { Cart } from '@/types/cartTypes';
+import { useMutation } from '@apollo/client';
 import AppContext from '@/components/context';
 import AuthorizationHandler from '@/utils/authorizationHandler';
-import {  updateCookieObject } from '@/utils/cookieHandler';
+import { updateCookieObject } from '@/utils/cookieHandler';
 import INCREMENT_CART from '@/mutations/cart/AddItemsToCart.mutation';
-import { Cart } from '@/types/cartTypes';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
-import {  useRouter } from 'next/router';
-import app from '@/utils/firebaseConfig';
+import { useRouter } from 'next/router';
 import GoogleButton from 'react-google-button';
-import { getAuth, , GoogleAuthProvider } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import Head from 'next/head';
 import ADD_APP_USER from '@/mutations/user/AddNewAppUser.mutation';
+import app from '@/utils/firebaseConfig';
 import { readToken } from '@/utils/token';
 import { formatAppUserArgs } from '@/utils/addNewAppUser';
-import confirmGoogleUser from '@/src/utils/signInHandlers/firebase/confirmGoogleUser';
-import consolidateGuestAndUserCarts from '@/src/utils/cart/consolidateGuestAndUserCarts';
-import routeUserToHomepage from '@/utils/routing/routeUserToHomepage';
-
-// import googleSignInHandler from '@/src/utils/signInHandlers/signIn.oAuth';
+import confirmGoogleUser from '@/utils/signInHandlers/firebase/confirmGoogleUser';
+import consolidateGuestAndUserCarts from '@/utils/cart/consolidateGuestAndUserCarts';
+import routeUserToHomepage from '@/utils/routing/routeUserToHomePage';
 
 const provider = new GoogleAuthProvider();
 
@@ -35,7 +33,6 @@ export default function SignIn() {
   const [oAuthError, setOAuthError] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const ctx = useContext(AppContext);
-
 
   const Auth = new AuthorizationHandler(ctx);
   const router = useRouter();
@@ -72,8 +69,6 @@ export default function SignIn() {
 
       await addNewAppUser(userArgs);
 
-      setErrorMessage(() => '');
-
       cart = await consolidateGuestAndUserCarts(accessToken, addItem);
 
       if (!cart) return;
@@ -85,6 +80,7 @@ export default function SignIn() {
         ctx.setCart(cart);
       }
 
+      setErrorMessage(() => '');
       return routeUserToHomepage(router, email, newUser);
     } catch (error) {
       console.log(error);
@@ -103,20 +99,17 @@ export default function SignIn() {
         return;
       }
 
-      setErrorMessage(() => '');
-
       cart = await consolidateGuestAndUserCarts(accessToken, addItem);
 
       if (!cart) return;
 
       // If there are items in the cart response, populate the local cart
       updateCookieObject('cart', cart);
-
       if (cart.items.length > 0) {
         ctx.setCart(cart);
       }
 
-      // return router.push('/');
+      setErrorMessage(() => '');
       return routeUserToHomepage(router);
     } catch (err) {
       console.log(

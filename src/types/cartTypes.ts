@@ -19,8 +19,9 @@ export interface CartItem extends Dish {
 
 export interface Cart {
   items: CartItem[];
-  totalCount: number;
-  totalCost: number;
+  totalCount?: number;
+  totalCost?: number;
+  total?: number;
 }
 
 export interface CartButtonSet {

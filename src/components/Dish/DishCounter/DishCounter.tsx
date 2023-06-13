@@ -1,6 +1,6 @@
 import IconButton from '@mui/material/IconButton';
-import IconAdd from '@/src/components/Dish/IconAdd';
-import IconSubtract from '@/src/components/Dish/IconSubtract';
+import IconAdd from '@/components/Dish/IconAdd';
+import IconSubtract from '@/components/Dish/IconSubtract';
 import { green, pink } from '@mui/material/colors';
 import { useState, useEffect } from 'react';
 import { getCookie } from '@/utils/cookieHandler';

@@ -1,7 +1,7 @@
 import { gql, useMutation } from '@apollo/client';
 import { useContext, useEffect, useState } from 'react';
 import AuthorizationHandler from '@/utils/authorizationHandler';
-import AppContext from '@/src/components/context';
+import AppContext from '@/components/context';
 // import { INCREMENT_CART } from '@/src/graphql/mutations';
 import INCREMENT_CART from '@/mutations/cart/AddItemsToCart.mutation';
 import { getCookie } from '@/utils/cookieHandler';

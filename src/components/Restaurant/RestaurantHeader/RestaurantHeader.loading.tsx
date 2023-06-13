@@ -1,4 +1,4 @@
-import Meta from '@/src/components/Meta';
+import Meta from '@/components/Meta';
 import Head from 'next/head';
 import styles from './RestaurantHeader.module.css';
 import Container from '@mui/material/Container';

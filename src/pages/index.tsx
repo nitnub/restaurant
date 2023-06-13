@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
-// import Meta from '../src/components/Meta';
 import Meta from '@/components/Meta';
 import Head from 'next/head';
-import SearchBar from '@/src/components/Filter/SearchBar';
-import RestaurantList from '@/src/components/Restaurant/RestaurantList';
+import SearchBar from '@/components/Filter/SearchBar';
+import RestaurantList from '@/components/Restaurant/RestaurantList';
 import { useRouter } from 'next/router';
 import { useQuery } from '@apollo/client';
 import Modal from '@/components/Modal';
-// import { GET_ALL_RESTAURANTS } from '@/src/graphql/queries';
 import GET_ALL_RESTAURANTS from '@/queries/restaurant/GetAllRestaurants.query';
 import { Restaurant, RestaurantQueryResult } from '@/types/restaurantTypes';
-import ChipToggleContainer from '@/src/components/Filter/Chip/ChipToggleContainer';
+import ChipToggleContainer from '@/components/Filter/Chip/ChipToggleContainer';
 import { useEffect } from 'react';
 import Container from '@mui/material/Container';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -51,7 +49,7 @@ export default function Home(props) {
   const { data, loading, error } = useQuery(GET_ALL_RESTAURANTS);
   if (loading) {
     return (
-      <div className="loadingContainer">
+      <div role="loadingContainer" className="loadingContainer">
         <CircularProgress />
       </div>
     );
@@ -73,14 +71,15 @@ export default function Home(props) {
       : restaurants;
 
   return (
-    <div>
+    <>
       <Meta />
-      <Head>
-        <title>Restaurant App | Welcome!</title>
+      <Head >
+        <title role="title">Restaurant App | Welcome!</title>
       </Head>
 
       <Container className="parentContainer">
         <SearchBar
+          role="homePageSearch"
           query={query}
           setQuery={setQuery}
           label="Find Restaurant"
@@ -100,6 +99,6 @@ export default function Home(props) {
           buttonText={buttonText}
         />
       </Container>
-    </div>
+    </>
   );
 }

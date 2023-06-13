@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import AppContext from '@/src/components/context';
+import AppContext from '@/components/context';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { styled, lighten, darken } from '@mui/system';

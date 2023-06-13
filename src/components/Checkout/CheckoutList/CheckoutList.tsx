@@ -1,11 +1,11 @@
 import Link from 'next/link';
 import List from '@mui/material/List';
 import { useContext, useEffect, useState } from 'react';
-import AppContext from '@/src/components/context';
+import AppContext from '@/components/context';
 import styles from './CheckoutList.module.css';
 import { convertToCurrency } from '@/libs/formatter';
 import { CartItem as ICartItem } from '@/types/cartTypes';
-import Dish from '@/src/components/Dish/Dish';
+import Dish from '@/components/Dish/Dish';
 import { getCookie } from '@/utils/cookieHandler';
 import { RestaurantTuple } from '@/types/restaurantTypes';
 import { Paper } from '@mui/material';

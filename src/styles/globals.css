@@ -15,8 +15,6 @@
 @value --clr-lt-blk: #4e4740;
 @value --val-hdr-gap: 450px;
 
-
-
 * {
   box-sizing: border-box;
   font-size: 10pt;
@@ -27,6 +25,7 @@ body {
   padding: 0;
   margin: 0;
   height: 100vh;
+
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   background-color: var(--clr-lt-bkgd);
@@ -117,7 +116,6 @@ a {
 .headerBackgroundSpan {
   position: absolute;
   background-color: var(--clr-lt-blk);
-  /* width: 100vw; */
   width: 100%;
   height: 250px;
   left: 0;
@@ -128,7 +126,6 @@ a {
 .headerBackgroundSpanLoading {
   position: absolute;
   background-color: var(--clr-lt-blk);
-  /* width: 100vw; */
   width: 100%;
   height: 250px;
   left: 0;
@@ -138,7 +135,6 @@ a {
 
 .mainBackground {
   height: 100vh;
-  /* width: 100vw; */
   width: 100%;
   left: 0px;
   top: var(--val-hdr-gap);
@@ -151,7 +147,7 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  height:50%;
+  height: 50%;
 }
 
 .resInputContainer {
@@ -181,7 +177,7 @@ a {
 }
 
 .cartIcon {
-  /* color: var(--clr-lt-hdr) */
+  /* color: var(--clr-lt-hdr); */
   color: black;
 }
 
@@ -192,7 +188,6 @@ a {
 }
 
 /* Payment Update Confirmation Card Container */
-
 .updateConfContainer {
   display: flex;
   height: 100%;
@@ -205,94 +200,14 @@ a {
   text-align: center;
 }
 
-
-
 /* Tablets and under */
-@media(max-width: 768px) {
-  .mainBackground {
-    height: 100vh;
-    /* width: 100vw; */
-    width: 100%;
-    left: 0px;
-    top: var(--val-hdr-gap);
-    position: absolute;
-    z-index: 0;
-    background-color: var(--clr-lt-bkgd);
-    background-color: rgb(0, 72, 255);
-  }
-
-
-
-  .headerImage {
-    height: 100%;
-    width: 100%;
-    left: 0px;
-    top: -45px;
-    position: absolute;
-    z-index: 0.5;
-    opacity: 0.33;
-  }
-  
-  .headerImageLoading {
-    height: 100%;
-    width: 100%;
-    left: 0px;
-    top: -45px;
-    position: absolute;
-    z-index: 0.5;
-    opacity: 0.33;
-    background-color: var(--clr-lt-blk);
-  }
-  
-  .headerImageSpacer {
-    width: 100px;
-    height: calc(var(--val-hdr-gap) - 175px);
-    z-index: -10;
-  }
-
-
-
-  .resInputContainer {
-    max-width: 'lg';
-    background-color: rgb(136, 165, 147);
-  }
-  .parentContainer {
-    max-width: 'sm';
-    background-color: rgb(165, 136, 136);
-  }
-
+@media (max-width: 768px) {
 }
 
 /* Mobile */
-@media(max-width: 500px) {
+@media (max-width: 500px) {
 
-  .mainBackground {
-    height: 100vh;
-    width: 100%;
-    left: 0px;
-    top: var(--val-hdr-gap);
-    position: absolute;
-    z-index: 0;
-    background-color: var(--clr-lt-bkgd);
-    background-color: red;
-  }
-
-  .resInputContainer {
-    max-width: 'lg';
-    background-color: rgb(136, 165, 147);
-  }
-  .parentContainer {
-    max-width: 'sm';
-    background-color: rgb(165, 136, 136);
-  }
-  
 }
-
-
-
-
-
-
 
 @media (prefers-color-scheme: dark) {
   html {

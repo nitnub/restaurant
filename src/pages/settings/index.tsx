@@ -1,4 +1,4 @@
-import SettingsTabs from '@/src/components/Settings/SettingsTabs';
+import SettingsTabs from '@/components/Settings/SettingsTabs';
 import Container from '@mui/material/Container';
 import Head from 'next/head';
 

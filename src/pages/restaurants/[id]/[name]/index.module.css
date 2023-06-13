@@ -1,0 +1,52 @@
+.parentContainer {
+  /* background-color: purple; */
+}
+
+.headerBackgroundSpan {
+  /* padding: 0px; */
+}
+
+
+.inputContainer {
+  /* background-color: purple; */
+  position: absolute;
+  display: flex;
+  flex-wrap: wrap;
+  z-index: 2;
+}
+
+.titleContainer {
+  margin-top: -40px;
+}
+
+.titleName {
+  color: white;
+  font-size: 4em;
+}
+
+.titleStyle {
+  color: white;
+  font-size: 2em;
+}
+
+.titleDescription {
+  color: white;
+  font-size: 1.5em;
+}
+
+/* Tablets and under */
+@media (max-width: 1022px) {
+  .searchContainer {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+/* Mobile */
+@media (max-width: 500px) {
+  .restaurant {
+    background-color: red;
+    width: 100px;
+  }
+
+}
