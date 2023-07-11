@@ -11,8 +11,8 @@
     "test": "jest"
   },
   "dependencies": {
-    "@apollo/client": "^3.4.16",
-    "@apollo/server": "^4.3.0",
+    "@apollo/client": "^3.7.17",
+    "@apollo/server": "^4.7.5",
     "@as-integrations/next": "^1.2.0",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
