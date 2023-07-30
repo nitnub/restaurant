@@ -30,30 +30,23 @@ interface RestaurantProps {
   restaurant: RestaurantProfile;
 }
 
-// export default function Restaurant(props: RestaurantProps) {
-export default function Restaurant({restaurant}: {restaurant: RestaurantProfile} ) {
-  // const { name, style, imageSm, rating, description, id, homePage } =
-  //   props.restaurant;
+export default function Restaurant({
+  restaurant,
+}: {
+  restaurant: RestaurantProfile;
+}) {
   const { name, style, imageSm, rating, description, id, homePage } =
     restaurant;
 
   return (
     <Card className={styles.card}>
-      <Link
-      href={`/restaurants/${id}/${name?.replaceAll(' ', '-')}`}
-        // href="restaurants/[id]/[name]"
-        // as={`/restaurants/${id}/${name?.replaceAll(' ', '-')}`}
-      >
+      <Link href={`/restaurants/${id}/${name?.replaceAll(' ', '-')}`}>
         <CardHeader className={styles.header} title={name} subheader={style} />
       </Link>
       <div className={styles.rating}>
         <StarRating rating={Number(rating)} />
       </div>
-      <Link
-        href={`/restaurants/${id}/${name?.replaceAll(' ', '-')}`}
-        // href="restaurants/[id]/[name]"
-        // as={`/restaurants/${id}/${name?.replaceAll(' ', '-')}`}
-      >
+      <Link href={`/restaurants/${id}/${name?.replaceAll(' ', '-')}`}>
         <CardMedia
           className={styles.image}
           component="img"
