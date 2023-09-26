@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import Dish from './Dish.active';
 import '@testing-library/jest-dom';
-// import { client } from '@/test_resources/apolloConfig';
 import client from '@/test_resources/apolloConfig';
 import { ApolloProvider } from '@apollo/client';
 

@@ -19,7 +19,7 @@ import { readToken } from '@/utils/token';
 import { formatAppUserArgs } from '@/utils/addNewAppUser';
 import confirmGoogleUser from '@/utils/signInHandlers/firebase/confirmGoogleUser';
 import consolidateGuestAndUserCarts from '@/utils/cart/consolidateGuestAndUserCarts';
-import routeUserToHomepage from '@/utils/routing/routeUserToHomePage';
+import routeUserToHomepage from '@/utils/routing/routeUserToHomepage';
 
 const provider = new GoogleAuthProvider();
 
@@ -48,6 +48,7 @@ export default function SignIn() {
     const googleAuth = getAuth(app);
 
     try {
+     
       const { success, message, accessToken, photoURL } =
         await confirmGoogleUser(ctx, googleAuth, provider);
 

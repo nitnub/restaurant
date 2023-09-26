@@ -1,7 +1,7 @@
 import { Context } from "@apollo/client";
-import { Auth, signInWithPopup } from "firebase/auth";
+import { Auth, AuthProvider, signInWithPopup } from "firebase/auth";
 import OAauthHandler from "@/utils/OAuthHandler";
-import { AuthProvider } from "@/src/types/utilTypes";
+// import { AuthProvider } from "@/src/types/utilTypes";
 
 export default async (ctx: Context, auth: Auth, provider: AuthProvider) => {
   const OAuth = new OAauthHandler(ctx);

@@ -2,7 +2,7 @@ import Meta from '@/components/Meta';
 import Head from 'next/head';
 import styles from './RestaurantHeader.module.css';
 import Container from '@mui/material/Container';
-import Skeleton from '@mui/material/skeleton';
+import Skeleton from '@mui/material/Skeleton';
 const RestaurantHeaderLoading = () => {
   return (
     <>

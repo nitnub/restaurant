@@ -1,4 +1,4 @@
- {
+{
   "compilerOptions": {
     "target": "ES2015",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -34,19 +34,6 @@
       "@/utils/*": ["src/utils/*"]
     }
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "../User.resolver.ts",
-    ".local-files/to-be-deleted/Stripe.resolver copy.ts",
-    ".local-files/to-be-deleted/index.tsx",
-    ".local-files/to-be-deleted/update-amount.ts",
-    ".local-files/LEGACY_schema.ts",
-    ".local-files/pingHandler.ts",
-    ".local-files/fetchTransactionHistory.ts",
-    ".local-files/getClientSecret.ts",
-    ".local-files/getOfficialTotal.ts"
-, "src/pages/__tests__/index.test.tsx"  ],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "../User.resolver.ts"],
   "exclude": ["node_modules"]
 }
