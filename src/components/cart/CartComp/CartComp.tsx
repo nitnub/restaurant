@@ -22,15 +22,16 @@ export default function CartComp() {
     setTotalCount(() => getCookie('cart').totalCount);
   }, [ctx.cart]);
 
-  const iconColor = 'black';
+
   useEffect(() => {
     setHydro(true);
   });
+  
   if (!hydro) {
     return null;
   }
+
   return (
-    // <div aria-label="cart" style={{ color: iconColor }}>
     <div aria-label="cart" className="cartIcon">
       <StyledBadge badgeContent={totalCount} color="success">
         <ShoppingCartIcon />

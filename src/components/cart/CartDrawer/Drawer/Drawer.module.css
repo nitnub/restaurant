@@ -1,0 +1,39 @@
+
+.drawerHeader {
+  z-index: 1;
+  background-color: white;
+  position: sticky;
+  top: 0;
+  height: 120px;
+}
+
+.cartSummaryContainer {
+  width: 100%;
+  display: flex; 
+  justify-content: space-between;
+  /* display: flex; */
+  /* justify-content: space-between; */
+}
+
+.cartSummary {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.headerCheckout {
+  text-align: center;
+  background-color: white;
+  position: sticky;
+  top: 1;
+}
+
+
+.priceSummary {
+  display: flex;
+  align-items: center;
+}
+
+.priceLabel {
+  font-weight: bold;
+}

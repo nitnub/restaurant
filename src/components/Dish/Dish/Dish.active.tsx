@@ -13,14 +13,16 @@ import DietaryList from '@/components/AllergyBar';
 
 export default function Dish({ dishProp }: { dishProp: CartItem }) {
   const ctx = useContext(AppContext);
-  const [count, setCount] = useState(0);
 
-  const dish = dishProp;
-  ctx.cart?.items.map((item: CartItem) => {
-    if (item.id === dishProp.id) {
-      dishProp.count = item.count;
-    }
-  });
+  const items = ctx.cart.items == null ? null : ctx.cart.items;
+
+  if (items != null) {
+    items.map((item: CartItem) => {
+      if (item.id === dishProp.id) {
+        dishProp.count = item.count;
+      }
+    });
+  }
 
   const dietaryProps = {
     vegetarian: dishProp.vegetarian,
@@ -35,7 +37,7 @@ export default function Dish({ dishProp }: { dishProp: CartItem }) {
           component="img"
           className={styles.dishImage}
           image={`/images/dishes/${dishProp.image}`}
-          alt={dish.description}
+          alt={dishProp.description}
         />
       </div>
       <Box className={styles.cardContent}>
@@ -58,9 +60,7 @@ export default function Dish({ dishProp }: { dishProp: CartItem }) {
                 <div className={styles.dishCounter}>
                   <div className={styles.addRemove}>
                     <DishCounter
-                      // setCountVar={setCountVar}
                       dishProp={dishProp}
-                      setCount={setCount}
                     />
                   </div>
                 </div>
