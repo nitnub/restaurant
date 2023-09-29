@@ -29,7 +29,6 @@ function UserBanner() {
 
   return ctx.email === 'Sign In' ? (
     <div className={styles.container}>
-      {/* <AccountCircleIcon sx={{ width: 30, height: 30 }} /> */}
       <AccountBoxIcon sx={{ width: 30, height: 30 }} />
       <Link href="/signin" className={styles.link}>
         {ctx.email}

@@ -3,7 +3,7 @@ import { useContext, useState } from 'react';
 import type { AppProps } from 'next/app';
 import Layout from '@/components/Layout';
 import AppContext from '@/components/context';
-import CartDrawer from '@/components/cart/CartDrawer';
+import CartDrawer from '@/components/Cart/CartDrawer';
 import { ApolloProvider } from '@apollo/client';
 import client from '@/dbConfigs/apollo.client';
 import { cookieDuster, getCookie } from '@/utils/cookieHandler';
@@ -105,7 +105,6 @@ export default function App({ Component, pageProps }: AppProps) {
 
   function removeFromCart(item: Dish) {
     const items = cart.items;
-
     const itemIndex = items.findIndex((el) => el.id === item.id);
 
     if (items.length === 0 || itemIndex === -1) {

@@ -42,12 +42,8 @@ export default function CartItem({ item }) {
           <IconAdd dishProp={item} setCount={setCount} />
         </div>
         <div>
-          <Typography className={styles.itemName}>
-            {/* {item.name} {item.count > 1 ? ' x ' + item.count : ''} */}
-            {item.name}
-          </Typography>
+          <Typography className={styles.itemName}>{item.name}</Typography>
           <div className={styles.productDetails}>
-            {/* Subtotal: {convertToCurrency(item.price * item.count)} */}
             <div>
               {item.count > 1
                 ? `${item.count} x ${convertToCurrency(item.price)}`

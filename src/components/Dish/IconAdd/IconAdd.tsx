@@ -73,6 +73,7 @@ const IconAdd = ({ dishProp, setCount }) => {
     ctx.setCart(newCart);
     ctx.setTotalCount(newCart.totalCount);
     ctx.setTotalCost(newCart.totalCost);
+
   };
 
   if (loading)

@@ -1,28 +1,22 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 import styles from './index.module.css';
 import Container from '@mui/material/Container';
-import AppContext from '@/components/context';
+
 import Meta from '@/components/Meta';
 import DishList from '@/components/Dish/DishList';
 import GET_RESTAURANT from '@/queries/restaurant/GetRestaurant.query';
 import SearchBar from '@/components/Filter/SearchBar';
 import { getCookie } from '@/utils/cookieHandler';
-import Head from 'next/head';
-import CircularProgress from '@mui/material/CircularProgress';
-import { Skeleton } from '@mui/material';
-import RestaurantHeader from '@/components/Restaurant/RestaurantHeader';
-import { Spinner } from '@/components/Spinner/Spinner';
 
 const Restaurant: React.FunctionComponent = () => {
-  const ctx = useContext(AppContext);
   const [query, setQuery] = useState('');
-
   const router = useRouter();
 
   // // Can now destructure any params from router.query
-  const { name, id } = router.query;
+  const { id } = router.query;
   const VARIABLES = { id: Number(id) };
   const ARGS = {
     variables: VARIABLES,
@@ -34,10 +28,6 @@ const Restaurant: React.FunctionComponent = () => {
   };
 
   const { data, loading, error } = useQuery(GET_RESTAURANT, ARGS);
-
-  if (false) {
-    return <RestaurantHeader loading />;
-  }
 
   if (error) {
     return <div>Unable to load page. Please try again!</div>;

@@ -1,4 +1,4 @@
-// Note: The stripe workflow is largely standard boilerplate code from stripe.com.
+// Note: This stripe workflow is largely standard boilerplate code from stripe.com.
 
 import React, { useContext, useEffect, useState } from 'react';
 import { Elements, useStripe } from '@stripe/react-stripe-js';

@@ -1,7 +1,5 @@
 import { Context } from '@apollo/client';
 import { newGuestID } from './newGuestID';
-
-import { AuthProvider } from '@/types/utilTypes';
 import { clearCookie, getCookie, setCookie } from './cookieHandler';
 
 const guestProfile = {
@@ -19,8 +17,6 @@ const emptyCart = { items: [], totalCost: 0, totalCount: 0 };
 export default class AuthorizationHandler {
   // private SUPPORTED_OAUTH_PROVIDERS = ['www.google.com'];
   private SIGN_IN_URL = process.env.NEXT_PUBLIC_AUTH_SERVER_SIGN_IN_URL;
-  // private SIGN_IN_OAUTH_URL =
-  // process.env.NEXT_PUBLIC_AUTH_SERVER_SIGN_IN_OAUTH_URL;
   private SIGN_OUT_URL = process.env.NEXT_PUBLIC_AUTH_SERVER_SIGN_OUT_URL;
   private TOKEN_URL = process.env.NEXT_PUBLIC_AUTH_SERVER_TOKEN_URL;
   private PROFILE_KEY = 'loggedInUser';
@@ -86,81 +82,6 @@ export default class AuthorizationHandler {
     };
   }
 
-  // public async signInOAuth(
-  //   idToken: string,
-  //   provider: AuthProvider,
-  //   additionalData: { image: string }
-  // ) {
-  //   const adImage = additionalData.image;
-
-  //   if (!this.SUPPORTED_OAUTH_PROVIDERS.includes(provider)) {
-  //     return {
-  //       status: 'fail',
-  //       success: false,
-  //       message: `Unsupported OAuth provider "${provider}"`,
-  //     };
-  //   }
-
-  //   // create request
-  //   const requestBody = {
-  //     idToken,
-  //     provider,
-  //   };
-
-  //   const response = await fetch(this.SIGN_IN_OAUTH_URL, {
-  //     method: 'POST',
-  //     body: JSON.stringify(requestBody),
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     // credentials: 'include',
-  //   });
-
-  //   const data = await response.json();
-
-  //   if (data instanceof Error) {
-  //     return {
-  //       status: 'fail',
-  //       success: false,
-  //       message: data.message,
-  //     };
-  //   }
-
-  //   if (data.status === 'success') {
-  //     const accessToken = data.data.resp.accessToken;
-
-  //     const { authProvider, avatar, exp } = JSON.parse(
-  //       Buffer.from(accessToken.split('.')[1], 'base64').toString()
-  //     );
-
-  //     setCookie('accessToken', accessToken, exp);
-      
-  //     adImage && setCookie('avatar', adImage, exp);
-  //     avatar && setCookie('avatar', avatar, exp);
-
-  //     this.ctx.setAuthProvider(authProvider);
-  //     this.ctx.setAccessToken(() => accessToken);
-
-  //     this.setProfile(accessToken);
-
-  //     return {
-  //       status: data.status,
-  //       success: true,
-  //       accessToken,
-  //     };
-  //   }
-
-  //   const message =
-  //     data.status === 'fail'
-  //       ? data.message
-  //       : 'Systm error. Please contact a system administrator.';
-
-  //   return {
-  //     status: 'fail',
-  //     success: false,
-  //     message,
-  //   };
-  // }
 
   public setProfile(accessToken: string) {
     const parsedUser = JSON.parse(

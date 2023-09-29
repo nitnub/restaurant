@@ -5,12 +5,10 @@ import AppContext from '@/components/context';
 import AuthorizationHandler from '@/utils/authorizationHandler';
 import { getCookie } from '@/utils/cookieHandler';
 import GET_CART from '@/queries/cart/GetCart.query';
-// import { GET_CART } from '@/graphql/queries/cart/getCart';
-// import { ADD_APP_USER, INCREMENT_CART } from '@/src/graphql/mutations';
 import ADD_APP_USER from '@/mutations/user/AddNewAppUser.mutation';
 import INCREMENT_CART from '@/mutations/cart/AddItemsToCart.mutation';
 import { useLazyQuery } from '@apollo/client';
-import { Cart, CartItem } from '@/types/cartTypes';
+import { Cart } from '@/types/cartTypes';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { CardHeader } from '@mui/material';
@@ -33,8 +31,7 @@ export default function Register() {
   const [addNewAppUser] = useMutation(ADD_APP_USER);
   const handler = async ({ firstName, lastName, email, password }) => {
     const avatar = 'HARD-CODED-PATH-FOR-TESTING';
-    const admin = false;
-    const active = true;
+
     const response = await fetch(
       process.env.NEXT_PUBLIC_AUTH_SERVER_REGISTER_URL,
       {
@@ -46,22 +43,19 @@ export default function Register() {
           email,
           password,
           avatar,
-          admin,
-          active,
+          admin: false,
+          active: true,
         }),
       }
     );
     const json = await response.json();
-    const data = json.data.sanitizedUser;
-    const accessToken = json.data.accessToken;
-
-    const VARIABLES = {
-      email: data.email,
-      globalUserId: data.id,
-    };
+    const { sanitizedUser, accessToken } = json.data;
 
     const ARGS = {
-      variables: VARIABLES,
+      variables: {
+        email: sanitizedUser.email,
+        globalUserId: sanitizedUser.id,
+      },
       context: {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -103,51 +97,30 @@ export default function Register() {
     }
 
     // // Generally, if profile is updated, should check the cookie state first
-
     setErrorMessage(() => '');
+
+    const ARGS = {
+      variables: {
+        accessToken: accessToken,
+        items: [],
+      },
+      context: {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    };
 
     let cart: Cart;
     if (prevUser.startsWith('Guest') && prevCart.length > 0) {
-      const VARIABLES = {
-        accessToken: accessToken,
-        items: prevCart,
-      };
-
-      const ARGS = {
-        variables: VARIABLES,
-        context: {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        },
-      };
-
+      ARGS.variables.items = prevCart;
       const result = await addItem(ARGS);
 
-      // data: addItemData, loading: addItemLoading, error: errorLoading },
       if (addItemLoading) return console.log(loading);
       if (errorLoading) return console.log(error);
 
       cart = result.data.incrementCartResult;
     } else {
-      // get all cart items in variable
-      // move all items to logged in user's cart
-      // clear old cart
-
-      const VARIABLES = {
-        accessToken: accessToken,
-      };
-
-      const ARGS = {
-        variables: VARIABLES,
-        context: {
-          headers: {
-            // Authorization: `Bearer ${getCookie('accessToken')}`,
-            Authorization: `Bearer ${accessToken}`,
-          },
-        },
-      };
-
       const result = await cartQuery(ARGS);
       if (loading) return console.log(loading);
       if (error) return console.log(error);
@@ -155,17 +128,13 @@ export default function Register() {
       cart = result.data.getCartResult;
     }
 
-    if (typeof cart === 'undefined') {
+    if (typeof cart === 'undefined' || cart.items.length === 0) {
       return;
     }
 
     // If there are items in the cart response, populate the local cart
-    if (cart.items.length > 0) {
-      document.cookie = `cart=${JSON.stringify(cart)}`;
-      ctx.setCart(() => cart);
-      ctx.setTotalCount(cart.totalCount);
-      ctx.setTotalCost(cart.totalCost);
-    }
+    document.cookie = `cart=${JSON.stringify(cart)}`;
+    ctx.setCart(cart);
   };
 
   const formFooter = {
@@ -183,11 +152,8 @@ export default function Register() {
           <CardContent>
             <CardHeader title="Create Account" />
             <Form
-              // header={'Create Account'}
               footer={formFooter}
-              // showName
               showFirstName
-              // firstName
               showLastName
               showEmail
               showPassword

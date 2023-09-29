@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import Home from '../index';
 import '@testing-library/jest-dom';
 
@@ -38,6 +38,7 @@ const client = new ApolloClient({
 
 // import client from '@/dbConfigs/apollo.client';
 import { useRouter } from 'next/router';
+import { act } from 'react-dom/test-utils';
 
 // mock useRouter
 jest.mock('next/router', () => ({
@@ -65,5 +66,12 @@ describe('Renders homepage ', () => {
   it('renders load spinner', () => {
     const loadingContainer = screen.getByRole('loadingContainer');
     expect(loadingContainer).toBeVisible();
+  });
+
+  it('renders search bar', () => {
+    act(async () => {
+      await screen.findByRole('homePageSearch');
+      expect(screen.getByRole('homePageSearch')).toBeVisible();
+    });
   });
 });

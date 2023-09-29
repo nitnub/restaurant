@@ -1,22 +1,17 @@
 import { useContext, useEffect, useState, SyntheticEvent } from 'react';
-import AppContext from '@/components/context';
-import { clearCookie, getCookie } from '@/utils/cookieHandler';
-import Button from '@mui/material/Button';
-import Link from 'next/link';
-import { convertToCurrency } from '@/libs/formatter';
-import CREATE_STRIPE_PAYMENT from '@/mutations/payment/CreatePayment.mutation';
-import CLEAR_CART from '@/mutations/cart/ClearCart.mutation';
-import GET_CART from '@/queries/cart/GetCart.query';
-import { useMutation, useQuery } from '@apollo/client';
-import styles from './index.module.css';
-import PaymentOption from '@/components/Stripe/PaymentOption';
-import { Cart } from '@/types/cartTypes';
 import Head from 'next/head';
+import Link from 'next/link';
+import AppContext from '@/components/context';
+import { getCookie } from '@/utils/cookieHandler';
+
+import GET_CART from '@/queries/cart/GetCart.query';
+import { useQuery } from '@apollo/client';
+import styles from './index.module.css';
 import OrderSummary from '@/components/Checkout/CheckoutForm/OrderSummary';
 import PaymentSummary from '@/components/Checkout/CheckoutForm/PaymentSummary';
 import SubmitOrder from '@/components/Checkout/CheckoutForm/SubmitOrder';
 
-export default function Checkout(props) {
+export default function Checkout() {
   const ctx = useContext(AppContext);
   const CART_ARGS = {
     context: {
@@ -25,7 +20,6 @@ export default function Checkout(props) {
       },
     },
   };
-
   const {
     data: cartData,
     loading: cartLoading,
@@ -118,12 +112,8 @@ export default function Checkout(props) {
 
       <div style={{ display: 'flex' }}>
         <div style={{ width: '1050px' }}>
-          {/* <OrderSummary props={orderSummaryProps} /> */}
           <OrderSummary props={checkoutProps} />
-
-          {/* <PaymentSummary props={paymentSummaryProps} /> */}
           <PaymentSummary props={checkoutProps} />
-
           <SubmitOrder props={submitOrderProps} />
         </div>
       </div>
