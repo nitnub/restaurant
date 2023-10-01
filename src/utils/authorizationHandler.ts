@@ -16,11 +16,11 @@ const emptyCart = { items: [], totalCost: 0, totalCount: 0 };
 
 export default class AuthorizationHandler {
   // private SUPPORTED_OAUTH_PROVIDERS = ['www.google.com'];
-  private SIGN_IN_URL = process.env.NEXT_PUBLIC_AUTH_SERVER_SIGN_IN_URL;
-  private SIGN_OUT_URL = process.env.NEXT_PUBLIC_AUTH_SERVER_SIGN_OUT_URL;
-  private TOKEN_URL = process.env.NEXT_PUBLIC_AUTH_SERVER_TOKEN_URL;
-  private PROFILE_KEY = 'loggedInUser';
-  private TOKEN_KEY = 'accessToken';
+  private SIGN_IN_URL: string = process.env.NEXT_PUBLIC_AUTH_SERVER_SIGN_IN_URL;
+  private SIGN_OUT_URL: string = process.env.NEXT_PUBLIC_AUTH_SERVER_SIGN_OUT_URL;
+  private TOKEN_URL: string = process.env.NEXT_PUBLIC_AUTH_SERVER_TOKEN_URL;
+  private PROFILE_KEY: string = 'loggedInUser';
+  private TOKEN_KEY: string = 'accessToken';
   protected ctx: Context;
 
   static token: string = '';

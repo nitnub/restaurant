@@ -11,7 +11,7 @@ const AppContext = createContext({
   setCartButtons: (buttons: CartButtonSet[]) => {},
   addToCart: (item: DishObject) => {},
   removeFromCart: (item: DishObject) => {},
-  setCartCount: (num) => {},
+  setCartCount: (num: number) => {},
   email: '',
   setEmail: (email: string) => {},
   authProvider: '',

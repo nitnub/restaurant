@@ -1,9 +1,7 @@
 import { useContext, useState } from 'react';
 import Form from '@/components/Form';
-import { Cart } from '@/types/cartTypes';
-import { useMutation } from '@apollo/client';
+import { Context, useMutation } from '@apollo/client';
 import AppContext from '@/components/context';
-import AuthorizationHandler from '@/utils/authorizationHandler';
 import { updateCookieObject } from '@/utils/cookieHandler';
 import INCREMENT_CART from '@/mutations/cart/AddItemsToCart.mutation';
 import Card from '@mui/material/Card';
@@ -11,121 +9,71 @@ import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import { useRouter } from 'next/router';
 import GoogleButton from 'react-google-button';
-import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import Head from 'next/head';
 import ADD_APP_USER from '@/mutations/user/AddNewAppUser.mutation';
-import app from '@/utils/firebaseConfig';
-import { readToken } from '@/utils/token';
-import { formatAppUserArgs } from '@/utils/addNewAppUser';
-import confirmGoogleUser from '@/utils/signInHandlers/firebase/confirmGoogleUser';
-import consolidateGuestAndUserCarts from '@/utils/cart/consolidateGuestAndUserCarts';
-import routeUserToHomepage from '@/utils/routing/routeUserToHomepage';
 
-const provider = new GoogleAuthProvider();
+import routeUserToHomepage from '@/utils/routing/routeUserToHomepage';
+import { googleSignInHandler } from '@/src/utils/signInHandlers/signIn.oAuth';
+import { signInAuthServerHandler } from '@/src/utils/signInHandlers/signIn.auth';
+
+export enum SignInError {
+  GENERAL = 'general',
+  O_AUTH = 'oAuth',
+}
+
+const errorDefault = {
+  general: '',
+  oAuth: '',
+};
 
 export default function SignIn() {
-  let cart: Cart | null = {
-    items: [],
-    totalCount: 0,
-    totalCost: 0,
-  };
-
-  const [oAuthError, setOAuthError] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-  const ctx = useContext(AppContext);
-
-  const Auth = new AuthorizationHandler(ctx);
-  const router = useRouter();
-
-  const [
-    addItem,
-    { data: addItemData, loading: addItemLoading, error: errorLoading },
-  ] = useMutation(INCREMENT_CART);
-
+  const [error, setError] = useState(errorDefault);
+  const [addItem, { error: errorLoading }] = useMutation(INCREMENT_CART);
   const [addNewAppUser] = useMutation(ADD_APP_USER);
 
-  const googleSignInHandler = async () => {
-    const googleAuth = getAuth(app);
+  const updateError = (type: SignInError, message: string) => {
+    setError({ ...error, ...{ [type]: message } });
+  };
 
-    try {
-     
-      const { success, message, accessToken, photoURL } =
-        await confirmGoogleUser(ctx, googleAuth, provider);
+  const ctx: Context = useContext(AppContext);
+  const router = useRouter();
 
-      if (message === 'invalid signature') {
-        setOAuthError(() => 'Unable to identify user.');
-        return;
-      }
+  const signInProps = {
+    ctx,
+    addNewAppUser,
+    addItem,
+    updateError,
+  };
 
-      if (!success) {
-        setErrorMessage(() => message);
-        return;
-      }
+  const signInWithGoogle = async () => {
+    const res = await googleSignInHandler(signInProps);
 
-      ctx.setAvatar(photoURL);
-
-      // Add the App User
-      const { email, id, newUser } = readToken(accessToken);
-      const userArgs = formatAppUserArgs(email, id, accessToken);
-
-      await addNewAppUser(userArgs);
-
-      cart = await consolidateGuestAndUserCarts(accessToken, addItem);
-
-      if (!cart) return;
-
-      // If there are items in the cart response, populate the local cart
-      updateCookieObject('cart', cart);
-
-      if (cart.items.length > 0) {
-        ctx.setCart(cart);
-      }
-
-      setErrorMessage(() => '');
-      return routeUserToHomepage(router, email, newUser);
-    } catch (error) {
-      console.log(error);
+    if (res) {
+      setUIToUser(res);
     }
   };
 
-  const signInAuthServerHandler = async ({ email, password }) => {
-    try {
-      const { success, message, accessToken } = (await Auth.signIn(
-        email,
-        password
-      )) || { success: null, message: null, accessToken: null };
+  const signInWithEmail = async ({ email, password }) => {
+    const res = await signInAuthServerHandler({
+      ...signInProps,
+      email,
+      password,
+    });
 
-      if (!success) {
-        setErrorMessage(() => message);
-        return;
-      }
-
-      cart = await consolidateGuestAndUserCarts(accessToken, addItem);
-
-      if (!cart) return;
-
-      // If there are items in the cart response, populate the local cart
-      updateCookieObject('cart', cart);
-      if (cart.items.length > 0) {
-        ctx.setCart(cart);
-      }
-
-      setErrorMessage(() => '');
-      return routeUserToHomepage(router);
-    } catch (err) {
-      console.log(
-        'There was an error logging into the application. Please try again later.'
-      );
-      return (
-        <>
-          <h1>Error</h1>
-          <p>
-            There was an error logging into the application. Please try again
-            later.
-          </p>
-        </>
-      );
+    if (res) {
+      setUIToUser(res);
     }
+  };
+
+  const setUIToUser = (res) => {
+    updateCookieObject('cart', res.cart);
+
+    if (res.cart.items.length > 0) {
+      ctx.setCart(res.cart);
+    }
+
+    ctx.setAvatar(res.photoURL);
+    routeUserToHomepage(router, res.email, res.newUser);
   };
 
   const formFooter = {
@@ -148,22 +96,19 @@ export default function SignIn() {
             <Form
               showEmail
               showPassword
-              handler={signInAuthServerHandler}
+              handler={signInWithEmail}
               footer={formFooter}
             />
-            <div>{errorMessage}</div>
+            <div>{error.general}</div>
           </CardContent>
 
           <div className="sectionBreak">&nbsp;or&nbsp;</div>
           <br />
-          <GoogleButton
-            style={{ width: '200px' }}
-            onClick={googleSignInHandler}
-          />
+          <GoogleButton style={{ width: '200px' }} onClick={signInWithGoogle} />
 
-          {oAuthError ? (
+          {error.oAuth ? (
             <div className="error-text">
-              <div>{oAuthError}</div>
+              <div>{error.oAuth}</div>
               <div>Please try again or create a new account.</div>
             </div>
           ) : (
