@@ -19,11 +19,8 @@ async function addNewAppUser(
     },
   };
 
-  const [runQuery, { data, loading, error }] = useLazyQuery(ADD_APP_USER, ARGS);
+  const [runQuery] = useLazyQuery(ADD_APP_USER, ARGS);
 
-  // return [runQuery, { data, loading, error }];
-  // if (loading) return console.log(loading);
-  // if (error) return console.log(error);
   return await runQuery();
 }
 

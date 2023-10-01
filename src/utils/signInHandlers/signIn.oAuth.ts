@@ -1,10 +1,5 @@
-import { useContext } from 'react';
-import AppContext from '@/components/context';
 import confirmGoogleUser from '@/utils/signInHandlers/firebase/confirmGoogleUser';
 import consolidateGuestAndUserCarts from '@/utils/cart/consolidateGuestAndUserCarts';
-import routeUserToHomepage from '@/utils/routing/routeUserToHomepage';
-import { useRouter } from 'next/router';
-import { updateCookieObject } from '@/utils/cookieHandler';
 
 import { Cart } from '@/types/cartTypes';
 
@@ -16,12 +11,9 @@ import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { readToken } from '@/utils/token';
 
 import { SignInError } from '@/src/pages/signin';
-import { Context } from '@apollo/client';
-// import { AppContext } from 'next/app';
+import { Context, MutationFunction } from '@apollo/client';
 
 const provider = new GoogleAuthProvider();
-
-// const ctx = useContext(AppContext);
 
 let cart: Cart | null = {
   items: [],
@@ -31,27 +23,19 @@ let cart: Cart | null = {
 
 interface SignInWithGoogleProps {
   ctx: Context;
-  addNewAppUser;
-  addItem;
+  addNewAppUser: MutationFunction;
+  addItem: MutationFunction;
   updateError: (type: SignInError, message: string) => void;
 }
 
-export const googleSignInHandler = async (
-  // ctx: Context,
-  // // router,
-  // addNewAppUser,
-  // addItem,
-  // updateError: (type: SignInError, message: string) => void
-  {
-    ctx,
-    // router,
-    addNewAppUser,
-    addItem,
-    updateError,
-  }: SignInWithGoogleProps
-) => {
+export const googleSignInHandler = async ({
+  ctx,
+  addNewAppUser,
+  addItem,
+  updateError,
+}: SignInWithGoogleProps) => {
   const googleAuth = getAuth(app);
-  // const router = useRouter();
+
   try {
     const { success, message, accessToken, photoURL } = await confirmGoogleUser(
       ctx,
@@ -69,8 +53,6 @@ export const googleSignInHandler = async (
       return;
     }
 
-    // ctx.setAvatar(photoURL);
-
     // Add the App User
     const { email, id, newUser } = readToken(accessToken);
     await addNewAppUser(formatAppUserArgs(email, id, accessToken));
@@ -78,16 +60,7 @@ export const googleSignInHandler = async (
 
     if (!cart) return;
 
-    // // If there are items in the cart response, populate the local cart
-    // updateCookieObject('cart', cart);
-
-    // if (cart.items.length > 0) {
-    //   ctx.setCart(cart);
-    // }
-
-    // setErrorMessage(() => '');
     updateError(SignInError.GENERAL, '');
-    // return routeUserToHomepage(router, email, newUser);
 
     return { email, newUser, cart, photoURL };
   } catch (error) {

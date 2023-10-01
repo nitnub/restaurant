@@ -1,27 +1,12 @@
-import { useContext } from 'react';
-import AppContext from '@/components/context';
-import confirmGoogleUser from '@/utils/signInHandlers/firebase/confirmGoogleUser';
 import consolidateGuestAndUserCarts from '@/utils/cart/consolidateGuestAndUserCarts';
-import routeUserToHomepage from '@/utils/routing/routeUserToHomepage';
-import { useRouter } from 'next/router';
+
 import { updateCookieObject } from '@/utils/cookieHandler';
 
 import { Cart } from '@/types/cartTypes';
 
-import app from '@/utils/firebaseConfig';
-import { formatAppUserArgs } from '@/utils/addNewAppUser';
-
-import { getAuth, GoogleAuthProvider } from 'firebase/auth';
-
-import { readToken } from '@/utils/token';
-
 import { SignInError } from '@/src/pages/signin';
 import AuthorizationHandler from '@/utils/authorizationHandler';
-import { Context } from '@apollo/client';
-
-// const ctx = useContext(AppContext);
-
-// const router = useRouter();
+import { Context, MutationFunction } from '@apollo/client';
 
 let cart: Cart | null = {
   items: [],
@@ -33,11 +18,20 @@ interface SignInAuthServerProps {
   ctx: Context;
   email: string;
   password: string;
-  addItem;
+  addItem: MutationFunction;
   updateError: (type: SignInError, message: string) => void;
 }
 
-export const signInAuthServerHandler = async ({
+interface SignInResponse {
+  email: string;
+  newUser: boolean;
+  cart: Cart;
+  photoURL: string;
+}
+
+export const signInAuthServerHandler: (
+  props: SignInAuthServerProps
+) => Promise<SignInResponse> = async ({
   ctx,
   email,
   password,

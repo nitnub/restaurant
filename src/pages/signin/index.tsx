@@ -7,7 +7,7 @@ import INCREMENT_CART from '@/mutations/cart/AddItemsToCart.mutation';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
-import { useRouter } from 'next/router';
+import { NextRouter, useRouter } from 'next/router';
 import GoogleButton from 'react-google-button';
 import Head from 'next/head';
 import ADD_APP_USER from '@/mutations/user/AddNewAppUser.mutation';
@@ -21,22 +21,26 @@ export enum SignInError {
   O_AUTH = 'oAuth',
 }
 
-const errorDefault = {
-  general: '',
-  oAuth: '',
+interface UserCredentials {
+  email: string;
+  password: string;
+}
+
+const formFooter = {
+  submitButton: { buttonText: ' Sign In' },
+  link: { text: 'Create an account', url: '/create_account' },
 };
 
 export default function SignIn() {
-  const [error, setError] = useState(errorDefault);
+  const [error, setError] = useState({ general: '', oAuth: '' });
   const [addItem, { error: errorLoading }] = useMutation(INCREMENT_CART);
   const [addNewAppUser] = useMutation(ADD_APP_USER);
+  const ctx: Context = useContext(AppContext);
+  const router = useRouter();
 
   const updateError = (type: SignInError, message: string) => {
     setError({ ...error, ...{ [type]: message } });
   };
-
-  const ctx: Context = useContext(AppContext);
-  const router = useRouter();
 
   const signInProps = {
     ctx,
@@ -47,38 +51,12 @@ export default function SignIn() {
 
   const signInWithGoogle = async () => {
     const res = await googleSignInHandler(signInProps);
-
-    if (res) {
-      setUIToUser(res);
-    }
+    res && setUIToUser(ctx, router, res);
   };
 
-  const signInWithEmail = async ({ email, password }) => {
-    const res = await signInAuthServerHandler({
-      ...signInProps,
-      email,
-      password,
-    });
-
-    if (res) {
-      setUIToUser(res);
-    }
-  };
-
-  const setUIToUser = (res) => {
-    updateCookieObject('cart', res.cart);
-
-    if (res.cart.items.length > 0) {
-      ctx.setCart(res.cart);
-    }
-
-    ctx.setAvatar(res.photoURL);
-    routeUserToHomepage(router, res.email, res.newUser);
-  };
-
-  const formFooter = {
-    submitButton: { buttonText: ' Sign In' },
-    link: { text: 'Create an account', url: '/create_account' },
+  const signInWithEmail = async (userCreds: UserCredentials) => {
+    const res = await signInAuthServerHandler({ ...signInProps, ...userCreds });
+    res && setUIToUser(ctx, router, res);
   };
 
   if (errorLoading) console.log('ERROR LOADING ITEMS');
@@ -121,4 +99,15 @@ export default function SignIn() {
       </div>
     </>
   );
+}
+
+function setUIToUser(ctx: Context, router: NextRouter, res) {
+  updateCookieObject('cart', res.cart);
+
+  ctx.setAvatar(res.photoURL);
+  if (res.cart.items.length > 0) {
+    ctx.setCart(res.cart);
+  }
+
+  routeUserToHomepage(router, res.email, res.newUser);
 }
