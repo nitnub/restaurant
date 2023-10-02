@@ -1,29 +1,17 @@
-import { gql, useMutation } from '@apollo/client';
-import { useContext, useEffect, useState } from 'react';
+import { useMutation } from '@apollo/client';
+import { useContext } from 'react';
 import AuthorizationHandler from '@/utils/authorizationHandler';
-import AppContext from '@/components/context';
-// import { INCREMENT_CART } from '@/src/graphql/mutations';
+import AppContext, { Action } from '@/components/context';
 import INCREMENT_CART from '@/mutations/cart/AddItemsToCart.mutation';
 import { getCookie } from '@/utils/cookieHandler';
-import { Cart, CartItem } from '@/types/cartTypes';
+import { Cart } from '@/types/cartTypes';
+import { Dish } from '@/src/types/dishTypes';
 
-const IconAdd = ({ dishProp, setCount }) => {
-  const ctx= useContext(AppContext);
+const IconAdd = ({ dishProp }) => {
+  const { ctx, dispatch } = useContext(AppContext);
   const ah = new AuthorizationHandler(ctx);
 
-  const itemVariable = {
-    id: dishProp.id,
-    name: dishProp.name,
-    itemType: dishProp.type,
-    description: dishProp.description,
-    image: dishProp.image,
-    price: dishProp.price,
-    restaurant: dishProp.restaurant,
-    restaurantName: dishProp.restaurantName,
-    vegetarian: dishProp.vegetarian,
-    vegan: dishProp.vegan,
-    glutenFree: dishProp.glutenFree,
-  };
+  const itemVariable = getFormattedItem(dishProp);
 
   const VARIABLES = {
     accessToken: ctx.accessToken ? ctx.accessToken : 'Guest',
@@ -41,14 +29,6 @@ const IconAdd = ({ dishProp, setCount }) => {
 
   const [addItem, { loading }] = useMutation(INCREMENT_CART, ARGS);
 
-  // const getDishTotal = (id: string, cart: Cart) => {
-  //   const item: CartItem = cart.items?.filter(
-  //     (el: CartItem) => Number(el.id) === Number(id)
-  //   )[0];
-  //   // return item?.count;
-    
-  // };
-
   const addHandler = async () => {
     const result = await addItem();
     const response = result.data.incrementCartResult;
@@ -62,10 +42,7 @@ const IconAdd = ({ dishProp, setCount }) => {
         return console.log('Session expired; please log back in manually!');
       }
     }
-    console.log('response')
-    console.log(response)
-setCount(() => response.totalCount);
-    // setCount(() => getDishTotal(dishProp.id, response));
+
     const newCart: Cart = {
       items: response.items || ctx.cart.items,
       totalCost: response.totalCost || ctx.cart.totalCost || 0,
@@ -74,8 +51,7 @@ setCount(() => response.totalCount);
 
     document.cookie = `cart=${JSON.stringify(newCart)}`;
 
-    ctx.cart = newCart;
-    console.log(ctx.cart)
+    dispatch({ type: Action.UPDATE_CART, payload: newCart });
   };
 
   if (loading)
@@ -110,3 +86,19 @@ setCount(() => response.totalCount);
   );
 };
 export default IconAdd;
+
+function getFormattedItem(dishProp: Dish) {
+  return {
+    id: dishProp.id,
+    name: dishProp.name,
+    itemType: dishProp.type,
+    description: dishProp.description,
+    image: dishProp.image,
+    price: dishProp.price,
+    restaurant: dishProp.restaurant,
+    restaurantName: dishProp.restaurantName,
+    vegetarian: dishProp.vegetarian,
+    vegan: dishProp.vegan,
+    glutenFree: dishProp.glutenFree,
+  };
+}

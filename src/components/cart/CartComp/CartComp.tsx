@@ -14,19 +14,18 @@ const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
   },
 }));
 export default function CartComp() {
-  const ctx = useContext(AppContext);
+  const { ctx } = useContext(AppContext);
   const [hydro, setHydro] = useState(false);
-  const [totalCount, setTotalCount] = useState(0);
+  const [totalCount, setTotalCount] = useState(ctx.cart.totalCount);
 
   useEffect(() => {
-    setTotalCount(() => getCookie('cart').totalCount);
-  }, [ctx.cart]);
-
+    setTotalCount(() => ctx.cart.totalCount || getCookie('cart').totalCount);
+  }, [ctx]);
 
   useEffect(() => {
     setHydro(true);
   });
-  
+
   if (!hydro) {
     return null;
   }

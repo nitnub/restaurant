@@ -2,7 +2,7 @@ import { useContext, useState } from 'react';
 import Form from '@/components/Form';
 import { Cart } from '@/types/cartTypes';
 import { useMutation } from '@apollo/client';
-import AppContext from '@/components/context';
+import AppContext, { Action } from '@/components/context';
 import AuthorizationHandler from '@/utils/authorizationHandler';
 import { updateCookieObject } from '@/utils/cookieHandler';
 import INCREMENT_CART from '@/mutations/cart/AddItemsToCart.mutation';
@@ -23,11 +23,10 @@ import routeUserToHomepage from '@/utils/routing/routeUserToHomepage';
 
 const provider = new GoogleAuthProvider();
 
-
-  export enum SignInError {
-    GENERAL = 'general',
-    O_AUTH = 'oAuth',
-  }
+export enum SignInError {
+  GENERAL = 'general',
+  O_AUTH = 'oAuth',
+}
 
 export default function SignIn() {
   let cart: Cart | null = {
@@ -64,9 +63,9 @@ export default function SignIn() {
     setError({ ...error, ...{ [type]: message } });
   };
 
-  const ctx = useContext(AppContext);
+  const { ctx, dispatch } = useContext(AppContext);
 
-  const Auth = new AuthorizationHandler(ctx);
+  const Auth = new AuthorizationHandler({ ctx, dispatch });
   const router = useRouter();
 
   const [
@@ -93,7 +92,8 @@ export default function SignIn() {
         return;
       }
 
-      ctx.setAvatar(photoURL);
+      // ctx.setAvatar(photoURL);
+      dispatch({ type: Action.UPDATE_USER, payload: { avatar: photoURL } });
 
       // Add the App User
       const { email, id, newUser } = readToken(accessToken);
@@ -109,7 +109,8 @@ export default function SignIn() {
       updateCookieObject('cart', cart);
 
       if (cart.items.length > 0) {
-        ctx.setCart(cart);
+        // ctx.setCart(cart);
+        dispatch({ type: Action.UPDATE_CART, payload: cart });
       }
 
       setErrorMessage(() => '');

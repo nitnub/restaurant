@@ -1,10 +1,8 @@
-import { useContext, useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import AppContext from '../../context';
 import { convertToCurrency } from '../../../libs/formatter';
 import styles from './Dish.module.css';
 import DishCounter from '../DishCounter';
@@ -12,18 +10,6 @@ import { CartItem } from '@/types/cartTypes';
 import DietaryList from '@/components/AllergyBar';
 
 export default function Dish({ dishProp }: { dishProp: CartItem }) {
-  const ctx = useContext(AppContext);
-
-  const items = ctx.cart.items == null ? null : ctx.cart.items;
-
-  if (items != null) {
-    items.map((item: CartItem) => {
-      if (item.id === dishProp.id) {
-        dishProp.count = item.count;
-      }
-    });
-  }
-
   const dietaryProps = {
     vegetarian: dishProp.vegetarian,
     vegan: dishProp.vegan,
@@ -59,9 +45,7 @@ export default function Dish({ dishProp }: { dishProp: CartItem }) {
               <div className={styles.counterContainer}>
                 <div className={styles.dishCounter}>
                   <div className={styles.addRemove}>
-                    <DishCounter
-                      dishProp={dishProp}
-                    />
+                    <DishCounter dishProp={dishProp} />
                   </div>
                 </div>
               </div>

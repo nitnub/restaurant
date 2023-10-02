@@ -1,6 +1,8 @@
 import { Context } from '@apollo/client';
 import { newGuestID } from './newGuestID';
 import { clearCookie, getCookie, setCookie } from './cookieHandler';
+import { Dispatch } from 'react';
+import { Action, ActionPayload } from '@/components/context';
 
 const guestProfile = {
   admin: false,
@@ -17,15 +19,19 @@ const emptyCart = { items: [], totalCost: 0, totalCount: 0 };
 export default class AuthorizationHandler {
   // private SUPPORTED_OAUTH_PROVIDERS = ['www.google.com'];
   private SIGN_IN_URL: string = process.env.NEXT_PUBLIC_AUTH_SERVER_SIGN_IN_URL;
-  private SIGN_OUT_URL: string = process.env.NEXT_PUBLIC_AUTH_SERVER_SIGN_OUT_URL;
+  private SIGN_OUT_URL: string =
+    process.env.NEXT_PUBLIC_AUTH_SERVER_SIGN_OUT_URL;
   private TOKEN_URL: string = process.env.NEXT_PUBLIC_AUTH_SERVER_TOKEN_URL;
   private PROFILE_KEY: string = 'loggedInUser';
   private TOKEN_KEY: string = 'accessToken';
   protected ctx: Context;
-
+  protected dispatch: Dispatch<ActionPayload>;
   static token: string = '';
-  constructor(ctx: Context) {
-    this.ctx = ctx;
+  // constructor(ctx: Context) {
+  constructor(context: Context) {
+    // this.ctx = ctx;
+    this.ctx = context.ctx;
+    this.dispatch = context.dispatch;
   }
 
   public async signIn(email: string, password: string) {
@@ -56,11 +62,16 @@ export default class AuthorizationHandler {
         Buffer.from(accessToken.split('.')[1], 'base64').toString()
       );
 
-      this.ctx.setAuthProvider(parsedUser.authProvider);
-
       setCookie('accessToken', accessToken, parsedUser.exp);
 
-      this.ctx.setAccessToken(() => accessToken);
+      // this.ctx.setAuthProvider(parsedUser.authProvider);
+      // this.ctx.setAccessToken(() => accessToken);
+
+      this.dispatch({
+        type: Action.UPDATE_PROPERTIES,
+        payload: { authProvider: parsedUser.authProvider, accessToken },
+      });
+
       this.setProfile(accessToken); //
 
       return {
@@ -82,7 +93,6 @@ export default class AuthorizationHandler {
     };
   }
 
-
   public setProfile(accessToken: string) {
     const parsedUser = JSON.parse(
       Buffer.from(accessToken.split('.')[1], 'base64').toString()
@@ -91,7 +101,8 @@ export default class AuthorizationHandler {
     setCookie(this.PROFILE_KEY, parsedUser, parsedUser.exp);
     setCookie(this.TOKEN_KEY, accessToken, parsedUser.exp);
 
-    this.ctx.setEmail(parsedUser.email);
+    // this.ctx.setEmail(parsedUser.email);
+    this.dispatch({ type: Action.UPDATE_USER, payload: parsedUser.email });
   }
 
   public getProfile() {
@@ -121,18 +132,30 @@ export default class AuthorizationHandler {
     clearCookie('avatar');
 
     // Clear cart
-    this.ctx.setCart(() => emptyCart);
-    this.ctx.setTotalCount(0);
-    this.ctx.setTotalCost(0);
+
+    this.dispatch({ type: Action.CLEAR_CART });
+    // this.ctx.setCart(() => emptyCart);
+    // this.ctx.setTotalCount(0);
+    // this.ctx.setTotalCost(0);
 
     clearCookie('cart');
 
     // Remove access token from context
     setCookie('accessToken', guestID, -1, false);
 
-    this.ctx.setEmail('Sign In');
-    this.ctx.setProfile(guestProfile);
-    this.ctx.setAccessToken(() => guestID);
+    this.dispatch({
+      type: Action.UPDATE_PROPERTIES,
+      payload: {
+        user: { ...this.ctx.user, email: 'Sign In' },
+        // email: 'Sign In',
+        // profile: guestProfile, // SETTING PROFILE
+        accessToken: guestID,
+      },
+    });
+
+    // this.ctx.setEmail('Sign In');
+    // this.ctx.setProfile(guestProfile);
+    // this.ctx.setAccessToken(() => guestID);
   }
 
   public async updateAccessToken(ctx: Context) {
@@ -160,9 +183,15 @@ export default class AuthorizationHandler {
 
       setCookie('accessToken', accessToken, parsedUser.exp);
 
-      ctx.setAccessToken(() => accessToken);
+      // ctx.setAccessToken(() => accessToken);
 
-      ctx.setEmail(() => parsedUser.email);
+      // ctx.setEmail(() => parsedUser.email);
+
+      ctx.dispatch({
+        type: Action.UPDATE_PROPERTIES,
+        payload: { accessToken, email: parsedUser.email },
+      });
+
       this.setProfile(accessToken);
 
       return {

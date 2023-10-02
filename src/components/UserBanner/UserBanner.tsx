@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useContext } from 'react';
 import styles from './UserBanner.module.css';
-import AppContext from '../context';
+import AppContext, { Action } from '../context';
 import Link from 'next/link';
 import AuthorizationHandler from '@/utils/authorizationHandler';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
@@ -11,9 +11,9 @@ import UserMenu from './UserMenu';
 
 function UserBanner() {
   let profile = { email: '' };
-  const ctx = useContext(AppContext);
-  const avatar: string = getCookie('avatar');
-  const authHandler = new AuthorizationHandler(ctx);
+  const { ctx, dispatch } = useContext(AppContext);
+  const avatar: string = getCookie('avatar') || '';
+  const authHandler = new AuthorizationHandler({ ctx, dispatch });
 
   if (typeof document !== 'undefined') {
     profile = authHandler.getProfile();
@@ -22,18 +22,15 @@ function UserBanner() {
   useEffect(() => {
     profile = authHandler.getProfile();
     const label = (profile.email as string) || 'Sign In';
-  console.log('avatar:')
-  console.log(avatar)
-    
-    ctx.email = label;
-    ctx.avatar = avatar;
-  }, [ctx.email]);
 
-  return ctx.context.email === 'Sign In' ? (
+    dispatch({ type: Action.UPDATE_USER, payload: { email: label, avatar } });
+  }, [ctx.user.email]);
+
+  return ctx.user.email === 'Sign In' ? (
     <div className={styles.container}>
       <AccountBoxIcon sx={{ width: 30, height: 30 }} />
       <Link href="/signin" className={styles.link}>
-        {ctx.email}
+        {ctx.user.email}
       </Link>
     </div>
   ) : (

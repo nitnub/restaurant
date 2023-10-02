@@ -1,5 +1,5 @@
 import consolidateGuestAndUserCarts from '@/utils/cart/consolidateGuestAndUserCarts';
-
+import { Dispatch } from 'react';
 import { updateCookieObject } from '@/utils/cookieHandler';
 
 import { Cart } from '@/types/cartTypes';
@@ -7,6 +7,7 @@ import { Cart } from '@/types/cartTypes';
 import { SignInError } from '@/src/pages/signin';
 import AuthorizationHandler from '@/utils/authorizationHandler';
 import { Context, MutationFunction } from '@apollo/client';
+import { Action, ActionPayload } from '@/components/context';
 
 let cart: Cart | null = {
   items: [],
@@ -16,6 +17,7 @@ let cart: Cart | null = {
 
 interface SignInAuthServerProps {
   ctx: Context;
+  dispatch: Dispatch<ActionPayload>;
   email: string;
   password: string;
   addItem: MutationFunction;
@@ -33,13 +35,15 @@ export const signInAuthServerHandler: (
   props: SignInAuthServerProps
 ) => Promise<SignInResponse> = async ({
   ctx,
+  dispatch,
   email,
   password,
   addItem,
   updateError,
 }: SignInAuthServerProps) => {
   try {
-    const Auth = new AuthorizationHandler(ctx);
+    const Auth = new AuthorizationHandler({ ctx, dispatch });
+
     const { success, message, accessToken } = (await Auth.signIn(
       email,
       password
@@ -54,11 +58,14 @@ export const signInAuthServerHandler: (
 
     if (!cart) return;
 
+
     // If there are items in the cart response, populate the local cart
     updateCookieObject('cart', cart);
-    if (cart.items.length > 0) {
-      ctx.setCart(cart);
-    }
+    // if (cart.items.length > 0) {
+    //   ctx.setCart(cart);
+    // }
+
+    dispatch({ type: Action.UPDATE_CART, payload: cart });
 
     updateError(SignInError.GENERAL, '');
 

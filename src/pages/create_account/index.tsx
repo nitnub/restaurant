@@ -1,7 +1,7 @@
 import Form from '@/components/Form';
 import { useMutation } from '@apollo/client';
 import { useContext, useState } from 'react';
-import AppContext from '@/components/context';
+import AppContext, { Action } from '@/components/context';
 import AuthorizationHandler from '@/utils/authorizationHandler';
 import { getCookie } from '@/utils/cookieHandler';
 import GET_CART from '@/queries/cart/GetCart.query';
@@ -17,11 +17,11 @@ import Head from 'next/head';
 
 export default function Register() {
   const [errorMessage, setErrorMessage] = useState('');
-  const ctx = useContext(AppContext);
+  const { ctx, dispatch } = useContext(AppContext);
   const [cartQuery, { data, loading, error }] = useLazyQuery(GET_CART);
   const router = useRouter();
 
-  const Auth = new AuthorizationHandler(ctx);
+  const Auth = new AuthorizationHandler({ ctx, dispatch });
 
   const [
     addItem,
@@ -134,7 +134,9 @@ export default function Register() {
 
     // If there are items in the cart response, populate the local cart
     document.cookie = `cart=${JSON.stringify(cart)}`;
-    ctx.setCart(cart);
+    // ctx.setCart(cart);
+
+    dispatch({ type: Action.UPDATE_CART, payload: cart });
   };
 
   const formFooter = {

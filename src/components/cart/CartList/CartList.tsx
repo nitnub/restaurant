@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import List from '@mui/material/List';
 import { useContext, useEffect, useState } from 'react';
-import AppContext, { ActionType } from '../../context';
+import AppContext, { Action } from '../../context';
 import CartItem from '../CartItem';
 import styles from './CartList.module.css';
 import { convertToCurrency } from '@/libs/formatter';
@@ -12,21 +12,16 @@ import { sortName, sortObjByName } from '@/utils/genUtils';
 
 export default function CartList() {
   const [hydro, setHydro] = useState(false);
-  // const [items, setItems] = useState<ICartItem[]>([]);
-  const { context, dispatch } = useContext(AppContext);
+
+  const { ctx, dispatch } = useContext(AppContext);
   useEffect(() => {
     let cartItems = getCookie('cart')?.items;
     if (cartItems) {
-      // setItems(() => cartItems);
-      dispatch({ type: ActionType.UPDATE_CART_ITEMS, payload: cartItems });
-      ctx.cart.items = cartItems;
+      dispatch({ type: Action.UPDATE_CART_ITEMS, payload: cartItems });
     }
-    // else {
-    //   setItems(() => []);
-    // }
-    // setItems
+
     setHydro(true);
-  }, [ctx]);
+  }, []);
   if (!hydro) {
     return null;
   }

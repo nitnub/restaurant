@@ -2,15 +2,16 @@ import AuthorizationHandler from '@/utils/authorizationHandler';
 import { useMutation } from '@apollo/client';
 import { useContext } from 'react';
 import DECREMENT_CART from '@/mutations/cart/RemoveItemFromCart.mutation';
-import AppContext from '../../context';
+
 import { getCookie } from '@/utils/cookieHandler';
-import { Cart, CartItem } from '@/types/cartTypes';
+import { Cart } from '@/types/cartTypes';
+import AppContext, { Action } from '@/components/context';
 
+// const IconSubtract = ({ dishProp, context, setCount }) => {
+const IconSubtract = ({ dishProp }) => {
+  const { ctx, dispatch } = useContext(AppContext);
 
-const IconSubtract = ({ dishProp, context, setCount}) => {
-  // const ctx = useContext(AppContext);
-  const ctx = context;
-  const ah = new AuthorizationHandler(ctx);
+  const ah = new AuthorizationHandler({ ctx, dispatch });
 
   const VARIABLES = {
     accessToken: ctx.accessToken ? ctx.accessToken : 'Guest',
@@ -26,19 +27,9 @@ const IconSubtract = ({ dishProp, context, setCount}) => {
     },
   };
 
-  const [removeItem, {loading }] = useMutation(
-    DECREMENT_CART,
-    ARGS
-  );
+  const [removeItem, { loading }] = useMutation(DECREMENT_CART, ARGS);
 
-  // const getDishTotal = (id: string, cart: Cart) => {
-  //   const item: CartItem = cart.items?.filter(
-  //     (el: CartItem) => Number(el.id) === Number(id)
-  //   )[0];
-  //   if (!item) return 0;
 
-  //   return item.count;
-  // };
 
   const removeHandler = async () => {
     const result = await removeItem();
@@ -54,8 +45,6 @@ const IconSubtract = ({ dishProp, context, setCount}) => {
       }
     }
 
-    // setCount(() => getDishTotal(dishProp.id, response));
-    setCount(() => response.totalCount);
     const newCart: Cart = {
       items: response.items || ctx.cart.items,
       totalCost: response.totalCost || 0,
@@ -64,8 +53,8 @@ const IconSubtract = ({ dishProp, context, setCount}) => {
 
     // update with new cart state
     document.cookie = `cart=${JSON.stringify(newCart)}`;
+    dispatch({ type: Action.UPDATE_CART, payload: newCart });
 
-    ctx.cart = newCart;
   };
 
   if (loading)

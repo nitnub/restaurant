@@ -8,27 +8,15 @@ import AppContext from '@/components/context';
 import { Dish } from '@/types/dishTypes';
 export default function DishCounter({ dishProp }) {
   const [count, setCount] = useState(0);
-  const ctx = useContext(AppContext);
-  let initialCount: number = 0;
-  const currentCart = getCookie('cart');
-  const hasCart = Object.keys(currentCart).length > 0;
+  const { ctx } = useContext(AppContext);
 
-  hasCart &&
-    currentCart.items?.forEach((el: Dish) => {
-      if (Number(el.id) === Number(dishProp.id)) {
-        initialCount = el.count;
-      }
-    });
-
-  const dishIndex = currentCart.items?.findIndex((el) => {
-    el.id === dishProp.id;
-  });
-  if (dishIndex === -1) {
-  }
   useEffect(() => {
     if (!dishProp) setCount(0);
     if (!dishProp.count) setCount(0);
   });
+
+  const index = ctx.cart.items.findIndex((item) => item.id === dishProp.id);
+  console.log('index:', index);
 
   return (
     <>
@@ -37,16 +25,18 @@ export default function DishCounter({ dishProp }) {
         sx={{ color: '#754d4d' }}
         aria-label="remove item from shopping cart"
       >
-        {/* <IconSubtract dishProp={dishProp} setCount={setCount} /> */}
-        <IconSubtract dishProp={dishProp} context={ctx} setCount={setCount} />
+
+        <IconSubtract dishProp={dishProp}  />
       </IconButton>
 
-      <div>{initialCount ? initialCount : count}</div>
+      <div>
+        {ctx.cart.items[index] ? ctx.cart.items[index].count : 0}
+      </div>
       <IconButton
         sx={{ color: '#4d7558' }}
         aria-label="add item to shopping cart"
       >
-        <IconAdd dishProp={dishProp} setCount={setCount} />
+        <IconAdd dishProp={dishProp}  />
       </IconButton>
     </>
   );

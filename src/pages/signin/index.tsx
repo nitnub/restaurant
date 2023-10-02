@@ -1,7 +1,7 @@
-import { useContext, useState } from 'react';
+import { Dispatch, useContext, useState } from 'react';
 import Form from '@/components/Form';
 import { Context, useMutation } from '@apollo/client';
-import AppContext from '@/components/context';
+import AppContext, { Action, ActionPayload } from '@/components/context';
 import { updateCookieObject } from '@/utils/cookieHandler';
 import INCREMENT_CART from '@/mutations/cart/AddItemsToCart.mutation';
 import Card from '@mui/material/Card';
@@ -35,7 +35,7 @@ export default function SignIn() {
   const [error, setError] = useState({ general: '', oAuth: '' });
   const [addItem, { error: errorLoading }] = useMutation(INCREMENT_CART);
   const [addNewAppUser] = useMutation(ADD_APP_USER);
-  const ctx: Context = useContext(AppContext);
+  const { ctx, dispatch }: Context = useContext(AppContext);
   const router = useRouter();
 
   const updateError = (type: SignInError, message: string) => {
@@ -44,6 +44,7 @@ export default function SignIn() {
 
   const signInProps = {
     ctx,
+    dispatch,
     addNewAppUser,
     addItem,
     updateError,
@@ -51,12 +52,12 @@ export default function SignIn() {
 
   const signInWithGoogle = async () => {
     const res = await googleSignInHandler(signInProps);
-    res && setUIToUser(ctx, router, res);
+    res && setUIToUser(dispatch, router, res);
   };
 
   const signInWithEmail = async (userCreds: UserCredentials) => {
     const res = await signInAuthServerHandler({ ...signInProps, ...userCreds });
-    res && setUIToUser(ctx, router, res);
+    res && setUIToUser(dispatch, router, res);
   };
 
   if (errorLoading) console.log('ERROR LOADING ITEMS');
@@ -101,13 +102,17 @@ export default function SignIn() {
   );
 }
 
-function setUIToUser(ctx: Context, router: NextRouter, res) {
+function setUIToUser(
+  dispatch: Dispatch<ActionPayload>,
+  router: NextRouter,
+  res
+) {
   updateCookieObject('cart', res.cart);
 
-  ctx.setAvatar(res.photoURL);
-  if (res.cart.items.length > 0) {
-    ctx.setCart(res.cart);
-  }
+  dispatch({
+    type: Action.UPDATE_UI_FOR_USER,
+    payload: { avatar: res.photoURL, cart: res.cart },
+  });
 
   routeUserToHomepage(router, res.email, res.newUser);
 }

@@ -1,4 +1,4 @@
-import {FoodCategory} from '@/types/restaurantTypes'
+import { FoodCategory } from '@/types/restaurantTypes';
 
 export interface Dish {
   id: string;
@@ -13,6 +13,7 @@ export interface Dish {
   vegan: string;
   glutenFree: string;
   count: number;
+  type?: FoodCategory;
 }
 
 export type FoodType = 'Appetizer' | 'Meal' | 'Dessert' | 'Drink' | 'Spirit';
@@ -28,7 +29,6 @@ export interface DishObject {
   vegetarian?: boolean;
   vegan?: boolean;
   glutenFree?: boolean;
-  
 }
 
 export interface CartItem extends DishObject {

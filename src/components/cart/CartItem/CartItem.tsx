@@ -9,12 +9,7 @@ import { getCookie } from '@/utils/cookieHandler';
 import { CartItem as ICartItem } from '@/types/cartTypes';
 
 export default function CartItem({ item }) {
-  const [count, setCount] = useState(0);
-
-  const ctx = useContext(AppContext);
-  useEffect(() => {
-    console.log('change...')
-  }, [ctx.cart])
+  const { ctx } = useContext(AppContext);
 
   if (!item) return;
   if (!item.count) return;
@@ -30,9 +25,8 @@ export default function CartItem({ item }) {
         initialCount = el.count;
       }
     });
-  console.log(item);
 
-  const ctxItem = ctx.cart.items.filter(el => el.id === item.id)[0]
+  const ctxItem = ctx.cart.items.filter((el) => el.id === item.id)[0];
 
   return (
     <div className={styles.container}>
@@ -44,12 +38,12 @@ export default function CartItem({ item }) {
       />
       <div className={styles.cartCounterContainer}>
         <div className={styles.cartCounter}>
-          <IconSubtract dishProp={item} context={ctx} setCount={setCount}/>
+          <IconSubtract dishProp={item} />
 
           <div className={styles.itemCount}>
             {initialCount ? initialCount : ctxItem.count}
           </div>
-          <IconAdd dishProp={item} setCount={setCount}/>
+          <IconAdd dishProp={item} />
         </div>
         <div>
           <Typography className={styles.itemName}>{item.name}</Typography>

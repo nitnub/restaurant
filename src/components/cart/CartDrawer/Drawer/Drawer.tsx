@@ -18,13 +18,15 @@ import { convertToCurrency } from '@/libs/formatter';
 const drawerWidth = 180;
 
 export default function ({ open, setOpen }) {
+  const { ctx } = useContext(AppContext);
   const [userIsGuest, setUserIsGuest] = useState();
   const [cartIsEmpty, setCartIsEmpty] = useState(true);
-  const ctx = useContext(AppContext).context;
+  const [totalCost, setTotalCost] = useState(ctx.cart.totalCost);
+
   const router = useRouter();
   const user = getCookie('accessToken') || 'guest';
   const cart = getCookie('cart') || [];
-  const ah = new AuthorizationHandler(ctx);
+  const ah = new AuthorizationHandler({ ctx, dispatch });
 
   const uat = async () => {
     const result = await ah.updateAccessToken(ctx);
@@ -39,6 +41,7 @@ export default function ({ open, setOpen }) {
 
   useEffect(() => {
     setUserIsGuest(user.toLowerCase().startsWith('guest'));
+    setTotalCost(() => ctx.cart.totalCost || getCookie('cart').totalCost);
     if (!cart.items) {
       setCartIsEmpty(() => true);
     } else {
@@ -74,7 +77,7 @@ export default function ({ open, setOpen }) {
               <div className={styles.priceSummary}>
                 <div className={styles.priceLabel}>Total:&nbsp;</div>
                 <div className={styles.priceAmount}>
-                  {convertToCurrency(ctx.cart.totalCost)}
+                  {convertToCurrency(totalCost)}
                 </div>
               </div>
             </div>

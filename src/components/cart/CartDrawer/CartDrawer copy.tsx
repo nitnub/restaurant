@@ -11,7 +11,7 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import CartComp from '@/components/Cart/CartComp';
 // import AppContext from '../../context';
-import AppContext from '@/components/context';
+import AppContext, { Action } from '@/components/context';
 import { convertToCurrency } from '@/libs/formatter';
 import styles from './CartDrawer.module.css';
 import UserBanner from '@/components/UserBanner';
@@ -78,8 +78,8 @@ export default function CartDrawer() {
   const [cartIsEmpty, setCartIsEmpty] = useState(true);
   // const [checkoutLabel, setCheckoutLabel] = useState('');
   // const theme = useTheme();
-  const ctx = useContext(AppContext);
-  const ah = new AuthorizationHandler(ctx);
+  const { ctx, dispatch } = useContext(AppContext);
+  const ah = new AuthorizationHandler({ ctx, dispatch });
   // const userID = ah.getProfile().id || 'guest';
   // const lc = new LocalCart();
   const [open, setOpen] = useState(false);
@@ -124,7 +124,12 @@ export default function CartDrawer() {
   if (cookieIsEmpty('accessToken')) {
     guestID = newGuestID();
     document.cookie = `accessToken=${guestID}`;
-    ctx.setAccessToken(guestID);
+    // ctx.setAccessToken(guestID);
+
+    dispatch({
+      type: Action.UPDATE_PROPERTIES,
+      payload: { accessToken: guestID },
+    });
   }
 
   const goToSignIn = (
@@ -136,7 +141,7 @@ export default function CartDrawer() {
       color="success"
       disabled={cartIsEmpty}
       onClick={async () => {
-        ctx.setCheckoutCart(ctx.cart);
+        dispatch({ type: Action.SET_CHECKOUT_CART });
       }}
     >
       {userIsGuest && 'Sign In To Order'}

@@ -34,7 +34,20 @@ import { Cart, CartItem } from '../types/cartTypes';
 //   query: '',
 // };
 
-export interface LoggedInUser {
+interface PropertyUpdate {
+  cart?: Cart;
+  clientSecret?: string;
+  customerID?: string;
+  authProvider?: string;
+  accessToken?: string;
+  user?: User;
+  checkoutTotal?: number;
+  checkoutCart?: Cart;
+  profile?: string;
+  query?: string;
+}
+
+export interface User {
   GUID: string;
   firstName: string;
   lastName: string;
@@ -43,6 +56,22 @@ export interface LoggedInUser {
   avatar: string;
   admin: boolean;
   active: boolean;
+}
+
+interface UserUpdate {
+  GUID?: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  password?: string;
+  avatar?: string;
+  admin?: boolean;
+  active?: boolean;
+}
+
+interface UIUpdate {
+  avatar: string;
+  cart: Cart;
 }
 
 interface AppContext {
@@ -55,11 +84,11 @@ interface AppContext {
   // cartButtons: [],
   clientSecret: string;
   customerID: string;
-  email: string;
+  // email: string;
   authProvider: string;
-  avatar: string;
+  // avatar: string;
   accessToken: string;
-  loggedUser: LoggedInUser;
+  user: User;
   checkoutTotal: number;
   checkoutCart: Cart;
   // {
@@ -72,59 +101,69 @@ interface AppContext {
 }
 
 export interface ContextReducer {
-  context: AppContext;
-  // setContext: Dispatch<SetStateAction<TAppContext>>;
-  dispatch: Dispatch<Action>;
+  ctx: AppContext;
+  dispatch: Dispatch<ActionPayload>;
 }
-// const AppContext = createContext<{AppContext | null, Dispatch<SetStateAction<AppContext>>}>(null);
+
 const AppContext = createContext<ContextReducer>(null);
 
-// export const ACTION = {
-//   // ADD_TODO: 'add-todo',
-//   // COMPLETE_TODO: 'complete-todo',
-//   // DELETE_TODO: 'delete-todo',
-//   UPDATE_CART: 'UPDATE_CART'
-// };
-export enum ActionType {
-  // ADD_TODO: 'add-todo',
-  // COMPLETE_TODO: 'complete-todo',
-  // DELETE_TODO: 'delete-todo',
+export enum Action {
   UPDATE_CART,
   UPDATE_CART_ITEMS,
+  UPDATE_USER,
+  UPDATE_UI_FOR_USER,
+  UPDATE_PROPERTIES,
+  CLEAR_CART,
+  SET_CHECKOUT_CART,
   ADD_TEST,
 }
 
-// type Payload = Action['type'] === ActionType.UPDATE_CART
-//   ? Cart
-//   : Action['type'] extends ActionType.ADD_TEST
-//   ? number
-//   : boolean;
-
-export type Action = UPDATE_CART | UPDATE_CART_ITEMS | TestAction;
+export type ActionPayload =
+  | UPDATE_CART
+  | UPDATE_CART_ITEMS
+  | UPDATE_USER
+  | UPDATE_UI_FOR_USER
+  | UPDATE_PROPERTIES
+  | CLEAR_CART
+  | SET_CHECKOUT_CART
+  | TestAction;
 
 interface UPDATE_CART {
-  type: ActionType.UPDATE_CART;
+  type: Action.UPDATE_CART;
   payload: Cart;
 }
 
 interface UPDATE_CART_ITEMS {
-  type: ActionType.UPDATE_CART_ITEMS;
+  type: Action.UPDATE_CART_ITEMS;
   payload: CartItem[];
 }
 
-interface TestAction {
-  type: ActionType.ADD_TEST;
-  payload: string;
+interface UPDATE_USER {
+  type: Action.UPDATE_USER;
+  payload: UserUpdate;
 }
 
-// export interface Action2 {
-//   // needs rename
-//   type: ActionType;
-//   payload: Action['type'] extends ActionType.UPDATE_CART
-//     ? Cart
-//     : // : Action['type'] extends ActionType.ADD_TEST
-//       // ? number
-//       boolean;
-// }
+interface UPDATE_UI_FOR_USER {
+  type: Action.UPDATE_UI_FOR_USER;
+  payload: UIUpdate;
+}
+
+interface UPDATE_PROPERTIES {
+  type: Action.UPDATE_PROPERTIES;
+  payload: PropertyUpdate;
+}
+
+interface CLEAR_CART {
+  type: Action.CLEAR_CART;
+}
+
+interface SET_CHECKOUT_CART {
+  type: Action.SET_CHECKOUT_CART;
+}
+
+interface TestAction {
+  type: Action.ADD_TEST;
+  payload: string;
+}
 
 export default AppContext;
