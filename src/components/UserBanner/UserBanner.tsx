@@ -22,12 +22,14 @@ function UserBanner() {
   useEffect(() => {
     profile = authHandler.getProfile();
     const label = (profile.email as string) || 'Sign In';
-
-    ctx.setEmail(label);
-    ctx.setAvatar(avatar);
+  console.log('avatar:')
+  console.log(avatar)
+    
+    ctx.email = label;
+    ctx.avatar = avatar;
   }, [ctx.email]);
 
-  return ctx.email === 'Sign In' ? (
+  return ctx.context.email === 'Sign In' ? (
     <div className={styles.container}>
       <AccountBoxIcon sx={{ width: 30, height: 30 }} />
       <Link href="/signin" className={styles.link}>

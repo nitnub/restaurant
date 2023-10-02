@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import List from '@mui/material/List';
 import { useContext, useEffect, useState } from 'react';
-import AppContext from '../../context';
+import AppContext, { ActionType } from '../../context';
 import CartItem from '../CartItem';
 import styles from './CartList.module.css';
 import { convertToCurrency } from '@/libs/formatter';
@@ -12,15 +12,18 @@ import { sortName, sortObjByName } from '@/utils/genUtils';
 
 export default function CartList() {
   const [hydro, setHydro] = useState(false);
-  const [items, setItems] = useState<ICartItem[]>([]);
-  const ctx = useContext(AppContext);
+  // const [items, setItems] = useState<ICartItem[]>([]);
+  const { context, dispatch } = useContext(AppContext);
   useEffect(() => {
     let cartItems = getCookie('cart')?.items;
     if (cartItems) {
-      setItems(() => cartItems);
-    } else {
-      setItems(() => []);
+      // setItems(() => cartItems);
+      dispatch({ type: ActionType.UPDATE_CART_ITEMS, payload: cartItems });
+      ctx.cart.items = cartItems;
     }
+    // else {
+    //   setItems(() => []);
+    // }
     // setItems
     setHydro(true);
   }, [ctx]);
@@ -29,8 +32,8 @@ export default function CartList() {
   }
 
   const headersObj = {};
-  items &&
-    items.forEach((el: ICartItem) => {
+  ctx.cart.items &&
+    ctx.cart.items.forEach((el: ICartItem) => {
       headersObj[el.restaurant] = el.restaurantName;
     });
   const headersList: RestaurantTuple[] = [];
@@ -54,7 +57,7 @@ export default function CartList() {
                 </Link>
               </h3>
               <List>
-                {items
+                {ctx.cart.items
                   .sort(sortObjByName)
                   .map((item: ICartItem, index: number) => {
                     if (item.restaurantName === restaurantName) {
@@ -63,7 +66,7 @@ export default function CartList() {
                       } else {
                         totals[restaurantName] = item.price * item.count;
                       }
-                      
+
                       return <CartItem key={item.id} item={item} />;
                     }
                   })}

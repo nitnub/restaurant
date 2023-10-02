@@ -8,7 +8,7 @@ import { getCookie } from '@/utils/cookieHandler';
 import { Cart, CartItem } from '@/types/cartTypes';
 
 const IconAdd = ({ dishProp, setCount }) => {
-  const ctx = useContext(AppContext);
+  const ctx= useContext(AppContext);
   const ah = new AuthorizationHandler(ctx);
 
   const itemVariable = {
@@ -39,14 +39,15 @@ const IconAdd = ({ dishProp, setCount }) => {
     },
   };
 
-  const [addItem, { data, loading, error }] = useMutation(INCREMENT_CART, ARGS);
+  const [addItem, { loading }] = useMutation(INCREMENT_CART, ARGS);
 
-  const getDishTotal = (id: string, cart: Cart) => {
-    const item: CartItem = cart.items?.filter(
-      (el: CartItem) => Number(el.id) === Number(id)
-    )[0];
-    return item?.count;
-  };
+  // const getDishTotal = (id: string, cart: Cart) => {
+  //   const item: CartItem = cart.items?.filter(
+  //     (el: CartItem) => Number(el.id) === Number(id)
+  //   )[0];
+  //   // return item?.count;
+    
+  // };
 
   const addHandler = async () => {
     const result = await addItem();
@@ -61,8 +62,10 @@ const IconAdd = ({ dishProp, setCount }) => {
         return console.log('Session expired; please log back in manually!');
       }
     }
-
-    setCount(() => getDishTotal(dishProp.id, response));
+    console.log('response')
+    console.log(response)
+setCount(() => response.totalCount);
+    // setCount(() => getDishTotal(dishProp.id, response));
     const newCart: Cart = {
       items: response.items || ctx.cart.items,
       totalCost: response.totalCost || ctx.cart.totalCost || 0,
@@ -70,10 +73,9 @@ const IconAdd = ({ dishProp, setCount }) => {
     };
 
     document.cookie = `cart=${JSON.stringify(newCart)}`;
-    ctx.setCart(newCart);
-    ctx.setTotalCount(newCart.totalCount);
-    ctx.setTotalCost(newCart.totalCost);
 
+    ctx.cart = newCart;
+    console.log(ctx.cart)
   };
 
   if (loading)

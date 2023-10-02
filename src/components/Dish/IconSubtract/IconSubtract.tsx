@@ -1,13 +1,15 @@
 import AuthorizationHandler from '@/utils/authorizationHandler';
-import { gql, useMutation } from '@apollo/client';
-import { useContext, useEffect, useState } from 'react';
-// import { DECREMENT_CART } from '@/src/graphql/mutations';
+import { useMutation } from '@apollo/client';
+import { useContext } from 'react';
 import DECREMENT_CART from '@/mutations/cart/RemoveItemFromCart.mutation';
 import AppContext from '../../context';
 import { getCookie } from '@/utils/cookieHandler';
 import { Cart, CartItem } from '@/types/cartTypes';
-const IconSubtract = ({ dishProp, setCount }) => {
-  const ctx = useContext(AppContext);
+
+
+const IconSubtract = ({ dishProp, context, setCount}) => {
+  // const ctx = useContext(AppContext);
+  const ctx = context;
   const ah = new AuthorizationHandler(ctx);
 
   const VARIABLES = {
@@ -24,19 +26,19 @@ const IconSubtract = ({ dishProp, setCount }) => {
     },
   };
 
-  const [removeItem, { data, loading, error }] = useMutation(
+  const [removeItem, {loading }] = useMutation(
     DECREMENT_CART,
     ARGS
   );
 
-  const getDishTotal = (id: string, cart: Cart) => {
-    const item: CartItem = cart.items?.filter(
-      (el: CartItem) => Number(el.id) === Number(id)
-    )[0];
-    if (!item) return 0;
+  // const getDishTotal = (id: string, cart: Cart) => {
+  //   const item: CartItem = cart.items?.filter(
+  //     (el: CartItem) => Number(el.id) === Number(id)
+  //   )[0];
+  //   if (!item) return 0;
 
-    return item.count;
-  };
+  //   return item.count;
+  // };
 
   const removeHandler = async () => {
     const result = await removeItem();
@@ -52,8 +54,8 @@ const IconSubtract = ({ dishProp, setCount }) => {
       }
     }
 
-    setCount(() => getDishTotal(dishProp.id, response));
-
+    // setCount(() => getDishTotal(dishProp.id, response));
+    setCount(() => response.totalCount);
     const newCart: Cart = {
       items: response.items || ctx.cart.items,
       totalCost: response.totalCost || 0,
@@ -62,9 +64,8 @@ const IconSubtract = ({ dishProp, setCount }) => {
 
     // update with new cart state
     document.cookie = `cart=${JSON.stringify(newCart)}`;
-    ctx.setCart(() => newCart);
-    ctx.setTotalCount(newCart.totalCount);
-    ctx.setTotalCost(newCart.totalCost);
+
+    ctx.cart = newCart;
   };
 
   if (loading)

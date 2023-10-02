@@ -20,7 +20,7 @@ const drawerWidth = 180;
 export default function ({ open, setOpen }) {
   const [userIsGuest, setUserIsGuest] = useState();
   const [cartIsEmpty, setCartIsEmpty] = useState(true);
-  const ctx = useContext(AppContext);
+  const ctx = useContext(AppContext).context;
   const router = useRouter();
   const user = getCookie('accessToken') || 'guest';
   const cart = getCookie('cart') || [];

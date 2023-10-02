@@ -1,14 +1,21 @@
 import Typography from '@mui/material/Typography';
 import styles from './CartItem.module.css';
 import { convertToCurrency } from '../../../libs/formatter';
+import AppContext from '@/components/context';
 import IconAdd from '@/components/Dish/IconAdd';
 import IconSubtract from '../../Dish/IconSubtract';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { getCookie } from '@/utils/cookieHandler';
 import { CartItem as ICartItem } from '@/types/cartTypes';
 
 export default function CartItem({ item }) {
   const [count, setCount] = useState(0);
+
+  const ctx = useContext(AppContext);
+  useEffect(() => {
+    console.log('change...')
+  }, [ctx.cart])
+
   if (!item) return;
   if (!item.count) return;
 
@@ -23,33 +30,36 @@ export default function CartItem({ item }) {
         initialCount = el.count;
       }
     });
+  console.log(item);
+
+  const ctxItem = ctx.cart.items.filter(el => el.id === item.id)[0]
 
   return (
     <div className={styles.container}>
       <img
-        src={`/images/dishes/${item.image}`}
+        src={`/images/dishes/${ctxItem.image}`}
         width="100%"
         height={128}
-        alt={item.name}
+        alt={ctxItem.name}
       />
       <div className={styles.cartCounterContainer}>
         <div className={styles.cartCounter}>
-          <IconSubtract dishProp={item} setCount={setCount} />
+          <IconSubtract dishProp={item} context={ctx} setCount={setCount}/>
 
           <div className={styles.itemCount}>
-            {initialCount ? initialCount : count}
+            {initialCount ? initialCount : ctxItem.count}
           </div>
-          <IconAdd dishProp={item} setCount={setCount} />
+          <IconAdd dishProp={item} setCount={setCount}/>
         </div>
         <div>
           <Typography className={styles.itemName}>{item.name}</Typography>
           <div className={styles.productDetails}>
             <div>
-              {item.count > 1
-                ? `${item.count} x ${convertToCurrency(item.price)}`
+              {ctxItem.count > 1
+                ? `${ctxItem.count} x ${convertToCurrency(ctxItem.price)}`
                 : 'Price'}
             </div>
-            <div>{convertToCurrency(item.count * item.price)}</div>
+            <div>{convertToCurrency(ctxItem.count * ctxItem.price)}</div>
           </div>
         </div>
       </div>
