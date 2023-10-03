@@ -156,7 +156,7 @@ export default function CartDrawer() {
       size="small"
       onClick={async () => {
         handleDrawerClose();
-        ctx.setCheckoutCart(ctx.cart);
+        dispatch({ type: Action.SET_CHECKOUT_CART });
       }}
     >
       Check Out

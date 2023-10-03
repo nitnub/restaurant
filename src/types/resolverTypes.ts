@@ -22,8 +22,6 @@ export interface ResultError {
   message: string;
 }
 
-
-
 export type ResolverError = NotAuthorizedError | ResultError;
 
 export interface VerifiedTotal {

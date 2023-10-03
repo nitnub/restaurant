@@ -1,83 +1,43 @@
 import '../styles/globals.css';
-import { useContext, useReducer, useState } from 'react';
+import { useReducer } from 'react';
 import type { AppProps } from 'next/app';
 import Layout from '@/components/Layout';
-import AppContext, {
-  Action,
-  ActionPayload,
-  // ActionType,
-  // TAppContext,
-} from '@/components/context';
+import AppContext, { Action, ActionPayload } from '@/components/context';
 import CartDrawer from '@/components/Cart/CartDrawer';
 import { ApolloProvider } from '@apollo/client';
 import client from '@/dbConfigs/apollo.client';
-import { cookieDuster, getCookie } from '@/utils/cookieHandler';
-import { Cart, CartButtonSet, CartItem } from '@/types/cartTypes';
-import { Dish } from '@/types/dishTypes';
-import Head from 'next/head';
-import { getTableHeadUtilityClass } from '@mui/material';
+import { getCookie } from '@/utils/cookieHandler';
 
 export default function App({ Component, pageProps }: AppProps) {
-  // const ctx = useContext(AppContext);
-  const [state, setState] = useState({ cartCount: 0 });
-  const [totalCost, setTotalCost] = useState(0);
-  const [totalCount, setTotalCount] = useState(0);
-  const [cart, setCart] = useState<Cart>({
+  const defaultCart = {
     items: [],
     totalCost: 0,
     totalCount: 0,
-  });
-  const [checkoutCart, setCheckoutCart] = useState<Cart>({
-    items: [],
-    totalCost: 0,
-    totalCount: 0,
-  });
-  // const [email, setEmail] = useState(ctx.email || 'Sign In');
-  // const [authProvider, setAuthProvider] = useState(
-  //   ctx.authProvider || 'standard'
-  // );
-  // const [avatar, setAvatar] = useState(ctx.avatar || getCookie('avatar') || '');
-  const [accessToken, setAccessToken] = useState('');
-  const [profile, setProfile] = useState('');
-  const [checkoutTotal, setCheckoutTotal] = useState(0);
-  const [clientSecret, setClientSecret] = useState('');
-  const [customerID, setCustomerID] = useState('');
+  };
 
-  // const contextValues = {
+  const defaultUser = {
+    GUID: '',
+    firstName: '',
+    lastName: '',
+    email: 'Sign In',
+    password: '',
+    avatar: (getCookie('avatar') as string) || '',
+    admin: null,
+    active: null,
+  };
+
   const contextValues = {
-    cart: {
-      items: [],
-      totalCost: 0,
-      totalCount: 0,
-    },
-    // cartButtons: [],
+    cart: defaultCart,
     clientSecret: '',
     customerID: '',
-    // email: 'Sign In',
     authProvider: 'standard',
-    // avatar: (getCookie('avatar') as string) || '',
     accessToken: '',
-    user: {
-      GUID: '',
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      avatar: '',
-      admin: null,
-      active: null,
-    },
+    user: defaultUser,
     checkoutTotal: 0,
-    checkoutCart: {
-      items: [],
-      totalCost: 0,
-      totalCount: 0,
-    },
+    checkoutCart: defaultCart,
     profile: '',
     query: '',
   };
-  const [contextState, setContext] = useState(contextValues);
-  // setContext(contextValues);
 
   const reducer = (state: AppContext, action: ActionPayload) => {
     const ctxCopy: AppContext = structuredClone(state);
@@ -91,11 +51,7 @@ export default function App({ Component, pageProps }: AppProps) {
         return ctxCopy;
 
       case Action.CLEAR_CART:
-        ctxCopy.cart = {
-          items: [],
-          totalCost: 0,
-          totalCount: 0,
-        };
+        ctxCopy.cart = defaultCart;
         return ctxCopy;
 
       case Action.UPDATE_USER:
@@ -118,6 +74,12 @@ export default function App({ Component, pageProps }: AppProps) {
       case Action.SET_CHECKOUT_CART:
         const cartCopy = { ...ctxCopy.cart };
         ctxCopy.checkoutCart = cartCopy;
+        return ctxCopy;
+
+      case Action.SIGN_OUT:
+        ctxCopy.cart = defaultCart;
+        ctxCopy.user = defaultUser;
+        ctxCopy.accessToken = action.payload.accessToken;
         return ctxCopy;
 
       default:

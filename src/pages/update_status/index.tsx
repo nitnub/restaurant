@@ -9,7 +9,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import styles from './index.module.css';
-import AppContext from '@/components/context';
+import AppContext, { Action } from '@/components/context';
 import { getCookie } from '@/utils/cookieHandler';
 import Head from 'next/head';
 const stripePromise = loadStripe(
@@ -23,7 +23,7 @@ const Wrapper = (props) => (
 );
 
 const PaymentStatus = (props) => {
-  const ctx = useContext(AppContext);
+  const { ctx, dispatch } = useContext(AppContext);
   const stripe = useStripe();
   const [cardTitle, setCardTitle] = useState('Verifying...');
   const [pageTitle, setPageTitle] = useState('Updating Payment Methods...');
@@ -33,7 +33,7 @@ const PaymentStatus = (props) => {
   const hasCart = Object.keys(cart).length > 0;
 
   useEffect(() => {
-    hasCart && ctx.setCart(cart);
+    hasCart && dispatch({ type: Action.UPDATE_CART, payload: cart });
   }, []);
 
   useEffect(() => {

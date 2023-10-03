@@ -1,6 +1,8 @@
+import { Action, ActionPayload } from '@/components/context';
 import Link from 'next/link';
+import { Dispatch } from 'react';
 
-export default function (ctx, handleDrawerClose) {
+export default function (dispatch: Dispatch<ActionPayload>, handleDrawerClose) {
   return (
     <Link
       href="/checkout"
@@ -10,7 +12,7 @@ export default function (ctx, handleDrawerClose) {
       size="small"
       onClick={async () => {
         handleDrawerClose();
-        ctx.setCheckoutCart(ctx.cart);
+        dispatch({ type: Action.SET_CHECKOUT_CART });
       }}
     >
       Check Out

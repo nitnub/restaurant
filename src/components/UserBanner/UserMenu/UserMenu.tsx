@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import styles from './UserMenu.module.css';
 import AccountBox from '@mui/icons-material/AccountBox';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -10,11 +10,18 @@ import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
 import { getAuth, signOut } from 'firebase/auth';
 import app from '@/utils/firebaseConfig';
+import AppContext, { Action } from '@/components/context';
 
-
-function UserMenu({authHandler, context}) {
+function UserMenu({ authHandler, context }) {
+    const { ctx, dispatch } = useContext(AppContext);
+  
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  // const [email, setEmail] = useState(ctx.user.email);
   const open = Boolean(anchorEl);
+
+  // useEffect(() => {
+  //   setEmail(() => context.user.email)
+  // }, [ctx])
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -25,7 +32,7 @@ function UserMenu({authHandler, context}) {
   };
 
   const signOutHandler = async () => {
-    handleClose()
+    handleClose();
     const auth = getAuth(app);
 
     // Sign out
@@ -44,7 +51,6 @@ function UserMenu({authHandler, context}) {
     }
   };
 
-
   return (
     <>
       <div>
@@ -57,7 +63,8 @@ function UserMenu({authHandler, context}) {
           onClick={handleClick}
           style={{ color: 'white' }}
         >
-          {context.email}
+          {ctx.user.email}
+          {/* {email} */}
         </Button>
       </div>
       <Menu

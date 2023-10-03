@@ -1,38 +1,12 @@
-import { Dispatch, SetStateAction, createContext } from 'react';
+import { Dispatch, createContext } from 'react';
 import { Cart, CartItem } from '../types/cartTypes';
 
-// const context = {
-//   cart: {
-//     items: [],
-//     totalCost: 0,
-//     totalCount: 0,
-//   },
-//   // cartButtons: [],
-//   clientSecret: '',
-//   customerID: '',
-//   email: 'Sign In',
-//   authProvider: 'standard',
-//   avatar: '',
-//   accessToken: '',
-//   loggedUser: {
-//     GUID: '',
-//     firstName: '',
-//     lastName: '',
-//     email: '',
-//     password: '',
-//     avatar: '',
-//     admin: '',
-//     active: '',
-//   },
-//   checkoutTotal: 0,
-//   checkoutCart: {
-//     items: [],
-//     totalCost: 0,
-//     totalCount: 0,
-//   },
-//   profile: '',
-//   query: '',
-// };
+
+
+const AppContext = createContext<ContextReducer>(null);
+
+
+
 
 interface PropertyUpdate {
   cart?: Cart;
@@ -58,6 +32,10 @@ export interface User {
   active: boolean;
 }
 
+interface SignOutUpdate {
+  accessToken: string;
+}
+
 interface UserUpdate {
   GUID?: string;
   firstName?: string;
@@ -76,26 +54,13 @@ interface UIUpdate {
 
 interface AppContext {
   cart: Cart;
-  // {
-  //   items: [],
-  //   totalCost: 0,
-  //   totalCount: 0,
-  // },
-  // cartButtons: [],
   clientSecret: string;
   customerID: string;
-  // email: string;
   authProvider: string;
-  // avatar: string;
   accessToken: string;
   user: User;
   checkoutTotal: number;
   checkoutCart: Cart;
-  // {
-  //   items: [],
-  //   totalCost: number,
-  //   totalCount: number,
-  // },
   profile: string;
   query: string;
 }
@@ -105,7 +70,7 @@ export interface ContextReducer {
   dispatch: Dispatch<ActionPayload>;
 }
 
-const AppContext = createContext<ContextReducer>(null);
+
 
 export enum Action {
   UPDATE_CART,
@@ -115,6 +80,7 @@ export enum Action {
   UPDATE_PROPERTIES,
   CLEAR_CART,
   SET_CHECKOUT_CART,
+  SIGN_OUT,
   ADD_TEST,
 }
 
@@ -126,6 +92,7 @@ export type ActionPayload =
   | UPDATE_PROPERTIES
   | CLEAR_CART
   | SET_CHECKOUT_CART
+  | SIGN_OUT
   | TestAction;
 
 interface UPDATE_CART {
@@ -159,6 +126,11 @@ interface CLEAR_CART {
 
 interface SET_CHECKOUT_CART {
   type: Action.SET_CHECKOUT_CART;
+}
+
+interface SIGN_OUT {
+  type: Action.SIGN_OUT;
+  payload: SignOutUpdate;
 }
 
 interface TestAction {

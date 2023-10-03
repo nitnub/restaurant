@@ -12,7 +12,7 @@ import PaymentSummary from '@/components/Checkout/CheckoutForm/PaymentSummary';
 import SubmitOrder from '@/components/Checkout/CheckoutForm/SubmitOrder';
 
 export default function Checkout() {
-  const ctx = useContext(AppContext);
+  const { ctx } = useContext(AppContext);
   const CART_ARGS = {
     context: {
       headers: {
@@ -35,7 +35,7 @@ export default function Checkout() {
   };
 
   const defaultCheckoutState = {
-    expanded: 'panel1',
+    expanded: 'panel1', // set default to panel1 = expanded
     itemsVerified: true,
     ccVerified: false,
     orderConfirmed: false,
@@ -54,16 +54,6 @@ export default function Checkout() {
         <Link href={'/'}>Click here to return to the Restaurants lists</Link>
       </>
     );
-  }
-
-  interface PaymentLabel {
-    id: string;
-    issuerLogo: string;
-    last4: string;
-  }
-
-  interface FinalCheckout {
-    amount: number;
   }
 
   const handleChange =
@@ -119,11 +109,6 @@ export default function Checkout() {
       </div>
     </>
   );
-}
-
-function createCartLabel(count: string | number) {
-  if (Number(count) === 1) return '1 Item';
-  return `${count} items`;
 }
 
 export async function getServerSideProps({ req, res }) {

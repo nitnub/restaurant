@@ -53,19 +53,20 @@ export const signInAuthServerHandler: (
       updateError(SignInError.GENERAL, message);
       return;
     }
-
+    
     cart = await consolidateGuestAndUserCarts(accessToken, addItem);
+   
 
     if (!cart) return;
 
 
     // If there are items in the cart response, populate the local cart
     updateCookieObject('cart', cart);
-    // if (cart.items.length > 0) {
-    //   ctx.setCart(cart);
-    // }
+    if (cart.items.length > 0) {
+      // ctx.setCart(cart);
+      dispatch({ type: Action.UPDATE_CART, payload: cart });
+    }
 
-    dispatch({ type: Action.UPDATE_CART, payload: cart });
 
     updateError(SignInError.GENERAL, '');
 

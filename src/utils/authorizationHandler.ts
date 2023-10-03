@@ -1,53 +1,38 @@
 import { Context } from '@apollo/client';
 import { newGuestID } from './newGuestID';
-import { clearCookie, getCookie, setCookie } from './cookieHandler';
+import { clearCookies, getCookie, setCookie } from './cookieHandler';
 import { Dispatch } from 'react';
 import { Action, ActionPayload } from '@/components/context';
 
-const guestProfile = {
-  admin: false,
-  avatar: '',
-  email: 'Sign In',
-  exp: 0,
-  firstName: '',
-  iat: 0,
-  id: 'Guest',
-};
-
-const emptyCart = { items: [], totalCost: 0, totalCount: 0 };
-
 export default class AuthorizationHandler {
-  // private SUPPORTED_OAUTH_PROVIDERS = ['www.google.com'];
   private SIGN_IN_URL: string = process.env.NEXT_PUBLIC_AUTH_SERVER_SIGN_IN_URL;
   private SIGN_OUT_URL: string =
     process.env.NEXT_PUBLIC_AUTH_SERVER_SIGN_OUT_URL;
   private TOKEN_URL: string = process.env.NEXT_PUBLIC_AUTH_SERVER_TOKEN_URL;
+  private DEFAULT_REQUEST_HEADERS = { 'Content-Type': 'application/json' };
   private PROFILE_KEY: string = 'loggedInUser';
   private TOKEN_KEY: string = 'accessToken';
+
   protected ctx: Context;
   protected dispatch: Dispatch<ActionPayload>;
   static token: string = '';
-  // constructor(ctx: Context) {
+
   constructor(context: Context) {
-    // this.ctx = ctx;
     this.ctx = context.ctx;
     this.dispatch = context.dispatch;
   }
 
   public async signIn(email: string, password: string) {
-    // create request
     const requestBody = {
       email,
       password,
     };
-    let response;
+    let response: Response;
     try {
       response = await fetch(this.SIGN_IN_URL, {
         method: 'POST',
         body: JSON.stringify(requestBody),
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: this.DEFAULT_REQUEST_HEADERS,
       });
     } catch (err) {
       return console.log(
@@ -58,21 +43,16 @@ export default class AuthorizationHandler {
 
     if (data.status === 'success') {
       const { accessToken } = data.data;
-      const parsedUser = JSON.parse(
-        Buffer.from(accessToken.split('.')[1], 'base64').toString()
-      );
+      const parsedUser = this.parseUserFromToken(accessToken);
 
       setCookie('accessToken', accessToken, parsedUser.exp);
-
-      // this.ctx.setAuthProvider(parsedUser.authProvider);
-      // this.ctx.setAccessToken(() => accessToken);
 
       this.dispatch({
         type: Action.UPDATE_PROPERTIES,
         payload: { authProvider: parsedUser.authProvider, accessToken },
       });
 
-      this.setProfile(accessToken); //
+      this.setProfile(accessToken);
 
       return {
         status: data.status,
@@ -94,15 +74,15 @@ export default class AuthorizationHandler {
   }
 
   public setProfile(accessToken: string) {
-    const parsedUser = JSON.parse(
-      Buffer.from(accessToken.split('.')[1], 'base64').toString()
-    );
+    const parsedUser = this.parseUserFromToken(accessToken);
 
     setCookie(this.PROFILE_KEY, parsedUser, parsedUser.exp);
     setCookie(this.TOKEN_KEY, accessToken, parsedUser.exp);
 
-    // this.ctx.setEmail(parsedUser.email);
-    this.dispatch({ type: Action.UPDATE_USER, payload: parsedUser.email });
+    this.dispatch({
+      type: Action.UPDATE_USER,
+      payload: { email: parsedUser.email },
+    });
   }
 
   public getProfile() {
@@ -114,56 +94,23 @@ export default class AuthorizationHandler {
   public async signOut(signOutAll: boolean) {
     // Create request
     const guestID = newGuestID();
-    const requestBody = {
-      signOutAll,
-    };
 
     // Send sign-out request
     await fetch(this.SIGN_OUT_URL, {
       method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      body: JSON.stringify({ signOutAll }),
+      headers: this.DEFAULT_REQUEST_HEADERS,
     });
 
-    clearCookie(this.PROFILE_KEY);
-
-    clearCookie('avatar');
-
-    // Clear cart
-
-    this.dispatch({ type: Action.CLEAR_CART });
-    // this.ctx.setCart(() => emptyCart);
-    // this.ctx.setTotalCount(0);
-    // this.ctx.setTotalCost(0);
-
-    clearCookie('cart');
-
-    // Remove access token from context
+    clearCookies(this.PROFILE_KEY, 'avatar', 'cart');
     setCookie('accessToken', guestID, -1, false);
-
-    this.dispatch({
-      type: Action.UPDATE_PROPERTIES,
-      payload: {
-        user: { ...this.ctx.user, email: 'Sign In' },
-        // email: 'Sign In',
-        // profile: guestProfile, // SETTING PROFILE
-        accessToken: guestID,
-      },
-    });
-
-    // this.ctx.setEmail('Sign In');
-    // this.ctx.setProfile(guestProfile);
-    // this.ctx.setAccessToken(() => guestID);
+    this.dispatch({ type: Action.SIGN_OUT, payload: { accessToken: guestID } });
   }
 
   public async updateAccessToken(ctx: Context) {
     const response = await fetch(this.TOKEN_URL, {
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: this.DEFAULT_REQUEST_HEADERS,
     });
 
     const data = await response.json();
@@ -176,20 +123,15 @@ export default class AuthorizationHandler {
     }
     if (data.status === 'success') {
       const { accessToken } = data.data;
-
-      const parsedUser = JSON.parse(
-        Buffer.from(accessToken.split('.')[1], 'base64').toString()
-      );
+      const parsedUser = this.parseUserFromToken(accessToken);
 
       setCookie('accessToken', accessToken, parsedUser.exp);
 
-      // ctx.setAccessToken(() => accessToken);
+      const user = { ...ctx.user, email: parsedUser.email };
 
-      // ctx.setEmail(() => parsedUser.email);
-
-      ctx.dispatch({
+      this.dispatch({
         type: Action.UPDATE_PROPERTIES,
-        payload: { accessToken, email: parsedUser.email },
+        payload: { accessToken, user },
       });
 
       this.setProfile(accessToken);
@@ -205,5 +147,11 @@ export default class AuthorizationHandler {
       success: false,
       message: 'Unable to verify user. Please log in again...',
     };
+  }
+
+  private parseUserFromToken(accessToken: string) {
+    return JSON.parse(
+      Buffer.from(accessToken.split('.')[1], 'base64').toString()
+    );
   }
 }

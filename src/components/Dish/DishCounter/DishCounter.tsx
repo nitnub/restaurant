@@ -16,7 +16,6 @@ export default function DishCounter({ dishProp }) {
   });
 
   const index = ctx.cart.items.findIndex((item) => item.id === dishProp.id);
-  console.log('index:', index);
 
   return (
     <>
@@ -25,18 +24,15 @@ export default function DishCounter({ dishProp }) {
         sx={{ color: '#754d4d' }}
         aria-label="remove item from shopping cart"
       >
-
-        <IconSubtract dishProp={dishProp}  />
+        <IconSubtract dishProp={dishProp} />
       </IconButton>
 
-      <div>
-        {ctx.cart.items[index] ? ctx.cart.items[index].count : 0}
-      </div>
+      <div>{ctx.cart.items[index] ? ctx.cart.items[index].count : 0}</div>
       <IconButton
         sx={{ color: '#4d7558' }}
         aria-label="add item to shopping cart"
       >
-        <IconAdd dishProp={dishProp}  />
+        <IconAdd dishProp={dishProp} />
       </IconButton>
     </>
   );

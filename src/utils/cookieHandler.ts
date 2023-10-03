@@ -1,19 +1,11 @@
-import AuthorizationHandler from './authorizationHandler';
-import AppContext from '@/components/context';
-import { useContext } from 'react';
 import { Context } from '@apollo/client';
-
-// const ctx = useContext(AppContext)
-// const ah = new AuthorizationHandler();
 
 export const getCookie = (cookieName: string) => {
   if (typeof document === 'undefined') return;
-
   const cookie = document.cookie;
 
   try {
     const step1 = cookie.split(`${cookieName}=`)[1];
-
     const step2 = step1.split(';')[0];
 
     // check if string is formatted as object
@@ -37,7 +29,6 @@ export const getCookieFromString = (cookieName: string, string: string) => {
 
   try {
     const step1 = cookie.split(`${cookieName}=`)[1];
-
     const step2 = step1.split(';')[0];
 
     // check if string is formatted as object
@@ -65,8 +56,10 @@ export const cookieIsEmpty = (cookieName: string) => {
   return false;
 };
 
-export const clearCookie = (cookieName: string) => {
-  document.cookie = `${cookieName}=null; expires=${new Date(0).toUTCString()}`;
+export const clearCookies = (...cookies: string[]) => {
+  cookies.forEach((cookie) => {
+    document.cookie = `${cookie}=null; expires=${new Date(0).toUTCString()}`;
+  });
 };
 
 export const cookieDuster = (

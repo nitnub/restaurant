@@ -18,7 +18,7 @@ import { convertToCurrency } from '@/libs/formatter';
 const drawerWidth = 180;
 
 export default function ({ open, setOpen }) {
-  const { ctx } = useContext(AppContext);
+  const { ctx, dispatch } = useContext(AppContext);
   const [userIsGuest, setUserIsGuest] = useState();
   const [cartIsEmpty, setCartIsEmpty] = useState(true);
   const [totalCost, setTotalCost] = useState(ctx.cart.totalCost);
@@ -77,7 +77,7 @@ export default function ({ open, setOpen }) {
               <div className={styles.priceSummary}>
                 <div className={styles.priceLabel}>Total:&nbsp;</div>
                 <div className={styles.priceAmount}>
-                  {convertToCurrency(totalCost)}
+                  {convertToCurrency(totalCost || 0)}
                 </div>
               </div>
             </div>
@@ -87,7 +87,7 @@ export default function ({ open, setOpen }) {
         <div className={styles.headerCheckout}>
           {(userIsGuest && SignIn(ctx)) ||
             (cartIsEmpty && <div>Cart is empty...</div>) ||
-            Checkout(ctx, () => setOpen(false))}
+            Checkout(dispatch, () => setOpen(false))}
         </div>
       </div>
       <Divider />
