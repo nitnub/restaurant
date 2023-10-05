@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import AppContext from '@/src/context/context';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -21,10 +21,9 @@ interface PaymentLabel {
 }
 
 export default function SubmitOrder({ props }) {
-  const { ctx, dispatch } = useContext(AppContext);
+  const { dispatch } = useContext(AppContext);
 
-  const { checkoutState, setCheckoutState, styles, handleChange, cartData } =
-    props;
+  const { checkoutState, setCheckoutState, styles, handleChange } = props;
 
   const {
     expanded,
@@ -37,20 +36,12 @@ export default function SubmitOrder({ props }) {
 
   const CLEAR_CART_ARGS = createClearCartArgs();
 
-  const PAYMENT_ARGS = createPaymentArgs(
-    // cartData?.getCartResult.totalCost,
-    checkoutTotal,
-    paymentMethod.id
-  );
+  const PAYMENT_ARGS = createPaymentArgs(checkoutTotal, paymentMethod.id);
 
   let [
     createStripePayment,
     { data: paymentData, loading: paymentLoading, error: paymentError },
   ] = useMutation(CREATE_STRIPE_PAYMENT, PAYMENT_ARGS);
-
-  // useEffect(() => {
-  //   console.log('Submit refresh');
-  // }, [ctx]);
 
   const [
     clearCartCache,
@@ -73,6 +64,8 @@ export default function SubmitOrder({ props }) {
       ...checkoutState,
       orderConfirmed: true,
     });
+
+    dispatch({ type: Action.CLEAR_CART });
   };
 
   if (paymentLoading) console.log('Loading official total...');
@@ -157,10 +150,8 @@ export default function SubmitOrder({ props }) {
 
 function createPaymentArgs(amount: string, paymentMethodID: string) {
   const PAYMENT_VARIABLES = {
-    // amount: cartData?.getCartResult.totalCost,
     amount,
     path: '/',
-    // paymentMethodID: paymentMethod.id,
     paymentMethodID,
   };
 

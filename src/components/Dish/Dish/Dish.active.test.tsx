@@ -27,7 +27,7 @@ beforeEach(() =>
 );
 
 describe('Renders Dish ', () => {
-  console.log(screen.debug());
+  // console.log(screen.debug());
   it('add/remove buttons', () => {
     const addButton = screen.getByLabelText('add item to shopping cart');
     const remButton = screen.getByLabelText('remove item from shopping cart');

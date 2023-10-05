@@ -1,14 +1,12 @@
 .parentContainer {
-  /* background-color: purple; */
+  /*  */
 }
 
 .headerBackgroundSpan {
-  /* padding: 0px; */
+  /*  */
 }
 
-
 .inputContainer {
-  /* background-color: purple; */
   position: absolute;
   display: flex;
   flex-wrap: wrap;
@@ -48,5 +46,4 @@
     background-color: red;
     width: 100px;
   }
-
 }

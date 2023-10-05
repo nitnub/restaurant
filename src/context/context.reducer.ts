@@ -16,7 +16,8 @@ export default (state: AppContext, action: ActionPayload) => {
       return ctxCopy;
 
     case Action.CLEAR_CART:
-      ctxCopy.cart = defaultCart;
+      ctxCopy.cart = { ...defaultCart };
+      ctxCopy.checkoutCart = { ...defaultCart };
       return ctxCopy;
 
     case Action.UPDATE_USER:

@@ -190,12 +190,6 @@ const resolvers = {
     },
 
     paymentMethodsResult: async (source, args, context) => {
-      console.log('source:');
-      console.log(source);
-      console.log('args:');
-      console.log(args);
-      console.log('context:');
-      console.log(context);
 
       if (!context.req.isAuthenticated) {
         log.error('User is not authenticated. Unable to get payment method.');
