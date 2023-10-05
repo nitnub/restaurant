@@ -30,12 +30,9 @@ export default function ChipToggle({
     }
   };
 
-  // <Chip label={props.foodStyle} color="success" size="small" />
   return (
-    // <div className={styles.chipToggle}>
     <Chip
-      // key={foodStyle}
-      style={{margin: '4px'}}
+      style={{ margin: '4px' }}
       className={styles.chipToggle}
       onClick={handler}
       variant={active ? 'filled' : 'outlined'}
@@ -43,6 +40,5 @@ export default function ChipToggle({
       color="success"
       size="small"
     />
-    // </div>
   );
 }
