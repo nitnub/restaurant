@@ -1,7 +1,9 @@
 import { Dispatch, useContext, useState } from 'react';
 import Form from '@/components/Form';
 import { Context, useMutation } from '@apollo/client';
-import AppContext, { Action, ActionPayload } from '@/components/context';
+import AppContext from '@/src/context/context';
+import { Action, ActionPayload } from '@/src/context/context.types';
+
 import { updateCookieObject } from '@/utils/cookieHandler';
 import INCREMENT_CART from '@/mutations/cart/AddItemsToCart.mutation';
 import Card from '@mui/material/Card';

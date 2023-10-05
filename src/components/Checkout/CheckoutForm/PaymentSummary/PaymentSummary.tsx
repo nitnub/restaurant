@@ -9,7 +9,6 @@ import Link from 'next/link';
 
 export default function PaymentSummary({ props }) {
   const { checkoutState, setCheckoutState, styles, handleChange } = props;
-
   const { expanded, ccVerified, orderConfirmed, paymentMethod } = checkoutState;
 
   return (

@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState, SyntheticEvent } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import AppContext from '@/components/context';
+import AppContext from '@/src/context/context';
 import { getCookie } from '@/utils/cookieHandler';
 
 import GET_CART from '@/queries/cart/GetCart.query';
@@ -13,6 +13,7 @@ import SubmitOrder from '@/components/Checkout/CheckoutForm/SubmitOrder';
 
 export default function Checkout() {
   const { ctx } = useContext(AppContext);
+  const user = getCookie('accessToken') || 'guest';
   const CART_ARGS = {
     context: {
       headers: {
@@ -72,12 +73,14 @@ export default function Checkout() {
         checkoutTotal: ctx.cart.totalCost,
       });
     }
-  }, [ctx.cart]);
+
+  // }, [ctx.cart, user]);
+  }, [ctx, user]);
 
   const [hydro, setHydro] = useState(false);
   useEffect(() => {
     setHydro(true);
-  });
+  }, []);
   if (!hydro) {
     return null;
   }

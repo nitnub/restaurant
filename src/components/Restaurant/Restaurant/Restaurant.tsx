@@ -11,10 +11,6 @@ import Launch from '@mui/icons-material/Launch';
 import styles from './Restaurant.module.css';
 import StarRating from '../StarRating';
 
-interface ExpandMoreProps extends IconButtonProps {
-  expand: boolean;
-}
-
 interface RestaurantProfile {
   id?: number;
   name: string;
@@ -24,10 +20,6 @@ interface RestaurantProfile {
   image: string;
   imageSm: string;
   homePage?: string;
-}
-
-interface RestaurantProps {
-  restaurant: RestaurantProfile;
 }
 
 export default function Restaurant({

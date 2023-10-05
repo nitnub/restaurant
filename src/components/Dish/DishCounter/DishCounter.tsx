@@ -4,7 +4,7 @@ import IconSubtract from '@/components/Dish/IconSubtract';
 import { green, pink } from '@mui/material/colors';
 import { useState, useEffect, useContext } from 'react';
 import { getCookie } from '@/utils/cookieHandler';
-import AppContext from '@/components/context';
+import AppContext from '@/src/context/context';
 import { Dish } from '@/types/dishTypes';
 export default function DishCounter({ dishProp }) {
   const [count, setCount] = useState(0);
@@ -13,7 +13,7 @@ export default function DishCounter({ dishProp }) {
   useEffect(() => {
     if (!dishProp) setCount(0);
     if (!dishProp.count) setCount(0);
-  });
+  }, []);
 
   const index = ctx.cart.items.findIndex((item) => item.id === dishProp.id);
 

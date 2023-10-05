@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { useContext } from 'react';
 import styles from './UserBanner.module.css';
-import AppContext, { Action } from '../context';
+import AppContext from '@/src/context/context';
+import { Action } from '@/src/context/context.types';
 import Link from 'next/link';
 import AuthorizationHandler from '@/utils/authorizationHandler';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
@@ -45,7 +46,7 @@ function UserBanner() {
       ) : (
         <AccountBoxIcon sx={{ width: 30, height: 30 }} />
       )}
-      <UserMenu authHandler={authHandler} context={ctx} />
+      <UserMenu authHandler={authHandler} />
     </div>
   );
 }

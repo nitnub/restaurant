@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import styles from './UserMenu.module.css';
 import AccountBox from '@mui/icons-material/AccountBox';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -10,18 +10,14 @@ import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
 import { getAuth, signOut } from 'firebase/auth';
 import app from '@/utils/firebaseConfig';
-import AppContext, { Action } from '@/components/context';
+import AppContext from '@/src/context/context';
+import { Action } from '@/src/context/context.types';
 
-function UserMenu({ authHandler, context }) {
-    const { ctx, dispatch } = useContext(AppContext);
-  
+function UserMenu({ authHandler }) {
+  const { ctx, dispatch } = useContext(AppContext);
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  // const [email, setEmail] = useState(ctx.user.email);
   const open = Boolean(anchorEl);
-
-  // useEffect(() => {
-  //   setEmail(() => context.user.email)
-  // }, [ctx])
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -38,15 +34,20 @@ function UserMenu({ authHandler, context }) {
     // Sign out
     authHandler.signOut(false);
 
+    dispatch({
+      type: Action.UPDATE_PROPERTIES,
+      payload: { authProvider: 'standard' },
+    });
+
     // Sign out firebase OAuth users
-    if (context.authProvider === 'google') {
+    if (ctx.authProvider === 'google') {
       signOut(auth)
         .then(() => {
-          context.setAuthProvider('standard');
           console.log('Signed out of firebase...');
         })
         .catch((error) => {
           console.log('Error signing out of firebase...');
+          console.log(error);
         });
     }
   };
@@ -64,7 +65,6 @@ function UserMenu({ authHandler, context }) {
           style={{ color: 'white' }}
         >
           {ctx.user.email}
-          {/* {email} */}
         </Button>
       </div>
       <Menu

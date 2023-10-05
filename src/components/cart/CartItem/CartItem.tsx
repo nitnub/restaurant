@@ -1,10 +1,10 @@
 import Typography from '@mui/material/Typography';
 import styles from './CartItem.module.css';
 import { convertToCurrency } from '../../../libs/formatter';
-import AppContext from '@/components/context';
+import AppContext from '@/src/context/context';
 import IconAdd from '@/components/Dish/IconAdd';
 import IconSubtract from '../../Dish/IconSubtract';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { getCookie } from '@/utils/cookieHandler';
 import { CartItem as ICartItem } from '@/types/cartTypes';
 

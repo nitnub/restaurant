@@ -3,9 +3,6 @@ import { Elements } from '@stripe/react-stripe-js';
 import SettingsForm from '@/components/Settings/SettingsForm';
 import { useQuery } from '@apollo/client';
 import GET_CLIENT_SECRET from '@/queries/payment/GetStripeClientSecret.query';
-import { useContext, useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import AppContext from '@/components/context';
 import { getCookie } from '@/utils/cookieHandler';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -35,13 +32,7 @@ export default function settings() {
   }
 
   const { clientSecret } = data ? data.clientSecretResult : '';
-
-  const options = {
-    clientSecret,
-    // appearance: {
-    //   /*...*/
-    // },
-  };
+  const options = { clientSecret };
 
   return (
     data && (

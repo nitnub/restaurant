@@ -1,12 +1,5 @@
-import { Dispatch, createContext } from 'react';
-import { Cart, CartItem } from '../types/cartTypes';
-
-
-
-const AppContext = createContext<ContextReducer>(null);
-
-
-
+import { Dispatch } from 'react';
+import { Cart, CartItem } from '@/types/cartTypes';
 
 interface PropertyUpdate {
   cart?: Cart;
@@ -36,6 +29,11 @@ interface SignOutUpdate {
   accessToken: string;
 }
 
+interface SignInOAuthUpdate {
+  authProvider: string;
+  accessToken: string;
+}
+
 interface UserUpdate {
   GUID?: string;
   firstName?: string;
@@ -52,7 +50,7 @@ interface UIUpdate {
   cart: Cart;
 }
 
-interface AppContext {
+export interface AppContext {
   cart: Cart;
   clientSecret: string;
   customerID: string;
@@ -70,8 +68,6 @@ export interface ContextReducer {
   dispatch: Dispatch<ActionPayload>;
 }
 
-
-
 export enum Action {
   UPDATE_CART,
   UPDATE_CART_ITEMS,
@@ -81,7 +77,7 @@ export enum Action {
   CLEAR_CART,
   SET_CHECKOUT_CART,
   SIGN_OUT,
-  ADD_TEST,
+  SIGN_IN_OAUTH,
 }
 
 export type ActionPayload =
@@ -93,7 +89,7 @@ export type ActionPayload =
   | CLEAR_CART
   | SET_CHECKOUT_CART
   | SIGN_OUT
-  | TestAction;
+  | SIGN_IN_OAUTH;
 
 interface UPDATE_CART {
   type: Action.UPDATE_CART;
@@ -133,9 +129,7 @@ interface SIGN_OUT {
   payload: SignOutUpdate;
 }
 
-interface TestAction {
-  type: Action.ADD_TEST;
-  payload: string;
+interface SIGN_IN_OAUTH {
+  type: Action.SIGN_IN_OAUTH;
+  payload: SignInOAuthUpdate;
 }
-
-export default AppContext;

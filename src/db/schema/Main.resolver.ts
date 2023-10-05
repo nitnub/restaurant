@@ -181,7 +181,6 @@ const resolvers = {
           where: { globalUserId: globalUserID },
         })) || noCustomerId;
 
-
       if (!stripeCustomerId) {
         log.error('[E1] Unable to find customerID in the DB!');
         throw new Error('[E1] Unable to find customerID in the DB!');
@@ -191,6 +190,13 @@ const resolvers = {
     },
 
     paymentMethodsResult: async (source, args, context) => {
+      console.log('source:');
+      console.log(source);
+      console.log('args:');
+      console.log(args);
+      console.log('context:');
+      console.log(context);
+
       if (!context.req.isAuthenticated) {
         log.error('User is not authenticated. Unable to get payment method.');
         return context.req.errorResponse;

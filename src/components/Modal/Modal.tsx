@@ -1,9 +1,9 @@
-import {useState} from 'react';
+import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import styles from './Modal.module.css'
+import styles from './Modal.module.css';
 const style = {
   position: 'absolute' as 'absolute',
   top: '50%',
@@ -17,13 +17,8 @@ const style = {
 };
 
 export default function BasicModal(props) {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
   return (
     <div>
-      {/* <Button onClick={handleOpen}>Open modal</Button> */}
       <Modal
         open={props.open}
         onClose={props.handleClose}
@@ -36,14 +31,16 @@ export default function BasicModal(props) {
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             {props.body}
-            Account {(
-      <strong>{props.email}</strong>
-    )} has been created! You can now place an order from the shopping cart. Any items that were in your guest cart have been moved over to your new account for you. Lastly, don&apos;t forget to add a dummy credit card number under &ldquo;Settings&rdquo; so that payment IDs can be generated through Stripe.
+            Account {<strong>{props.email}</strong>} has been created! You can
+            now place an order from the shopping cart. Any items that were in
+            your guest cart have been moved over to your new account for you.
+            Lastly, don&apos;t forget to add a dummy credit card number under
+            &ldquo;Settings&rdquo; so that payment IDs can be generated through
+            Stripe.
           </Typography>
           <br />
           <div className={styles.button}>
-          <Button  onClick={props.handleClose}>{props.buttonText}</Button>
-
+            <Button onClick={props.handleClose}>{props.buttonText}</Button>
           </div>
         </Box>
       </Modal>

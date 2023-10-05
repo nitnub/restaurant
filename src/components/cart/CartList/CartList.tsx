@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import List from '@mui/material/List';
 import { useContext, useEffect, useState } from 'react';
-import AppContext, { Action } from '../../context';
+import AppContext from '@/src/context/context';
+import { Action } from '@/src/context/context.types';
 import CartItem from '../CartItem';
 import styles from './CartList.module.css';
 import { convertToCurrency } from '@/libs/formatter';
@@ -52,7 +53,7 @@ export default function CartList() {
                 </Link>
               </h3>
               <List>
-                {ctx.cart.items
+                {[...ctx.cart.items]
                   .sort(sortObjByName)
                   .map((item: ICartItem, index: number) => {
                     if (item.restaurantName === restaurantName) {

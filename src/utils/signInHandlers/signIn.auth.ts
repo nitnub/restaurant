@@ -1,13 +1,11 @@
 import consolidateGuestAndUserCarts from '@/utils/cart/consolidateGuestAndUserCarts';
 import { Dispatch } from 'react';
 import { updateCookieObject } from '@/utils/cookieHandler';
-
 import { Cart } from '@/types/cartTypes';
-
 import { SignInError } from '@/src/pages/signin';
 import AuthorizationHandler from '@/utils/authorizationHandler';
 import { Context, MutationFunction } from '@apollo/client';
-import { Action, ActionPayload } from '@/components/context';
+import { Action, ActionPayload } from '@/src/context/context.types';
 
 let cart: Cart | null = {
   items: [],
@@ -53,12 +51,10 @@ export const signInAuthServerHandler: (
       updateError(SignInError.GENERAL, message);
       return;
     }
-    
+
     cart = await consolidateGuestAndUserCarts(accessToken, addItem);
-   
 
     if (!cart) return;
-
 
     // If there are items in the cart response, populate the local cart
     updateCookieObject('cart', cart);
@@ -66,7 +62,6 @@ export const signInAuthServerHandler: (
       // ctx.setCart(cart);
       dispatch({ type: Action.UPDATE_CART, payload: cart });
     }
-
 
     updateError(SignInError.GENERAL, '');
 

@@ -1,4 +1,4 @@
-import { Action, ActionPayload } from '@/components/context';
+import { Action, ActionPayload } from '@/src/context/context.types';
 import Link from 'next/link';
 import { Dispatch } from 'react';
 

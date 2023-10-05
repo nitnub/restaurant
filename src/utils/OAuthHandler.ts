@@ -2,16 +2,15 @@ import AuthorizationHandler from '@/utils/authorizationHandler';
 import { Context } from '@apollo/client';
 import { AuthProvider } from '@/types/utilTypes';
 import { setCookie } from './cookieHandler';
-
-
+import { Action } from '@/src/context/context.types';
 
 export default class OAauthHandler extends AuthorizationHandler {
   private SUPPORTED_OAUTH_PROVIDERS = ['www.google.com'];
   private SIGN_IN_OAUTH_URL =
-  process.env.NEXT_PUBLIC_AUTH_SERVER_SIGN_IN_OAUTH_URL;
+    process.env.NEXT_PUBLIC_AUTH_SERVER_SIGN_IN_OAUTH_URL;
 
-  constructor(ctx: Context) {
-    super(ctx);
+  constructor(context: Context) {
+    super(context);
   }
 
   public async signInOAuth(
@@ -38,9 +37,7 @@ export default class OAauthHandler extends AuthorizationHandler {
     const response = await fetch(this.SIGN_IN_OAUTH_URL, {
       method: 'POST',
       body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: this.DEFAULT_REQUEST_HEADERS,
       // credentials: 'include',
     });
 
@@ -57,18 +54,17 @@ export default class OAauthHandler extends AuthorizationHandler {
     if (data.status === 'success') {
       const accessToken = data.data.resp.accessToken;
 
-      const { authProvider, avatar, exp } = JSON.parse(
-        Buffer.from(accessToken.split('.')[1], 'base64').toString()
-      );
+      const { authProvider, avatar, exp } =
+        this.parseUserFromToken(accessToken);
 
       setCookie('accessToken', accessToken, exp);
       adImage && setCookie('avatar', adImage, exp);
       avatar && setCookie('avatar', avatar, exp);
 
-      this.ctx.setAuthProvider(authProvider);
-      this.ctx.setAccessToken(() => accessToken);
-
       this.setProfile(accessToken);
+
+      const payload = { authProvider, accessToken };
+      this.dispatch({ type: Action.SIGN_IN_OAUTH, payload });
 
       return {
         status: data.status,
@@ -88,6 +84,4 @@ export default class OAauthHandler extends AuthorizationHandler {
       message,
     };
   }
-
-
 }

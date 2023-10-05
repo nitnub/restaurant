@@ -8,23 +8,19 @@ import GET_PAYMENT_METHODS from '@/queries/payment/GetStripePaymentMethods.query
 import { useQuery } from '@apollo/client';
 import { getCookie } from '@/utils/cookieHandler';
 
-export default function PaymentSelector({
-  // setPaymentMethod,
-  // setCcVerified,
-  setCheckoutState,
-  checkoutState,
-}) {
+export default function PaymentSelector({ setCheckoutState, checkoutState }) {
   const ARGS = {
     context: {
       headers: {
         Authorization: `Bearer ${getCookie('accessToken')}`,
       },
     },
+    queryKey: getCookie('accessToken'),
   };
 
   const { data, loading, error } = useQuery(GET_PAYMENT_METHODS, ARGS);
+
   if (loading) {
-    // console.log('Loading payment options...');
     return <h3>Loading...</h3>;
   }
 
@@ -51,14 +47,6 @@ export default function PaymentSelector({
       expMonth,
     };
     setCheckoutState({ ...checkoutState, paymentMethod, ccVerified: true });
-    // setCcVerified(true);
-    // setPaymentMethod({
-    //   id: option.id,
-    //   brand: option.card.brand,
-    //   last4: option.card.last4,
-    //   expYear,
-    //   expMonth,
-    // });
   };
 
   return (
@@ -77,16 +65,6 @@ export default function PaymentSelector({
                 <Radio
                   value={option.id}
                   onClick={() => handler(option, expYear, expMonth)}
-                  // onClick={() => {
-                  //   setCcVerified(true);
-                  //   setPaymentMethod({
-                  //     id: option.id,
-                  //     brand: option.card.brand,
-                  //     last4: option.card.last4,
-                  //     expYear,
-                  //     expMonth,
-                  //   });
-                  // }}
                 />
                 <PaymentOption paymentProps={paymentProps} />
               </div>

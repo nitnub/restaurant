@@ -1,4 +1,4 @@
-import { MouseEvent, useEffect, useState } from 'react';
+import { MouseEvent, useContext, useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
@@ -22,6 +22,8 @@ import { useQuery } from '@apollo/client';
 import { getCookie } from '@/utils/cookieHandler';
 import { convertToCurrency } from '@/libs/formatter';
 import styles from './TransactionsGrid.module.css';
+import AppContext from '@/src/context/context';
+
 function TablePaginationActions(props: TablePaginationActionsProps) {
   const theme = useTheme();
   const { count, page, rowsPerPage, onPageChange } = props;
@@ -96,6 +98,7 @@ function createRow(
 }
 
 export default function CustomPaginationActionsTable() {
+  const { ctx } = useContext(AppContext);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
   const [rows, setRows] = useState([]);
@@ -108,12 +111,20 @@ export default function CustomPaginationActionsTable() {
     },
   };
 
-  const { data, loading, error } = useQuery(GET_CUSTOMER_TRANSACTIONS, ARGS);
+  const { data, loading, error, client } = useQuery(
+    GET_CUSTOMER_TRANSACTIONS,
+    ARGS
+  );
 
   let results = [];
   useEffect(() => {
-    if (data) {
+    client.refetchQueries({
+      include: 'active',
+    });
+
+    if (data?.customerTransactionsResult != null) {
       results = data.customerTransactionsResult.dataFormatted;
+
       const mapped = results.map((row) => {
         return createRow(
           new Date(row.created * 1000).toLocaleDateString(),
@@ -128,7 +139,8 @@ export default function CustomPaginationActionsTable() {
 
       setRows(mapped);
     }
-  }, [data]);
+  }, [data, ctx.cart, ctx.accessToken]);
+
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;

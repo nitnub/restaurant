@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import Badge, { BadgeProps } from '@mui/material/Badge';
 import { styled } from '@mui/material/styles';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import AppContext from '../../context';
+import AppContext from '../../../context/context';
 import { getCookie } from '@/utils/cookieHandler';
 
 const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
@@ -17,14 +17,15 @@ export default function CartComp() {
   const { ctx } = useContext(AppContext);
   const [hydro, setHydro] = useState(false);
   const [totalCount, setTotalCount] = useState(ctx.cart.totalCount);
+  const user = getCookie('accessToken') || 'guest';
 
   useEffect(() => {
     setTotalCount(() => ctx.cart.totalCount || getCookie('cart').totalCount);
-  }, [ctx]);
+  }, [user, ctx]);
 
   useEffect(() => {
     setHydro(true);
-  });
+  }, []);
 
   if (!hydro) {
     return null;

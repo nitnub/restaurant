@@ -56,10 +56,27 @@ export const cookieIsEmpty = (cookieName: string) => {
   return false;
 };
 
-export const clearCookies = (...cookies: string[]) => {
-  cookies.forEach((cookie) => {
+export const clearCookie = (cookie: string) => {
+  document.cookie = `${cookie}=null; expires=${new Date(0).toUTCString()}`;
+};
+
+export const resetUserCookies = (profileKey: string, guestID: string) => {
+  const userCookies = [
+    profileKey,
+    'authProvider',
+    'cart',
+    '__stripe_mid',
+    '__stripe_sid',
+    'accessToken',
+    'avatar',
+    'loggedInUser',
+  ];
+
+  userCookies.forEach((cookie) => {
     document.cookie = `${cookie}=null; expires=${new Date(0).toUTCString()}`;
   });
+
+  setCookie('accessToken', guestID, -1, false);
 };
 
 export const cookieDuster = (

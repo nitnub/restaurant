@@ -1,7 +1,8 @@
 import { useMutation } from '@apollo/client';
 import { useContext } from 'react';
 import AuthorizationHandler from '@/utils/authorizationHandler';
-import AppContext, { Action } from '@/components/context';
+import AppContext from '@/src/context/context';
+import { Action } from '@/src/context/context.types';
 import INCREMENT_CART from '@/mutations/cart/AddItemsToCart.mutation';
 import { getCookie } from '@/utils/cookieHandler';
 import { Cart } from '@/types/cartTypes';
@@ -9,7 +10,7 @@ import { Dish } from '@/src/types/dishTypes';
 
 const IconAdd = ({ dishProp }) => {
   const { ctx, dispatch } = useContext(AppContext);
-  const ah = new AuthorizationHandler(ctx);
+  const ah = new AuthorizationHandler({ ctx, dispatch });
 
   const itemVariable = getFormattedItem(dishProp);
 

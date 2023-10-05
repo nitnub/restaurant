@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Formik, Form as FormikForm } from 'formik';
 import * as Yup from 'yup';
 import FormElement from './FormElement';
-import {convertToCurrency} from '../../libs/formatter';
+import { convertToCurrency } from '../../libs/formatter';
 import Button from '@mui/material/Button';
 import getValidationSchema from '../../utils/getValidationSchema';
 import getInitialValues from '../../utils/getInitialValues';
@@ -78,8 +78,6 @@ function Form(props) {
           )}
           <div className="btn-container">
             <CardActions className={styles.cardFooter}>
-              {/* <button */}
-
               <Button
                 variant="contained"
                 className="btn btn-dark"
@@ -90,13 +88,11 @@ function Form(props) {
                   ? props.footer.submitButton.buttonText
                   : 'Submit'}
               </Button>
-              {/* </button> */}
               {props.footer?.link ? (
                 <Link className="footerLink" href={props.footer.link.url}>
                   {props.footer.link.text}
                 </Link>
-              ) : // ? <Link className='footerLink' href={props.footer.link.url} color='red' underline='always'>{props.footer.link.text}</Link>
-              null}
+              ) : null}
             </CardActions>
           </div>
         </FormikForm>

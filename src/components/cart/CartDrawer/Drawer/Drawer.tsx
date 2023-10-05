@@ -5,7 +5,7 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 
 import styles from './Drawer.module.css';
-import AppContext from '@/components/context';
+import AppContext from '@/src/context/context';
 import Header from '@/components/Cart/CartDrawer/Drawer/Header';
 import Checkout from '@/components/Cart/CartDrawer/Links/Checkout';
 import SignIn from '@/components/Cart/CartDrawer/Links/SignIn';
@@ -85,7 +85,7 @@ export default function ({ open, setOpen }) {
         </div>
 
         <div className={styles.headerCheckout}>
-          {(userIsGuest && SignIn(ctx)) ||
+          {(userIsGuest && SignIn(dispatch)) ||
             (cartIsEmpty && <div>Cart is empty...</div>) ||
             Checkout(dispatch, () => setOpen(false))}
         </div>

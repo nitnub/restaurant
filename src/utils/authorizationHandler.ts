@@ -1,18 +1,23 @@
 import { Context } from '@apollo/client';
 import { newGuestID } from './newGuestID';
-import { clearCookies, getCookie, setCookie } from './cookieHandler';
+import {
+  clearCookies,
+  getCookie,
+  resetUserCookies,
+  setCookie,
+} from './cookieHandler';
 import { Dispatch } from 'react';
-import { Action, ActionPayload } from '@/components/context';
+import { Action, ActionPayload } from '@/src/context/context.types';
 
 export default class AuthorizationHandler {
   private SIGN_IN_URL: string = process.env.NEXT_PUBLIC_AUTH_SERVER_SIGN_IN_URL;
   private SIGN_OUT_URL: string =
     process.env.NEXT_PUBLIC_AUTH_SERVER_SIGN_OUT_URL;
   private TOKEN_URL: string = process.env.NEXT_PUBLIC_AUTH_SERVER_TOKEN_URL;
-  private DEFAULT_REQUEST_HEADERS = { 'Content-Type': 'application/json' };
   private PROFILE_KEY: string = 'loggedInUser';
   private TOKEN_KEY: string = 'accessToken';
 
+  protected DEFAULT_REQUEST_HEADERS = { 'Content-Type': 'application/json' };
   protected ctx: Context;
   protected dispatch: Dispatch<ActionPayload>;
   static token: string = '';
@@ -102,8 +107,8 @@ export default class AuthorizationHandler {
       headers: this.DEFAULT_REQUEST_HEADERS,
     });
 
-    clearCookies(this.PROFILE_KEY, 'avatar', 'cart');
-    setCookie('accessToken', guestID, -1, false);
+    // location.replace("/");
+    resetUserCookies(this.PROFILE_KEY, guestID);
     this.dispatch({ type: Action.SIGN_OUT, payload: { accessToken: guestID } });
   }
 
@@ -149,7 +154,7 @@ export default class AuthorizationHandler {
     };
   }
 
-  private parseUserFromToken(accessToken: string) {
+  protected parseUserFromToken(accessToken: string) {
     return JSON.parse(
       Buffer.from(accessToken.split('.')[1], 'base64').toString()
     );

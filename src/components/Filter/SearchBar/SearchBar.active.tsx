@@ -1,8 +1,8 @@
 import { useState, useContext, useEffect } from 'react';
-import AppContext from '@/components/context';
+import AppContext from '@/src/context/context';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import { styled, lighten, darken } from '@mui/system';
+import { styled } from '@mui/system';
 import styles from './SearchBar.module.css';
 
 const GroupHeader = styled('div')(({ theme }) => ({
@@ -10,9 +10,7 @@ const GroupHeader = styled('div')(({ theme }) => ({
   top: '-8px',
   padding: '4px 10px',
   color: 'white',
-  // backgroundColor: '#4e4740',
   backgroundColor: '#ec989d',
-  // backgroundColor: '#db5f68',
 }));
 
 const GroupItems = styled('ul')({
@@ -23,7 +21,7 @@ export default function SearchBar({ props }) {
   const [query, setQuery] = useState('');
   const [options, setOptions] = useState([]);
 
-  const ctx = useContext(AppContext);
+  const { ctx } = useContext(AppContext);
 
   const handler = (value: string) => {
     ctx.query = value;
@@ -69,8 +67,6 @@ export default function SearchBar({ props }) {
           handler('');
           setQuery('');
           return;
-        } else {
-          // setQuery('')
         }
       }}
       renderInput={(params) => (
@@ -85,7 +81,6 @@ export default function SearchBar({ props }) {
       renderGroup={(params) => (
         <li key={params.key}>
           <GroupHeader>{params.group}</GroupHeader>
-          {/* <GroupHeader className={'groupHeader'}>{params.group}</GroupHeader> */}
           <GroupItems onClick={(e) => handler(e.target.textContent)}>
             {params.children}
           </GroupItems>

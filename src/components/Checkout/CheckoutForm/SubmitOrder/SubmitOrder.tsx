@@ -1,5 +1,5 @@
-import { useContext } from 'react';
-import AppContext from '@/components/context';
+import { useContext, useEffect } from 'react';
+import AppContext from '@/src/context/context';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -10,8 +10,9 @@ import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { convertToCurrency } from '@/libs/formatter';
 import { getCookie, updateCookieObject } from '@/utils/cookieHandler';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import CREATE_STRIPE_PAYMENT from '@/mutations/payment/CreatePayment.mutation';
+import { Action } from '@/src/context/context.types';
 
 interface PaymentLabel {
   id: string;
@@ -20,7 +21,7 @@ interface PaymentLabel {
 }
 
 export default function SubmitOrder({ props }) {
-  const ctx = useContext(AppContext);
+  const { ctx, dispatch } = useContext(AppContext);
 
   const { checkoutState, setCheckoutState, styles, handleChange, cartData } =
     props;
@@ -42,12 +43,14 @@ export default function SubmitOrder({ props }) {
     paymentMethod.id
   );
 
-  const [
+  let [
     createStripePayment,
     { data: paymentData, loading: paymentLoading, error: paymentError },
   ] = useMutation(CREATE_STRIPE_PAYMENT, PAYMENT_ARGS);
 
-  // useEffect(() => {}, [cartData, paymentMethod]);
+  // useEffect(() => {
+  //   console.log('Submit refresh');
+  // }, [ctx]);
 
   const [
     clearCartCache,
@@ -63,13 +66,7 @@ export default function SubmitOrder({ props }) {
       return;
     }
 
-    // empty cart
-    const freshCart = { items: [], totalCost: 0, totalCount: 0 };
-
-    updateCookieObject('cart', freshCart);
-    ctx.setCart(freshCart);
-
-    // clear out cart in redis
+    updateCookieObject('cart', { items: [], totalCost: 0, totalCount: 0 });
     await clearCartCache();
 
     setCheckoutState({

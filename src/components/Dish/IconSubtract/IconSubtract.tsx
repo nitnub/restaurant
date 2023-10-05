@@ -5,7 +5,8 @@ import DECREMENT_CART from '@/mutations/cart/RemoveItemFromCart.mutation';
 
 import { getCookie } from '@/utils/cookieHandler';
 import { Cart } from '@/types/cartTypes';
-import AppContext, { Action } from '@/components/context';
+import AppContext from '@/src/context/context';
+import { Action } from '@/src/context/context.types';
 
 // const IconSubtract = ({ dishProp, context, setCount }) => {
 const IconSubtract = ({ dishProp }) => {
@@ -28,8 +29,6 @@ const IconSubtract = ({ dishProp }) => {
   };
 
   const [removeItem, { loading }] = useMutation(DECREMENT_CART, ARGS);
-
-
 
   const removeHandler = async () => {
     const result = await removeItem();
@@ -54,7 +53,6 @@ const IconSubtract = ({ dishProp }) => {
     // update with new cart state
     document.cookie = `cart=${JSON.stringify(newCart)}`;
     dispatch({ type: Action.UPDATE_CART, payload: newCart });
-
   };
 
   if (loading)

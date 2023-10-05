@@ -1,7 +1,8 @@
 import Form from '@/components/Form';
 import { useMutation } from '@apollo/client';
 import { useContext, useState } from 'react';
-import AppContext, { Action } from '@/components/context';
+import AppContext from '@/src/context/context';
+import { Action } from '@/src/context/context.types';
 import AuthorizationHandler from '@/utils/authorizationHandler';
 import { getCookie } from '@/utils/cookieHandler';
 import GET_CART from '@/queries/cart/GetCart.query';

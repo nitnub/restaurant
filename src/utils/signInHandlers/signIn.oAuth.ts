@@ -12,6 +12,8 @@ import { readToken } from '@/utils/token';
 
 import { SignInError } from '@/src/pages/signin';
 import { Context, MutationFunction } from '@apollo/client';
+import { Dispatch } from 'react';
+import { ActionPayload } from '@/src/context/context.types';
 
 const provider = new GoogleAuthProvider();
 
@@ -23,6 +25,7 @@ let cart: Cart | null = {
 
 interface SignInWithGoogleProps {
   ctx: Context;
+  dispatch: Dispatch<ActionPayload>,
   addNewAppUser: MutationFunction;
   addItem: MutationFunction;
   updateError: (type: SignInError, message: string) => void;
@@ -30,6 +33,7 @@ interface SignInWithGoogleProps {
 
 export const googleSignInHandler = async ({
   ctx,
+  dispatch,
   addNewAppUser,
   addItem,
   updateError,
@@ -38,7 +42,7 @@ export const googleSignInHandler = async ({
 
   try {
     const { success, message, accessToken, photoURL } = await confirmGoogleUser(
-      ctx,
+      {ctx, dispatch},
       googleAuth,
       provider
     );

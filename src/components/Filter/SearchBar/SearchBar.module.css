@@ -8,21 +8,14 @@
   background-color: white;
 }
 
-/* .groupHeader {
-  background: red;
-} */
-
 @media (max-width: 500px) {
-
   .searchBar,
   .searchBarLoading {
     width: 300px;
   }
-  
+
   .searchBarLoading {
     height: 53px;
     background-color: white;
   }
-
-
 }

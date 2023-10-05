@@ -9,7 +9,8 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import styles from './index.module.css';
-import AppContext, { Action } from '@/components/context';
+import AppContext from '@/src/context/context';
+import { Action } from '@/src/context/context.types';
 import { getCookie } from '@/utils/cookieHandler';
 import Head from 'next/head';
 const stripePromise = loadStripe(

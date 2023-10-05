@@ -1,52 +1,42 @@
 import Link from 'next/link';
 import List from '@mui/material/List';
 import { useContext, useEffect, useState } from 'react';
-import AppContext from '@/components/context';
+import AppContext from '@/src/context/context';
 import styles from './CheckoutList.module.css';
 import { convertToCurrency } from '@/libs/formatter';
-import { CartItem as ICartItem } from '@/types/cartTypes';
+import { CartItem } from '@/types/cartTypes';
 import Dish from '@/components/Dish/Dish';
 import { getCookie } from '@/utils/cookieHandler';
 import { RestaurantTuple } from '@/types/restaurantTypes';
 import { Paper } from '@mui/material';
+import { Action } from '@/src/context/context.types';
+import { sortName, sortObjByName } from '@/src/utils/genUtils';
 
 export default function CheckoutList() {
-  const ctx = useContext(AppContext);
+  const [hydro, setHydro] = useState(false);
+  const { ctx, dispatch } = useContext(AppContext);
 
   const items = getCookie('cart')?.items;
-  const [hydro, setHydro] = useState(false);
-  useEffect(() => {
-    const cartCopy = ctx.cart;
-    cartCopy.items = items;
+  const headersList: RestaurantTuple[] = [];
+  const headersObj = {};
 
-    ctx.setCart(cartCopy);
+  useEffect(() => {
+    dispatch({ type: Action.UPDATE_CART_ITEMS, payload: items });
     setHydro(true);
-  });
+  }, []);
   if (!hydro) {
     return null;
   }
 
-  // separate items by restaurant
-  const headersObj = {};
-  items &&
-    items.forEach((el) => {
+  if (items != null && items.length > 0) {
+    items.forEach((el: CartItem) => {
       headersObj[el.restaurant] = el.restaurantName;
     });
-  const headersList: RestaurantTuple[] = [];
+  }
+
   for (let key in headersObj) {
     headersList.push([Number(key), headersObj[key]]);
   }
-
-  const sortName = (a: string, b: string) => {
-    if (!a || !b) return;
-    if (a.toLowerCase().startsWith('the ')) a = a.slice(4);
-    if (b.toLowerCase().startsWith('the ')) b = b.slice(4);
-
-    return a > b ? 1 : -1;
-  };
-
-  const sortObjByName = (a: ICartItem, b: ICartItem) =>
-    sortName(a.name, b.name);
 
   const totals = {};
 
@@ -75,7 +65,7 @@ export default function CheckoutList() {
                 <List className={styles.productGroup}>
                   {items
                     .sort(sortObjByName)
-                    .map((item: ICartItem, index: number) => {
+                    .map((item: CartItem, index: number) => {
                       if (item.restaurantName === restaurantName) {
                         if (totals[restaurantName]) {
                           totals[restaurantName] += item.price * item.count;
