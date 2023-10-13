@@ -1,12 +1,17 @@
 import Tooltip from '@mui/material/Tooltip';
 import styles from './DietaryIcon.module.css';
 
-export default function DietaryIcon({ icon }) {
+interface DietaryProps {
+  icon: string;
+}
+
+export default function DietaryIcon({ icon }: DietaryProps) {
   const iconHeight = '12px';
   const iconWidth = '12px';
 
   const vegetarianIcon = (
     <svg
+      name="vegetarianIcon"
       fill="#4d7558"
       version="1.1"
       id="Layer_1"
@@ -50,6 +55,7 @@ c6.555,0,11.936,0.229,15.592,0.449C974.923,828.811,976.248,898.729,941.383,937.3
 
   const veganIcon = (
     <svg
+      name="veganIcon"
       fill="#4d7558"
       version="1.1"
       id="Layer_1"
@@ -86,6 +92,7 @@ c6.555,0,11.936,0.229,15.592,0.449C974.923,828.811,976.248,898.729,941.383,937.3
   );
   const glutenFreeIcon = (
     <svg
+      name="glutenFreeIcon"
       fill="#75674d"
       width={iconWidth}
       height={iconHeight}
@@ -129,9 +136,11 @@ c6.555,0,11.936,0.229,15.592,0.449C974.923,828.811,976.248,898.729,941.383,937.3
 
   const record = dietaryIcons[icon];
 
+  if (record === undefined) return null;
+
   return (
     <Tooltip className={styles.container} title={record.title} arrow>
-      <div>{record.img}</div>
+      <div >{record.img}</div>
     </Tooltip>
   );
 }

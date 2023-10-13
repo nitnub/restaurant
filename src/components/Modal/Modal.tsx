@@ -16,7 +16,7 @@ const style = {
   p: 4,
 };
 
-export default function BasicModal(props) {
+export default function AccountCreationModal(props) {
   return (
     <div>
       <Modal

@@ -34,6 +34,6 @@
       "@/utils/*": ["src/utils/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "../User.resolver.ts", ".local-files/CartDrawer copy.tsx", ".local-files/incrementCart.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "../User.resolver.ts", ".local-files/CartDrawer copy.tsx", ".local-files/incrementCart.ts", "data.js"],
   "exclude": ["node_modules"]
 }

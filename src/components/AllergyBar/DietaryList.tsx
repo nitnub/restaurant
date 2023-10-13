@@ -1,8 +1,20 @@
 import DietaryIcon from './DietaryIcon';
 import styles from './DietaryList.module.css';
 
-export default function DietaryList({ dietaryProps }) {
-  
+interface DietaryProps {
+  vegetarian: boolean;
+  vegan: boolean;
+  glutenFree: boolean;
+}
+export default function DietaryList({
+  dietaryProps,
+}: {
+  dietaryProps: DietaryProps;
+}) {
+  if (dietaryProps === undefined || dietaryProps === null) {
+    return <br />;
+  }
+
   let iconList = [];
   const iconKeys = Object.keys(dietaryProps);
 
@@ -17,7 +29,7 @@ export default function DietaryList({ dietaryProps }) {
   }
 
   return (
-    <div className={styles.allergyContainer}>
+    <div role="group" className={styles.allergyContainer}>
       {iconList.map((value, index) => {
         return <DietaryIcon key={index} icon={value} />;
       })}
