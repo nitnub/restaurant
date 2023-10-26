@@ -2,19 +2,19 @@
 import nextJest from 'next/jest.js';
 
 const createJestConfig = nextJest({
-  // Provide the path to Next.js app to load next.config.js and .env files in \test environment
   dir: './',
 });
-
 
 const customJestConfig = {
   // Add more setup options before each test is run
 
   moduleDirectories: ['node_modules', '<rootDir>/'],
-  // testEnvironment: 'jest-environment-jsdom',
+  testEnvironment: 'jest-environment-jsdom', //
+  // testEnvironment: 'jsdom', // //
+  // testEnvironment: 'node', //
+
   verbose: true,
   collectCoverage: true,
-  testEnvironment: 'jsdom',
   moduleNameMapper: {
     '^@/components/(.*)$': '<rootDir>/src/components/$1',
     '^@/configs/(.*)$': '<rootDir>/src/configs/$1',
@@ -33,9 +33,11 @@ const customJestConfig = {
     '^@/test_resources/(.*)$': '<rootDir>/test_resources/$1',
     '^@/utils/(.*)$': '<rootDir>/src/utils/$1',
 
-    '^.+\\.(css|less)$': '<rootDir>/src/__mocks__/CSSStub.ts',
+    // '^.+\\.(css|less)$': '<rootDir>/src/__mocks__/CSSStub.ts',
   },
+
 };
 
+// export default customJestConfig;
 
-export default customJestConfig;
+export default createJestConfig(customJestConfig);

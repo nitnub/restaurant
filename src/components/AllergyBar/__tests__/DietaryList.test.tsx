@@ -122,6 +122,7 @@ describe('DietaryList test suite', () => {
       tc.expected.include.forEach((value) => {
         expect(container.innerHTML).toContain(value);
       });
+
       tc.expected.exclude.forEach((value) => {
         expect(container.innerHTML).not.toContain(value);
       });

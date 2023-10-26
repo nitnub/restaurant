@@ -9,6 +9,8 @@ import DishCounter from '../DishCounter';
 import { CartItem } from '@/types/cartTypes';
 import DietaryList from '@/components/AllergyBar';
 
+import { createTheme } from '@mui/material/styles';
+
 export default function Dish({ dishProp }: { dishProp: CartItem }) {
   const dietaryProps = {
     vegetarian: dishProp.vegetarian,
@@ -26,7 +28,8 @@ export default function Dish({ dishProp }: { dishProp: CartItem }) {
           alt={dishProp.description}
         />
       </div>
-      <Box className={styles.cardContent}>
+
+      <Box data-testid="card-test" className={styles.cardContent}>
         <CardContent className={styles.cardContent}>
           <Typography role="heading" component={'span'} variant="h5">
             {dishProp.name}

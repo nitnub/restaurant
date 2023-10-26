@@ -1,12 +1,10 @@
 /**
  * @jest-environment jsdom
  */
-import { render, screen } from '@testing-library/react';
-import Dish from './Dish.active';
+import { screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import client from '@/test_resources/apolloConfig';
-import { ApolloProvider } from '@apollo/client';
 import React from 'react';
+import { CartItem } from '@/types/cartTypes';
 
 const dishProp = {
   id: '1',
@@ -34,7 +32,7 @@ const defaultUser = {
   lastName: '',
   email: 'Sign In',
   password: '',
-  avatar: 'TEST_AVATAR_STRING', //(getCookie('avatar') as string) || '',
+  avatar: 'TEST_AVATAR_STRING',
   admin: null,
   active: null,
 };
@@ -52,21 +50,27 @@ const contextValues = {
   query: '',
 };
 
-jest.spyOn(React, 'useContext').mockImplementation(() => contextValues);
+jest
+  .spyOn(React, 'useContext')
+  .mockImplementation(() => ({ ctx: contextValues }));
 
-function setup() {
-  render(
-    <ApolloProvider client={client}>
-      <Dish dishProp={dishProp} />
-    </ApolloProvider>
-  );
-}
+const testProps: CartItem = {
+  id: 'someId',
+  name: 'someName',
+  itemType: 'someItemType',
+  description: 'someDescription',
+  image: '',
+  price: 101,
+  restaurant: 101,
+  // restaurantName?: string;
+  vegetarian: false,
+  vegan: false,
+  glutenFree: false,
+  count: 101,
+};
 
-beforeEach(() => setup());
-
-describe.skip('Renders Dish ', () => {
-  // console.log(screen.debug());
-  it('add/remove buttons', () => {
+describe.skip('Renders Dish', () => {
+  it('displays add/remove buttons', () => {
     const addButton = screen.getByLabelText('add item to shopping cart');
     const remButton = screen.getByLabelText('remove item from shopping cart');
 
@@ -74,20 +78,20 @@ describe.skip('Renders Dish ', () => {
     expect(remButton).toBeVisible();
   });
 
-  it('display name', () => {
+  it('displays name', () => {
     const title = screen.getByRole('heading');
 
     expect(title).toHaveTextContent(dishProp.name);
     expect(title).toBeVisible();
   });
 
-  it('display description', () => {
+  it('displays description', () => {
     const title = screen.getByRole('paragraph');
 
     expect(title).toHaveTextContent(dishProp.description);
   });
 
-  it('display formatted price', () => {
+  it('displays formatted price', () => {
     const dishPrice = screen.getByText('$12.99');
 
     expect(dishPrice).toBeVisible();

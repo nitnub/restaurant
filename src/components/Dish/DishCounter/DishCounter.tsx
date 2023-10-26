@@ -1,11 +1,9 @@
 import IconButton from '@mui/material/IconButton';
 import IconAdd from '@/components/Dish/IconAdd';
 import IconSubtract from '@/components/Dish/IconSubtract';
-import { green, pink } from '@mui/material/colors';
 import { useState, useEffect, useContext } from 'react';
-import { getCookie } from '@/utils/cookieHandler';
 import AppContext from '@/src/context/context';
-import { Dish } from '@/types/dishTypes';
+
 export default function DishCounter({ dishProp }) {
   const [count, setCount] = useState(0);
   const { ctx } = useContext(AppContext);
