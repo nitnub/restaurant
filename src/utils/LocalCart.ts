@@ -18,21 +18,18 @@ export default class LocalCart {
   }
 
   private setCartObject(cart) {
-try {
-  const date = new Date();
-  date.setDate(date.getDate() + this.COOKIE_LIFESPAN_DAYS);
+    try {
+      const date = new Date();
+      date.setDate(date.getDate() + this.COOKIE_LIFESPAN_DAYS);
 
-  const expirationDate = date.toUTCString();
+      const expirationDate = date.toUTCString();
 
-  document.cookie = `${this.CART_KEY}=${JSON.stringify(
-    cart
-  )}; expires=${new Date(expirationDate)}`;
-
-} catch {
-  return false;
-}
-
-
+      document.cookie = `${this.CART_KEY}=${JSON.stringify(
+        cart
+      )}; expires=${new Date(expirationDate)}`;
+    } catch {
+      return false;
+    }
   }
 
   public initializeCart(userID: string) {
@@ -114,7 +111,6 @@ try {
   }
 
   public getCartItems(userID: string) {
-
     this.initializeCart(userID);
     const cartGroup = this.getCartObject();
     const cart = cartGroup[userID];
@@ -127,7 +123,4 @@ try {
       0
     ).toUTCString()}`;
   }
-
 }
-
-

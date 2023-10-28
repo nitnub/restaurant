@@ -4,13 +4,11 @@ import styles from './Form.module.css';
 function FormElement({ formik, label, type, id }) {
   // const labelLower = label.toLowerCase().replace(' ', ''); // as needed...
 
-
   const name = label.charAt(0).toLowerCase() + label.replace(' ', '').slice(1);
 
   return (
     <>
       <div className="form-section">
-
         <TextField
           className="form-control"
           id={id}
@@ -24,10 +22,6 @@ function FormElement({ formik, label, type, id }) {
           variant="standard"
           min="0" // Hold for now in case of need for a dynamic num form field
         />
-
-
-
-
       </div>
     </>
   );

@@ -1,16 +1,17 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Formik, Form as FormikForm } from 'formik';
 import * as Yup from 'yup';
 import FormElement from './FormElement';
 import { convertToCurrency } from '../../libs/formatter';
 import Button from '@mui/material/Button';
-import getValidationSchema from '../../utils/getValidationSchema';
-import getInitialValues from '../../utils/getInitialValues';
 import CardActions from '@mui/material/CardActions';
 import Link from 'next/link';
 import styles from './Form.module.css';
+import FormSetter from './FormSetter';
+
 function Form(props) {
-  const validationSchema = Yup.object(getValidationSchema(props));
+  const formSetter = new FormSetter(props);
+  const validationSchema = Yup.object(formSetter.validationSchema());
 
   const isDisabled = (values) => {
     let disabled = false;
@@ -22,7 +23,7 @@ function Form(props) {
 
   return (
     <Formik
-      initialValues={getInitialValues(props)}
+      initialValues={formSetter.initialValues()}
       validationSchema={validationSchema}
       onSubmit={(values, { resetForm }) => {
         props.handler(values);

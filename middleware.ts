@@ -1,14 +1,14 @@
 import { NextFunction, Response } from 'express';
 import Logger from '@/libs/logger';
-import type { NextRequest } from 'next/server';
-import verifyToken from '../utils/token';
+import verifyToken from './src/utils/token';
+import { NextApiRequest } from 'next';
 
 export interface RequestErrorResponse {
   status: string;
   message: string;
   nextTarget: string;
 }
-export interface VerifiedRequest extends NextRequest {
+export interface VerifiedRequest extends NextApiRequest {
   user: LoggedInUser | Guest | string;
   isAuthorized: boolean;
   isAuthenticated: boolean;
@@ -111,7 +111,6 @@ export function logRequests(
   return;
 }
 
-// See "Matching Paths" below
 export const config = {
   matcher: '/api/graphql',
 };
