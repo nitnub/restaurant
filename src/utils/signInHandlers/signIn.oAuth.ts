@@ -2,7 +2,6 @@ import confirmGoogleUser from '@/utils/signInHandlers/firebase/confirmGoogleUser
 import consolidateGuestAndUserCarts from '@/utils/cart/consolidateGuestAndUserCarts';
 import { Cart } from '@/types/cartTypes';
 import app from '@/utils/firebaseConfig';
-import { formatAppUserArgs } from '@/utils/addNewAppUser';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { readToken } from '@/utils/token';
 import { SignInError } from '@/src/pages/signin';
@@ -21,7 +20,8 @@ let cart: Cart | null = {
 export interface SignInWithGoogleProps {
   ctx: Context;
   dispatch: Dispatch<ActionPayload>;
-  addNewAppUser: MutationFunction;
+  addNewAppUser: (email: string, id: string, accessToken: string) => void;
+  // addNewAppUser: MutationFunction;
   addItem: MutationFunction;
   updateError: (type: SignInError, message: string) => void;
 }
@@ -54,7 +54,8 @@ export const googleSignInHandler = async ({
 
     // Add the App User
     const { email, id, newUser } = readToken(accessToken);
-    await addNewAppUser(formatAppUserArgs(email, id, accessToken));
+
+    await addNewAppUser(email, id, accessToken);
     cart = await consolidateGuestAndUserCarts(accessToken, addItem);
 
     if (!cart) return;

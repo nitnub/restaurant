@@ -2,7 +2,11 @@ import { Dispatch, useContext, useState } from 'react';
 import Form from '@/components/Form';
 import { Context, useMutation } from '@apollo/client';
 import AppContext from '@/src/context/context';
-import { Action, ActionPayload, ContextReducer } from '@/src/context/context.types';
+import {
+  Action,
+  ActionPayload,
+  ContextReducer,
+} from '@/src/context/context.types';
 
 import { updateCookieObject } from '@/utils/cookieHandler';
 import INCREMENT_CART from '@/mutations/cart/AddItemsToCart.mutation';
@@ -15,7 +19,10 @@ import Head from 'next/head';
 import ADD_APP_USER from '@/mutations/user/AddNewAppUser.mutation';
 
 import routeUserToHomepage from '@/utils/routing/routeUserToHomepage';
-import { SignInWithGoogleProps, googleSignInHandler } from '@/src/utils/signInHandlers/signIn.oAuth';
+import {
+  SignInWithGoogleProps,
+  googleSignInHandler,
+} from '@/src/utils/signInHandlers/signIn.oAuth';
 import { signInAuthServerHandler } from '@/src/utils/signInHandlers/signIn.auth';
 import { useGetAddAppUserMutation } from '@/src/utils/customHooks';
 

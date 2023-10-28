@@ -1,5 +1,6 @@
 import {
   DocumentNode,
+  MutationFunction,
   useLazyQuery,
   useMutation,
   useQuery,
@@ -101,7 +102,7 @@ export function useRestaurantQuery(id: string) {
   const variables = { id: Number(id) };
   const ARGS = { ...BEARER_AUTH_ARGS, variables };
 
-  return useQuery(GET_RESTAURANT);
+  return useQuery(GET_RESTAURANT, ARGS);
 }
 
 // Finalized Mutations
@@ -171,8 +172,7 @@ export function useGetAddAppUserMutation() {
   const [addNewAppUser] = useMutation(ADD_APP_USER);
 
   return (email: string, globalUserId: string, accessToken: string) => {
-
-    console.log
+    console.log;
     const variables = { email, globalUserId };
 
     const ARGS = { ...getBearerAuthArgs(accessToken), variables };
@@ -180,8 +180,6 @@ export function useGetAddAppUserMutation() {
     addNewAppUser(ARGS);
   };
 }
-
-
 
 // Finalized LazyQueries
 
@@ -217,27 +215,27 @@ function useCustomQuery(gqlString: DocumentNode) {
   return useQuery(gqlString, BEARER_AUTH_ARGS);
 }
 
-// export const formatCustomerTransactionsArgs = () => {
-//   const ARGS = {
-//     context: {
-//       headers: {
-//         Authorization: `Bearer ${getCookie('accessToken')}`,
-//       },
-//     },
-//   };
-//   return ARGS;
-// };
+export const formatCustomerTransactionsArgs = () => {
+  const ARGS = {
+    context: {
+      headers: {
+        Authorization: `Bearer ${getCookie('accessToken')}`,
+      },
+    },
+  };
+  return ARGS;
+};
 
-// export const getClientSecretArgs = () => {
-//   const ARGS = {
-//     context: {
-//       headers: {
-//         Authorization: `Bearer ${getCookie('accessToken')}`,
-//       },
-//     },
-//   };
-//   return ARGS;
-// };
+export const getClientSecretArgs = () => {
+  const ARGS = {
+    context: {
+      headers: {
+        Authorization: `Bearer ${getCookie('accessToken')}`,
+      },
+    },
+  };
+  return ARGS;
+};
 
 function getFormattedItem(dishProp: Dish) {
   return {
