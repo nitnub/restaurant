@@ -1,33 +1,26 @@
 import { useState } from 'react';
-import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import styles from './index.module.css';
 import Container from '@mui/material/Container';
-
 import Meta from '@/components/Meta';
 import DishList from '@/components/Dish/DishList';
-import GET_RESTAURANT from '@/queries/restaurant/GetRestaurant.query';
 import SearchBar from '@/components/Filter/SearchBar';
-import { getCookie } from '@/utils/cookieHandler';
+import { useRestaurantQuery } from '@/src/utils/customHooks';
+import Logger from '@/libs/logger';
 
 const Restaurant: React.FunctionComponent = () => {
   const [query, setQuery] = useState('');
   const router = useRouter();
 
   // // Can now destructure any params from router.query
-  const { id } = router.query;
-  const VARIABLES = { id: Number(id) };
-  const ARGS = {
-    variables: VARIABLES,
-    context: {
-      headers: {
-        Authorization: `Bearer ${getCookie('accessToken')}`,
-      },
-    },
-  };
+  let { id } = router.query;
+  if (Array.isArray(id)) {
+    id = id[0];
+    Logger.warn('Received restaurant id argument of type Array.');
+  }
 
-  const { data, loading, error } = useQuery(GET_RESTAURANT, ARGS);
+  const { data, loading, error } = useRestaurantQuery(id);
 
   if (error) {
     return <div>Unable to load page. Please try again!</div>;

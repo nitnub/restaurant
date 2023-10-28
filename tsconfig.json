@@ -34,6 +34,6 @@
       "@/utils/*": ["src/utils/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "../User.resolver.ts", ".local-files/CartDrawer copy.tsx", ".local-files/incrementCart.ts", "data.js", ".local-files/utils/getInitialValues.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "../User.resolver.ts", ".local-files/CartDrawer copy.tsx", ".local-files/incrementCart.ts", "data.js", ".local-files/utils/getInitialValues.ts", "src/utils/addNewAppUser.ts", ".local-files/getExistingCart.ts"],
   "exclude": ["node_modules"]
 }

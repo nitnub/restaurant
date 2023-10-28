@@ -4,21 +4,11 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import PaymentOption from '@/components/Stripe/PaymentOption';
 import styles from './PaymentSelector.module.css';
-import GET_PAYMENT_METHODS from '@/queries/payment/GetStripePaymentMethods.query';
-import { useQuery } from '@apollo/client';
-import { getCookie } from '@/utils/cookieHandler';
+
+import { usePaymentMethodQuery } from '@/src/utils/customHooks';
 
 export default function PaymentSelector({ setCheckoutState, checkoutState }) {
-  const ARGS = {
-    context: {
-      headers: {
-        Authorization: `Bearer ${getCookie('accessToken')}`,
-      },
-    },
-    queryKey: getCookie('accessToken'),
-  };
-
-  const { data, loading, error } = useQuery(GET_PAYMENT_METHODS, ARGS);
+  const { data, loading, error } = usePaymentMethodQuery();
 
   if (loading) {
     return <h3>Loading...</h3>;

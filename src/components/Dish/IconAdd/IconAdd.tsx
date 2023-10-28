@@ -7,28 +7,13 @@ import INCREMENT_CART from '@/mutations/cart/AddItemsToCart.mutation';
 import { getCookie } from '@/utils/cookieHandler';
 import { Cart } from '@/types/cartTypes';
 import { Dish } from '@/src/types/dishTypes';
+import { useIncrementCartMutation } from '@/src/utils/customHooks';
 
 const IconAdd = ({ dishProp }) => {
   const { ctx, dispatch } = useContext(AppContext);
   const ah = new AuthorizationHandler({ ctx, dispatch });
 
-  const itemVariable = getFormattedItem(dishProp);
-
-  const VARIABLES = {
-    accessToken: ctx.accessToken ? ctx.accessToken : 'Guest',
-    items: [itemVariable],
-  };
-
-  const ARGS = {
-    variables: VARIABLES,
-    context: {
-      headers: {
-        Authorization: `Bearer ${getCookie('accessToken')}`,
-      },
-    },
-  };
-
-  const [addItem, { loading }] = useMutation(INCREMENT_CART, ARGS);
+  const [addItem, { loading }] = useIncrementCartMutation(dishProp);
 
   const addHandler = async () => {
     const result = await addItem();
@@ -87,19 +72,3 @@ const IconAdd = ({ dishProp }) => {
   );
 };
 export default IconAdd;
-
-function getFormattedItem(dishProp: Dish) {
-  return {
-    id: dishProp.id,
-    name: dishProp.name,
-    itemType: dishProp.type,
-    description: dishProp.description,
-    image: dishProp.image,
-    price: dishProp.price,
-    restaurant: dishProp.restaurant,
-    restaurantName: dishProp.restaurantName,
-    vegetarian: dishProp.vegetarian,
-    vegan: dishProp.vegan,
-    glutenFree: dishProp.glutenFree,
-  };
-}

@@ -5,14 +5,16 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Button from '@mui/material/Button';
 import Link from 'next/link';
-import CLEAR_CART from '@/mutations/cart/ClearCart.mutation';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { convertToCurrency } from '@/libs/formatter';
-import { getCookie, updateCookieObject } from '@/utils/cookieHandler';
-import { useMutation } from '@apollo/client';
-import CREATE_STRIPE_PAYMENT from '@/mutations/payment/CreatePayment.mutation';
+import { updateCookieObject } from '@/utils/cookieHandler';
+
 import { Action } from '@/src/context/context.types';
+import {
+  useClearCartMutation,
+  useCreateStripePaymentMutation,
+} from '@/src/utils/customHooks';
 
 interface PaymentLabel {
   id: string;
@@ -34,19 +36,12 @@ export default function SubmitOrder({ props }) {
     paymentMethod,
   } = checkoutState;
 
-  const CLEAR_CART_ARGS = createClearCartArgs();
-
-  const PAYMENT_ARGS = createPaymentArgs(checkoutTotal, paymentMethod.id);
-
   let [
     createStripePayment,
     { data: paymentData, loading: paymentLoading, error: paymentError },
-  ] = useMutation(CREATE_STRIPE_PAYMENT, PAYMENT_ARGS);
+  ] = useCreateStripePaymentMutation(checkoutTotal, paymentMethod.id);
 
-  const [
-    clearCartCache,
-    { data: clearCartData, loading: clearCartLoading, error: clearCartError },
-  ] = useMutation(CLEAR_CART, CLEAR_CART_ARGS);
+  const [clearCartCache] = useClearCartMutation();
 
   const submitPayment = async (e) => {
     e.preventDefault();
@@ -146,33 +141,4 @@ export default function SubmitOrder({ props }) {
       </AccordionDetails>
     </Accordion>
   );
-}
-
-function createPaymentArgs(amount: string, paymentMethodID: string) {
-  const PAYMENT_VARIABLES = {
-    amount,
-    path: '/',
-    paymentMethodID,
-  };
-
-  const PAYMENT_ARGS = {
-    variables: PAYMENT_VARIABLES,
-    context: {
-      headers: {
-        Authorization: `Bearer ${getCookie('accessToken')}`,
-      },
-    },
-  };
-
-  return PAYMENT_ARGS;
-}
-
-function createClearCartArgs() {
-  return {
-    context: {
-      headers: {
-        Authorization: `Bearer ${getCookie('accessToken')}`,
-      },
-    },
-  };
 }

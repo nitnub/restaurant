@@ -7,28 +7,14 @@ import { getCookie } from '@/utils/cookieHandler';
 import { Cart } from '@/types/cartTypes';
 import AppContext from '@/src/context/context';
 import { Action } from '@/src/context/context.types';
+import { useDecrementCartMutation } from '@/src/utils/customHooks';
 
 // const IconSubtract = ({ dishProp, context, setCount }) => {
 const IconSubtract = ({ dishProp }) => {
   const { ctx, dispatch } = useContext(AppContext);
-
   const ah = new AuthorizationHandler({ ctx, dispatch });
 
-  const VARIABLES = {
-    accessToken: ctx.accessToken ? ctx.accessToken : 'Guest',
-    id: dishProp.id,
-  };
-
-  const ARGS = {
-    variables: VARIABLES,
-    context: {
-      headers: {
-        Authorization: `Bearer ${getCookie('accessToken')}`,
-      },
-    },
-  };
-
-  const [removeItem, { loading }] = useMutation(DECREMENT_CART, ARGS);
+  const [removeItem, { loading }] = useDecrementCartMutation(dishProp);
 
   const removeHandler = async () => {
     const result = await removeItem();

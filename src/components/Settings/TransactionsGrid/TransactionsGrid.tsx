@@ -17,12 +17,10 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import Typography from '@mui/material/Typography';
 import { TablePaginationActionsProps } from '@/types/utilTypes';
-import GET_CUSTOMER_TRANSACTIONS from '@/queries/payment/GetCustomerTransactions.query';
-import { useQuery } from '@apollo/client';
-import { getCookie } from '@/utils/cookieHandler';
 import { convertToCurrency } from '@/libs/formatter';
 import styles from './TransactionsGrid.module.css';
 import AppContext from '@/src/context/context';
+import { useTransactionsQuery } from '@/src/utils/customHooks';
 
 function TablePaginationActions(props: TablePaginationActionsProps) {
   const theme = useTheme();
@@ -103,18 +101,7 @@ export default function CustomPaginationActionsTable() {
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
   const [rows, setRows] = useState([]);
 
-  const ARGS = {
-    context: {
-      headers: {
-        Authorization: `Bearer ${getCookie('accessToken')}`,
-      },
-    },
-  };
-
-  const { data, loading, error, client } = useQuery(
-    GET_CUSTOMER_TRANSACTIONS,
-    ARGS
-  );
+  const { data, client } = useTransactionsQuery();
 
   let results = [];
   useEffect(() => {

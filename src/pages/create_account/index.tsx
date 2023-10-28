@@ -1,35 +1,35 @@
 import Form from '@/components/Form';
-import { useMutation } from '@apollo/client';
 import { useContext, useState } from 'react';
 import AppContext from '@/src/context/context';
 import { Action } from '@/src/context/context.types';
 import AuthorizationHandler from '@/utils/authorizationHandler';
 import { getCookie } from '@/utils/cookieHandler';
-import GET_CART from '@/queries/cart/GetCart.query';
-import ADD_APP_USER from '@/mutations/user/AddNewAppUser.mutation';
-import INCREMENT_CART from '@/mutations/cart/AddItemsToCart.mutation';
-import { useLazyQuery } from '@apollo/client';
 import { Cart } from '@/types/cartTypes';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { CardHeader } from '@mui/material';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
-
+import {
+  useGetAddAppUserMutation,
+  useGetIncrementCartMutation,
+  useLazyCartQuery,
+} from '@/src/utils/customHooks';
+import { Dish } from '@/src/types/dishTypes';
 export default function Register() {
   const [errorMessage, setErrorMessage] = useState('');
   const { ctx, dispatch } = useContext(AppContext);
-  const [cartQuery, { data, loading, error }] = useLazyQuery(GET_CART);
+  const { cartQuery, loading, error } = useLazyCartQuery();
   const router = useRouter();
-
   const Auth = new AuthorizationHandler({ ctx, dispatch });
 
-  const [
+  const {
     addItem,
-    { data: addItemData, loading: addItemLoading, error: errorLoading },
-  ] = useMutation(INCREMENT_CART);
+    loading: addItemLoading,
+    error: errorLoading,
+  } = useGetIncrementCartMutation();
 
-  const [addNewAppUser] = useMutation(ADD_APP_USER);
+  const addNewAppUser = useGetAddAppUserMutation();
   const handler = async ({ firstName, lastName, email, password }) => {
     const avatar = 'HARD-CODED-PATH-FOR-TESTING';
 
@@ -52,21 +52,13 @@ export default function Register() {
     const json = await response.json();
     const { sanitizedUser, accessToken } = json.data;
 
-    const ARGS = {
-      variables: {
-        email: sanitizedUser.email,
-        globalUserId: sanitizedUser.id,
-      },
-      context: {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      },
-    };
-
     await signInAuthServerHandler({ email, password })
       .then(() => {
-        return addNewAppUser(ARGS);
+        return addNewAppUser(
+          sanitizedUser.email,
+          sanitizedUser.id,
+          accessToken
+        );
       })
       .catch((err) => console.log('Sign In Error:', err));
 
@@ -85,12 +77,10 @@ export default function Register() {
    */
   const signInAuthServerHandler = async ({ email, password }) => {
     const prevUser = getCookie('accessToken');
-    const prevCart = getCookie('cart')?.items || [];
+    const prevCart: Dish[] = getCookie('cart')?.items || [];
 
-    const { success, message, accessToken } = await Auth.signIn(
-      email,
-      password
-    )!;
+    const { success, message, accessToken } =
+      (await Auth.signIn(email, password)) || null;
 
     if (!success) {
       setErrorMessage(() => message);
@@ -100,29 +90,16 @@ export default function Register() {
     // // Generally, if profile is updated, should check the cookie state first
     setErrorMessage(() => '');
 
-    const ARGS = {
-      variables: {
-        accessToken: accessToken,
-        items: [],
-      },
-      context: {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      },
-    };
-
     let cart: Cart;
     if (prevUser.startsWith('Guest') && prevCart.length > 0) {
-      ARGS.variables.items = prevCart;
-      const result = await addItem(ARGS);
+      const result = await addItem(accessToken, prevCart);
 
       if (addItemLoading) return console.log(loading);
       if (errorLoading) return console.log(error);
 
       cart = result.data.incrementCartResult;
     } else {
-      const result = await cartQuery(ARGS);
+      const result = await cartQuery(accessToken);
       if (loading) return console.log(loading);
       if (error) return console.log(error);
 

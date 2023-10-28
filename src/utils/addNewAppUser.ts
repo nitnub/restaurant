@@ -1,28 +1,27 @@
-import { GET_CART } from 'graphql/queries';
-import { useLazyQuery } from '@apollo/client';
-import ADD_APP_USER from '@/mutations/user/AddNewAppUser.mutation';
-async function addNewAppUser(
-  email: string,
-  globalUserId: string,
-  accessToken: string
-) {
-  const VARIABLES = {
-    email,
-    globalUserId,
-  };
-  const ARGS = {
-    variables: VARIABLES,
-    context: {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    },
-  };
+// import { useLazyQuery } from '@apollo/client';
+// import ADD_APP_USER from '@/mutations/user/AddNewAppUser.mutation';
+// async function addNewAppUser(
+//   email: string,
+//   globalUserId: string,
+//   accessToken: string
+// ) {
+//   const VARIABLES = {
+//     email,
+//     globalUserId,
+//   };
+//   const ARGS = {
+//     variables: VARIABLES,
+//     context: {
+//       headers: {
+//         Authorization: `Bearer ${accessToken}`,
+//       },
+//     },
+//   };
 
-  const [runQuery] = useLazyQuery(ADD_APP_USER, ARGS);
+//   const [runQuery] = useLazyQuery(ADD_APP_USER, ARGS);
 
-  return await runQuery();
-}
+//   return await runQuery();
+// }
 
 export const formatAppUserArgs = (
   email: string,
@@ -33,6 +32,7 @@ export const formatAppUserArgs = (
     email,
     globalUserId: id,
   };
+
   return {
     variables: VARIABLES,
     context: {
@@ -43,4 +43,4 @@ export const formatAppUserArgs = (
   };
 };
 
-export default addNewAppUser;
+// export default addNewAppUser;

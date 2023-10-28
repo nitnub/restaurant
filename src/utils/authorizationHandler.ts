@@ -9,6 +9,19 @@ import {
 import { Dispatch } from 'react';
 import { Action, ActionPayload } from '@/src/context/context.types';
 
+type ResponseStatus = 'success' | 'fail';
+
+interface ResponseData {
+  success: boolean;
+  accessToken?: string;
+}
+
+interface ServerResponse {
+  data: ResponseData;
+  status: ResponseStatus;
+  message: string;
+}
+
 export default class AuthorizationHandler {
   private SIGN_IN_URL: string = process.env.NEXT_PUBLIC_AUTH_SERVER_SIGN_IN_URL;
   private SIGN_OUT_URL: string =
@@ -44,7 +57,7 @@ export default class AuthorizationHandler {
         'There was an issue logging into the application. Please try again later.'
       );
     }
-    const data = await response.json();
+    const data: ServerResponse = await response.json();
 
     if (data.status === 'success') {
       const { accessToken } = data.data;

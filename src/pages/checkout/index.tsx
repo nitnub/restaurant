@@ -10,22 +10,13 @@ import styles from './index.module.css';
 import OrderSummary from '@/components/Checkout/CheckoutForm/OrderSummary';
 import PaymentSummary from '@/components/Checkout/CheckoutForm/PaymentSummary';
 import SubmitOrder from '@/components/Checkout/CheckoutForm/SubmitOrder';
+import { useCartQuery } from '@/src/utils/customHooks';
 
 export default function Checkout() {
   const { ctx } = useContext(AppContext);
   const user = getCookie('accessToken') || 'guest';
-  const CART_ARGS = {
-    context: {
-      headers: {
-        Authorization: `Bearer ${getCookie('accessToken')}`,
-      },
-    },
-  };
-  const {
-    data: cartData,
-    loading: cartLoading,
-    error: cartError,
-  } = useQuery(GET_CART, CART_ARGS);
+
+  const { data: cartData } = useCartQuery();
 
   const cartCookie = getCookie('cart');
 
@@ -47,6 +38,23 @@ export default function Checkout() {
   };
 
   const [checkoutState, setCheckoutState] = useState(defaultCheckoutState);
+  useEffect(() => {
+    if (ctx.cart) {
+      setCheckoutState({
+        ...checkoutState,
+        cartCount: ctx.cart.totalCount,
+        checkoutTotal: ctx.cart.totalCost,
+      });
+    }
+  }, [ctx, user]);
+
+  const [hydro, setHydro] = useState(false);
+  useEffect(() => {
+    setHydro(true);
+  }, []);
+  if (!hydro) {
+    return null;
+  }
 
   if (!defaultCheckoutState.checkoutCart) {
     return (
@@ -64,26 +72,6 @@ export default function Checkout() {
         expanded: isExpanded ? panel : false,
       });
     };
-
-  useEffect(() => {
-    if (ctx.cart) {
-      setCheckoutState({
-        ...checkoutState,
-        cartCount: ctx.cart.totalCount,
-        checkoutTotal: ctx.cart.totalCost,
-      });
-    }
-
-  // }, [ctx.cart, user]);
-  }, [ctx, user]);
-
-  const [hydro, setHydro] = useState(false);
-  useEffect(() => {
-    setHydro(true);
-  }, []);
-  if (!hydro) {
-    return null;
-  }
 
   const checkoutProps = {
     checkoutState,

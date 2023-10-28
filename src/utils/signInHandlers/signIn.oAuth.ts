@@ -1,15 +1,10 @@
 import confirmGoogleUser from '@/utils/signInHandlers/firebase/confirmGoogleUser';
 import consolidateGuestAndUserCarts from '@/utils/cart/consolidateGuestAndUserCarts';
-
 import { Cart } from '@/types/cartTypes';
-
 import app from '@/utils/firebaseConfig';
 import { formatAppUserArgs } from '@/utils/addNewAppUser';
-
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
-
 import { readToken } from '@/utils/token';
-
 import { SignInError } from '@/src/pages/signin';
 import { Context, MutationFunction } from '@apollo/client';
 import { Dispatch } from 'react';
@@ -23,9 +18,9 @@ let cart: Cart | null = {
   totalCost: 0,
 };
 
-interface SignInWithGoogleProps {
+export interface SignInWithGoogleProps {
   ctx: Context;
-  dispatch: Dispatch<ActionPayload>,
+  dispatch: Dispatch<ActionPayload>;
   addNewAppUser: MutationFunction;
   addItem: MutationFunction;
   updateError: (type: SignInError, message: string) => void;
@@ -42,7 +37,7 @@ export const googleSignInHandler = async ({
 
   try {
     const { success, message, accessToken, photoURL } = await confirmGoogleUser(
-      {ctx, dispatch},
+      { ctx, dispatch },
       googleAuth,
       provider
     );

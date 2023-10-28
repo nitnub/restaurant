@@ -2,7 +2,7 @@ import { Dispatch, useContext, useState } from 'react';
 import Form from '@/components/Form';
 import { Context, useMutation } from '@apollo/client';
 import AppContext from '@/src/context/context';
-import { Action, ActionPayload } from '@/src/context/context.types';
+import { Action, ActionPayload, ContextReducer } from '@/src/context/context.types';
 
 import { updateCookieObject } from '@/utils/cookieHandler';
 import INCREMENT_CART from '@/mutations/cart/AddItemsToCart.mutation';
@@ -15,8 +15,9 @@ import Head from 'next/head';
 import ADD_APP_USER from '@/mutations/user/AddNewAppUser.mutation';
 
 import routeUserToHomepage from '@/utils/routing/routeUserToHomepage';
-import { googleSignInHandler } from '@/src/utils/signInHandlers/signIn.oAuth';
+import { SignInWithGoogleProps, googleSignInHandler } from '@/src/utils/signInHandlers/signIn.oAuth';
 import { signInAuthServerHandler } from '@/src/utils/signInHandlers/signIn.auth';
+import { useGetAddAppUserMutation } from '@/src/utils/customHooks';
 
 export enum SignInError {
   GENERAL = 'general',
@@ -33,10 +34,19 @@ const formFooter = {
   link: { text: 'Create an account', url: '/create_account' },
 };
 
+// interface SignInProps extends SignInWithGoogleProps {
+//   ctx: Context,
+//   dispatch: ContextReducer,
+//   addNewAppUser,
+//   addItem,
+//   updateError,
+// }
+
 export default function SignIn() {
   const [error, setError] = useState({ general: '', oAuth: '' });
   const [addItem, { error: errorLoading }] = useMutation(INCREMENT_CART);
-  const [addNewAppUser] = useMutation(ADD_APP_USER);
+  // const [addNewAppUser] = useMutation(ADD_APP_USER);
+  const addNewAppUser = useGetAddAppUserMutation();
   const { ctx, dispatch }: Context = useContext(AppContext);
   const router = useRouter();
 
@@ -44,7 +54,7 @@ export default function SignIn() {
     setError({ ...error, ...{ [type]: message } });
   };
 
-  const signInProps = {
+  const signInProps: SignInWithGoogleProps = {
     ctx,
     dispatch,
     addNewAppUser,
